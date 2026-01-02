@@ -5,10 +5,11 @@
     <div class="hero-content">
         <h1 class="hero-title"><?php bloginfo('name'); ?></h1>
         <p class="hero-subtitle"><?php bloginfo('description'); ?></p>
+        <a href="#content" class="hero-cta">Explore More</a>
     </div>
 </section>
 
-<main class="site-content">
+<main class="site-content" id="content">
     <div class="container">
         <?php if (have_posts()) : ?>
             <div class="posts-grid">

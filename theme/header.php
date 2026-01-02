@@ -14,20 +14,23 @@
             <?php if (has_custom_logo()) : ?>
                 <?php the_custom_logo(); ?>
             <?php else : ?>
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="site-title">
-                    <?php bloginfo('name'); ?>
-                </a>
+                <h1 class="site-title">
+                    <a href="<?php echo esc_url(home_url('/')); ?>">
+                        Hello World!
+                    </a>
+                </h1>
             <?php endif; ?>
         </div>
         
-        <nav class="main-navigation">
+        <nav class="site-nav">
             <?php
             wp_nav_menu(array(
                 'theme_location' => 'primary',
                 'container' => false,
                 'fallback_cb' => function() {
-                    echo '<a href="' . esc_url(home_url('/')) . '">' . __('Home', 'custom-theme') . '</a>';
-                    echo '<a href="' . esc_url(admin_url('nav-menus.php')) . '">' . __('Menü einrichten', 'custom-theme') . '</a>';
+                    echo '<ul>';
+                    echo '<li><a href="' . esc_url(home_url('/')) . '">Home</a></li>';
+                    echo '</ul>';
                 }
             ));
             ?>
