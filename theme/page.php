@@ -5,16 +5,17 @@
         <?php while (have_posts()) : the_post(); ?>
             <article id="page-<?php the_ID(); ?>" <?php post_class('single-page'); ?>>
                 <?php if (has_post_thumbnail()) : ?>
-                    <div class="hero-section" style="background-image: linear-gradient(rgba(10, 20, 40, 0.7), rgba(10, 20, 40, 0.9)), url('<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>');
+                    <div class="hero-section" style="background-image: linear-gradient(rgba(15, 13, 12, 0.85), rgba(10, 10, 10, 0.95)), url('<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>');
                          background-size: cover;
-                         background-position: center;">
+                         background-position: center;
+                         min-height: 50vh;">
                         <div class="hero-content">
                             <h1 class="hero-title"><?php the_title(); ?></h1>
                         </div>
                     </div>
                 <?php else : ?>
-                    <header class="post-header" style="text-align: center; padding: 60px 0;">
-                        <h1 class="hero-title"><?php the_title(); ?></h1>
+                    <header class="post-header" style="text-align: center; padding: 80px 0 40px; border-bottom: 2px solid rgba(42, 37, 32, 0.5);">
+                        <h1 class="hero-title" style="margin-bottom: 0;"><?php the_title(); ?></h1>
                     </header>
                 <?php endif; ?>
                 

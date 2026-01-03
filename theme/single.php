@@ -2,39 +2,39 @@
 
 <main class="site-content">
     <div class="container">
-        <?php while (have_posts()) : the_post(); ?>
+        <?php while (have_posts()) : the_post(); 
+            $categories = get_the_category();
+            $cat_name = !empty($categories) ? esc_html($categories[0]->name) : 'BUILD';
+        ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class('single-post'); ?>>
                 <?php if (has_post_thumbnail()) : ?>
-                    <div class="hero-section" style="background-image: linear-gradient(rgba(10, 20, 40, 0.7), rgba(10, 20, 40, 0.9)), url('<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>');
+                    <div class="hero-section" style="background-image: linear-gradient(rgba(15, 13, 12, 0.85), rgba(10, 10, 10, 0.95)), url('<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>');
                          background-size: cover;
-                         background-position: center;">
+                         background-position: center;
+                         min-height: 60vh;">
                         <div class="hero-content">
+                            <span class="post-category" style="margin-bottom: 20px; display: inline-block;"><?php echo $cat_name; ?></span>
                             <h1 class="hero-title"><?php the_title(); ?></h1>
                             <div class="post-meta" style="justify-content: center;">
                                 <span class="post-date">
-                                    <?php echo get_the_date(); ?>
+                                    <?php echo get_the_date('d.m.Y'); ?>
                                 </span>
                                 <span class="post-author">
-                                    <?php echo __('von', 'custom-theme') . ' ' . get_the_author(); ?>
-                                </span>
-                                <span class="post-category">
-                                    <?php the_category(', '); ?>
+                                    von <?php echo get_the_author(); ?>
                                 </span>
                             </div>
                         </div>
                     </div>
                 <?php else : ?>
-                    <header class="post-header" style="text-align: center; padding: 60px 0;">
-                        <h1 class="hero-title"><?php the_title(); ?></h1>
+                    <header class="post-header" style="text-align: center; padding: 80px 0 40px; border-bottom: 2px solid rgba(42, 37, 32, 0.5);">
+                        <span class="post-category" style="margin-bottom: 20px; display: inline-block;"><?php echo $cat_name; ?></span>
+                        <h1 class="hero-title" style="margin-bottom: 20px;"><?php the_title(); ?></h1>
                         <div class="post-meta" style="justify-content: center;">
                             <span class="post-date">
-                                <?php echo get_the_date(); ?>
+                                <?php echo get_the_date('d.m.Y'); ?>
                             </span>
                             <span class="post-author">
-                                <?php echo __('von', 'custom-theme') . ' ' . get_the_author(); ?>
-                            </span>
-                            <span class="post-category">
-                                <?php the_category(', '); ?>
+                                von <?php echo get_the_author(); ?>
                             </span>
                         </div>
                     </header>
