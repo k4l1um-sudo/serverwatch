@@ -86,6 +86,28 @@ get_header(); ?>
                     Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden 
                     von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
                 </p>
+
+                <h2>Nutzung von Diablo IV Inhalten</h2>
+                <p>
+                    Diese Website verwendet Bilder, Screenshots, Namen, Begriffe und andere Inhalte aus dem Spiel 
+                    <strong>Diablo IV</strong>, die urheberrechtlich geschützt sind und der <strong>Blizzard Entertainment, Inc.</strong> 
+                    und/oder ihren verbundenen Unternehmen gehören.
+                </p>
+                <p>
+                    Diablo, Diablo IV und Blizzard Entertainment sind Marken oder eingetragene Marken von Blizzard Entertainment, Inc. 
+                    in den USA und/oder anderen Ländern. Alle Rechte vorbehalten.
+                </p>
+                <p>
+                    Diese Website ist nicht offiziell von Blizzard Entertainment betrieben, gesponsert oder in irgendeiner 
+                    Weise mit Blizzard Entertainment verbunden. Die Verwendung der Spielinhalte erfolgt zu redaktionellen und 
+                    informativen Zwecken im Rahmen einer Fan-Website. Es besteht keine kommerzielle Absicht zur Nutzung der 
+                    urheberrechtlich geschützten Materialien.
+                </p>
+                <p>
+                    Der Betreiber dieser Website erhebt keinen Anspruch auf Eigentum an den verwendeten Diablo IV-Inhalten. 
+                    Alle Rechte liegen bei Blizzard Entertainment, Inc. Sollten Bedenken hinsichtlich der Verwendung dieser 
+                    Inhalte bestehen, kontaktieren Sie uns bitte unter den oben angegebenen Kontaktdaten.
+                </p>
             </div>
         </article>
     </div>

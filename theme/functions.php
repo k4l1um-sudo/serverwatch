@@ -68,3 +68,109 @@ function diablo_body_classes($classes) {
     return $classes;
 }
 add_filter('body_class', 'diablo_body_classes');
+
+// ACF Fields for Build Guide Template
+if( function_exists('acf_add_local_field_group') ):
+
+acf_add_local_field_group(array(
+    'key' => 'group_build_guide',
+    'title' => 'Build Guide Felder',
+    'fields' => array(
+        // Allgemeine Felder
+        array(
+            'key' => 'field_build_season',
+            'label' => 'Season',
+            'name' => 'build_season',
+            'type' => 'select',
+            'choices' => array(
+                'season_7' => 'Season 7',
+                'season_8' => 'Season 8',
+                'season_9' => 'Season 9',
+                'season_10' => 'Season 10',
+                'season_11' => 'Season 11',
+                'season_12' => 'Season 12',
+                'season_13' => 'Season 13',
+                'eternal' => 'Eternal',
+            ),
+            'default_value' => 'season_11',
+            'allow_null' => 0,
+            'required' => 1,
+        ),
+        array(
+            'key' => 'field_build_allgemeines',
+            'label' => 'Allgemeines',
+            'name' => 'build_allgemeines',
+            'type' => 'textarea',
+            'rows' => 8,
+        ),
+        array(
+            'key' => 'field_build_spielweise',
+            'label' => 'Spielweise',
+            'name' => 'build_spielweise',
+            'type' => 'textarea',
+            'rows' => 8,
+        ),
+        // Build Bewertung
+        array(
+            'key' => 'field_rating_monster',
+            'label' => 'VS Monster',
+            'name' => 'rating_monster',
+            'type' => 'text',
+            'default_value' => 'Sehr gut',
+        ),
+        array(
+            'key' => 'field_rating_boss',
+            'label' => 'VS Bosse',
+            'name' => 'rating_boss',
+            'type' => 'text',
+            'default_value' => 'Sehr gut',
+        ),
+        array(
+            'key' => 'field_rating_robustheit',
+            'label' => 'Robustheit',
+            'name' => 'rating_robustheit',
+            'type' => 'text',
+            'default_value' => 'Gut',
+        ),
+        array(
+            'key' => 'field_rating_mobilitaet',
+            'label' => 'Mobilität',
+            'name' => 'rating_mobilitaet',
+            'type' => 'text',
+            'default_value' => 'Gut',
+        ),
+        array(
+            'key' => 'field_rating_spielweise',
+            'label' => 'Spielweise',
+            'name' => 'rating_spielweise',
+            'type' => 'text',
+            'default_value' => 'Einfach',
+        ),
+        array(
+            'key' => 'field_rating_budget',
+            'label' => 'Budget',
+            'name' => 'rating_budget',
+            'type' => 'text',
+            'default_value' => 'Günstig',
+        ),
+        // D4Builds Integration
+        array(
+            'key' => 'field_d4builds_url',
+            'label' => 'D4Builds.gg Build URL',
+            'name' => 'd4builds_url',
+            'type' => 'url',
+            'instructions' => 'Füge hier die URL deines D4Builds.gg-Builds ein (z.B. https://d4builds.gg/builds/...)',
+        ),
+    ),
+    'location' => array(
+        array(
+            array(
+                'param' => 'page_template',
+                'operator' => '==',
+                'value' => 'page-build-guide.php',
+            ),
+        ),
+    ),
+));
+
+endif;
