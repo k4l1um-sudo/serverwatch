@@ -29,6 +29,7 @@ add_action('after_setup_theme', 'diablo_theme_setup');
 function diablo_theme_scripts() {
     wp_enqueue_style('diablo-theme-style', get_stylesheet_uri(), array(), '2.0.0');
     wp_enqueue_script('diablo-theme-cookie-banner', get_template_directory_uri() . '/js/cookie-banner.js', array(), '2.0.0', true);
+    wp_enqueue_script('diablo-theme-mobile-menu', get_template_directory_uri() . '/js/mobile-menu.js', array(), '2.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'diablo_theme_scripts');
 
@@ -168,6 +169,74 @@ acf_add_local_field_group(array(
                 'param' => 'page_template',
                 'operator' => '==',
                 'value' => 'page-build-guide.php',
+            ),
+        ),
+    ),
+));
+
+// ACF Fields for News Posts
+acf_add_local_field_group(array(
+    'key' => 'group_news_post',
+    'title' => 'News Felder',
+    'fields' => array(
+        array(
+            'key' => 'field_news_kurzbeschreibung',
+            'label' => 'Kurzbeschreibung',
+            'name' => 'news_kurzbeschreibung',
+            'type' => 'textarea',
+            'instructions' => 'Eine kurze Zusammenfassung der News (1-2 Sätze)',
+            'rows' => 3,
+            'required' => 1,
+        ),
+        array(
+            'key' => 'field_news_link_1_url',
+            'label' => 'Link 1 - URL',
+            'name' => 'news_link_1_url',
+            'type' => 'url',
+            'instructions' => 'Weiterführender Link 1',
+        ),
+        array(
+            'key' => 'field_news_link_1_text',
+            'label' => 'Link 1 - Text',
+            'name' => 'news_link_1_text',
+            'type' => 'text',
+            'instructions' => 'Anzeigetext für Link 1',
+        ),
+        array(
+            'key' => 'field_news_link_2_url',
+            'label' => 'Link 2 - URL',
+            'name' => 'news_link_2_url',
+            'type' => 'url',
+            'instructions' => 'Weiterführender Link 2',
+        ),
+        array(
+            'key' => 'field_news_link_2_text',
+            'label' => 'Link 2 - Text',
+            'name' => 'news_link_2_text',
+            'type' => 'text',
+            'instructions' => 'Anzeigetext für Link 2',
+        ),
+        array(
+            'key' => 'field_news_link_3_url',
+            'label' => 'Link 3 - URL',
+            'name' => 'news_link_3_url',
+            'type' => 'url',
+            'instructions' => 'Weiterführender Link 3',
+        ),
+        array(
+            'key' => 'field_news_link_3_text',
+            'label' => 'Link 3 - Text',
+            'name' => 'news_link_3_text',
+            'type' => 'text',
+            'instructions' => 'Anzeigetext für Link 3',
+        ),
+    ),
+    'location' => array(
+        array(
+            array(
+                'param' => 'post_type',
+                'operator' => '==',
+                'value' => 'post',
             ),
         ),
     ),

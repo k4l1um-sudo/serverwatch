@@ -29,13 +29,20 @@
             <?php endif; ?>
         </div>
         
-        <nav class="site-nav">
+        <button class="mobile-menu-toggle" aria-label="Menü öffnen" aria-expanded="false">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <nav class="site-nav" id="main-navigation">
             <?php
             wp_nav_menu(array(
                 'theme_location' => 'primary',
                 'container' => false,
+                'menu_class' => 'nav-menu',
                 'fallback_cb' => function() {
-                    echo '<ul>';
+                    echo '<ul class="nav-menu">';
                     echo '<li><a href="' . esc_url(home_url('/')) . '">Home</a></li>';
                     echo '<li><a href="' . esc_url(home_url('/builds')) . '">Builds</a></li>';
                     echo '<li><a href="' . esc_url(home_url('/guides')) . '">Guides</a></li>';

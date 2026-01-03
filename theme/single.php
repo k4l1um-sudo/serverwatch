@@ -1,9 +1,29 @@
-<?php get_header(); ?>
+<?php 
+// Check if post is in "news" category
+$categories = get_the_category();
+$is_news = false;
+if (!empty($categories)) {
+    foreach ($categories as $category) {
+        if ($category->slug === 'news') {
+            $is_news = true;
+            break;
+        }
+    }
+}
+
+// Load news template for news posts
+if ($is_news) {
+    include(get_template_directory() . '/single-news.php');
+    return;
+}
+
+// Default template for other posts
+get_header(); 
+?>
 
 <main class="site-content">
     <div class="container">
         <?php while (have_posts()) : the_post(); 
-            $categories = get_the_category();
             $cat_name = !empty($categories) ? esc_html($categories[0]->name) : 'BUILD';
         ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class('single-post'); ?>>
