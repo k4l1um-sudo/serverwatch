@@ -267,7 +267,7 @@ body {
 
 .hero-title {
     font-family: 'Cinzel', serif;
-    font-size: 80px;
+    font-size: 50px;
     font-weight: 900;
     margin-bottom: 25px;
     color: var(--light-gold);
@@ -641,7 +641,7 @@ body {
 }
 
 .single-post .post-title {
-    font-size: 48px;
+    font-size: 26px;
     margin-bottom: 30px;
     text-align: center;
 }
@@ -674,17 +674,17 @@ body {
 .single-post h2 {
     font-family: 'Cinzel', serif;
     color: var(--gold);
-    font-size: 32px;
+    font-size: 18px;
     margin: 40px 0 20px;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 }
 
 .single-page h3,
 .single-post h3 {
     font-family: 'Cinzel', serif;
     color: var(--light-gold);
-    font-size: 24px;
+    font-size: 20px;
     margin: 30px 0 15px;
     letter-spacing: 1px;
 }
@@ -1036,7 +1036,24 @@ body {
 .contact-submit {
     width: 100%;
     padding: 18px;
-    font-size: 16px;
+    font-size: 18px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--dark-red), rgba(139, 0, 0, 0.9));
+    color: var(--light-gold);
+    border: 2px solid var(--primary-red);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contact-submit:hover {
+    background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(185, 29, 29, 0.4);
+    color: #fff;
+    transform: translateY(-2px);
 }
 
 .contact-message {

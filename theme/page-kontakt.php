@@ -135,16 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form_submit']
                     <h2>Kontaktinformationen</h2>
                     <div class="contact-details">
                         <div class="contact-detail">
-                            <strong>Adresse:</strong><br>
-                            Andreas Wagner<br>
-                            Auf der Heide 48<br>
-                            52223 Stolberg
-                        </div>
-                        <div class="contact-detail">
-                            <strong>E-Mail:</strong><br>
-                            <a href="mailto:info@k4l1um.de">info(at)k4l1um.de</a>
-                        </div>
-                        <div class="contact-detail">
                             <strong>Telefon:</strong><br>
                             <a href="tel:+491711859808">+49 171 1859808</a>
                         </div>
