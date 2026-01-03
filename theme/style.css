@@ -1191,6 +1191,251 @@ body {
     }
 }
 
+/* ==========================================
+   COMMENTS SECTION - DIABLO IV STYLE
+   ========================================== */
+
+.comments-area {
+    max-width: 900px;
+    margin: 60px auto 0;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(15, 13, 12, 0.6), rgba(22, 18, 15, 0.4));
+    border: 1px solid var(--border-dark);
+    border-top: 3px solid var(--primary-red);
+}
+
+.comments-title {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-dark);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+}
+
+.comment-list .comment {
+    background: rgba(10, 8, 7, 0.5);
+    border: 1px solid var(--border-dark);
+    border-left: 3px solid var(--dark-red);
+    padding: 25px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.comment-list .comment:hover {
+    border-left-color: var(--primary-red);
+    background: rgba(15, 13, 12, 0.7);
+    box-shadow: 0 0 30px rgba(185, 29, 29, 0.1);
+}
+
+.comment-list .children {
+    list-style: none;
+    margin-left: 40px;
+    margin-top: 20px;
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.comment-author .avatar {
+    border-radius: 50%;
+    border: 2px solid var(--dark-red);
+    box-shadow: 0 0 10px rgba(185, 29, 29, 0.3);
+}
+
+.comment-author .fn {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--light-gold);
+    font-style: normal;
+}
+
+.comment-metadata {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.comment-metadata a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.comment-metadata a:hover {
+    color: var(--gold);
+}
+
+.comment-content {
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.comment-content p {
+    margin-bottom: 15px;
+}
+
+.reply {
+    text-align: right;
+}
+
+.comment-reply-link {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, var(--dark-red), rgba(139, 0, 0, 0.8));
+    color: var(--light-gold);
+    font-family: 'Marcellus', serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border: 1px solid rgba(185, 29, 29, 0.5);
+    transition: all 0.3s ease;
+}
+
+.comment-reply-link:hover {
+    background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+    border-color: var(--primary-red);
+    box-shadow: 0 0 20px rgba(185, 29, 29, 0.4);
+    color: #fff;
+}
+
+/* Comment Form */
+.comment-respond {
+    background: linear-gradient(135deg, rgba(15, 13, 12, 0.8), rgba(10, 8, 7, 0.6));
+    border: 1px solid var(--border-dark);
+    border-top: 3px solid var(--gold);
+    padding: 30px;
+    margin-top: 40px;
+}
+
+.comment-reply-title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.comment-form {
+    display: grid;
+    gap: 20px;
+}
+
+.comment-form p {
+    margin: 0;
+}
+
+.comment-form label {
+    display: block;
+    font-family: 'Marcellus', serif;
+    font-size: 14px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.comment-form input[type="text"],
+.comment-form input[type="email"],
+.comment-form input[type="url"],
+.comment-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(10, 8, 7, 0.6);
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+    font-family: 'Crimson Text', serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.comment-form input[type="text"]:focus,
+.comment-form input[type="email"]:focus,
+.comment-form input[type="url"]:focus,
+.comment-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-red);
+    background: rgba(15, 13, 12, 0.8);
+    box-shadow: 0 0 15px rgba(185, 29, 29, 0.2);
+}
+
+.comment-form textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.form-submit {
+    margin-top: 10px;
+}
+
+.form-submit input[type="submit"] {
+    padding: 15px 40px;
+    background: linear-gradient(135deg, var(--dark-red), rgba(139, 0, 0, 0.9));
+    color: var(--light-gold);
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 2px solid var(--primary-red);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-submit input[type="submit"]:hover {
+    background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(185, 29, 29, 0.4);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.no-comments {
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 30px;
+}
+
+.comment-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-dark);
+}
+
+.comment-navigation a {
+    color: var(--gold);
+    text-decoration: none;
+    font-family: 'Marcellus', serif;
+    transition: color 0.3s ease;
+}
+
+.comment-navigation a:hover {
+    color: var(--light-gold);
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 12px;

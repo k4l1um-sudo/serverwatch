@@ -22,7 +22,7 @@
             <?php else : ?>
                 <h1 class="site-title">
                     <a href="<?php echo esc_url(home_url('/')); ?>">
-                        <span class="diablo-logo">DIABLO IV</span>
+                        <span class="diablo-logo">K4L1UM</span>
                         <span class="site-tagline">Builds & Guides</span>
                     </a>
                 </h1>
