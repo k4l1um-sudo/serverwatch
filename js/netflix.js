@@ -45,15 +45,18 @@
 
   async function fetchStatus(){
     container.innerHTML = '<p class="muted">Lade Status…</p>';
-    // 1) Try Vercel serverless endpoint (live, CORS-enabled)
-    try{
-      const svc = await fetch('/api/netflix', {cache:'no-store'});
-      if(svc.ok){
-        const j = await svc.json();
-        const comps = (j.components||[]).filter(c => /netflix|playback|stream|video|account|login/i.test(c.name));
-        if(comps.length){ render(comps); return; }
-      }
-    }catch(e){ /* ignore */ }
+      // Vercel deployment base URL (use provided deployment)
+      const VERCEL_BASE = 'https://serverwatch-qskejdd38-k4l1um-sudos-projects.vercel.app';
+
+      // 1) Try Vercel serverless endpoint (live, CORS-enabled)
+      try{
+        const svc = await fetch(VERCEL_BASE + '/api/netflix', {cache:'no-store'});
+        if(svc.ok){
+          const j = await svc.json();
+          const comps = (j.components||[]).filter(c => /netflix|playback|stream|video|account|login/i.test(c.name));
+          if(comps.length){ render(comps); return; }
+        }
+      }catch(e){ /* ignore */ */
 
     // 2) Try local cached data produced by CI (data/netflix.json)
     try{
@@ -98,7 +101,7 @@
     const helpEl = document.getElementById('netflix-help');
     if(!helpEl) return;
     try{
-      const res = await fetch('/api/netflixstatus', {cache:'no-store'});
+      const res = await fetch(VERCEL_BASE + '/api/netflixstatus', {cache:'no-store'});
       if(!res.ok) return;
       const j = await res.json();
       if(j && j.summary){
