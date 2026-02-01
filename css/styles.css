@@ -48,4 +48,11 @@ footer{margin-top:auto;padding:18px;color:var(--muted)}
 .status-badge.unknown{background:rgba(255,255,255,0.03);color:var(--muted)}
 .muted{color:var(--muted)}
 
+/* Clickable button styled like status badges */
+.status-btn{display:inline-block;padding:6px 12px;border-radius:999px;font-weight:700;font-size:0.9rem;text-decoration:none;color:#04221a;background:linear-gradient(90deg,#19c37d,#00e5a8);box-shadow:0 8px 20px rgba(30,200,220,0.06);transition:transform .12s ease;margin-top:6px}
+.status-btn.degraded{background:linear-gradient(90deg,#ffb86b,#ff8a4b);color:#2b1408}
+.status-btn.down{background:linear-gradient(90deg,#ff5b6a,#ff2e4a);color:#2b0a0f}
+.status-btn.maintenance{background:linear-gradient(90deg,#9fb5ff,#6bb0ff);color:#05102a}
+.status-btn.unknown{background:rgba(255,255,255,0.03);color:var(--muted)}
+
 
