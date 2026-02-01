@@ -32,6 +32,11 @@
     });
   }
 
+  // small helper to escape text for insertion into simple HTML
+  function escapeHtml(str){
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
   async function tryFetch(url){
     try{
       const res = await fetch(url, {cache:'no-store'});
@@ -55,8 +60,32 @@
           const j = await svc.json();
           const comps = (j.components||[]).filter(c => /netflix|playback|stream|video|account|login/i.test(c.name));
           if(comps.length){ render(comps); return; }
+        } else {
+          // upstream failed (e.g. 502) — try human-readable help page summary as fallback
+          try{
+            const res = await fetch(VERCEL_BASE + '/api/netflixstatus', {cache:'no-store'});
+            if(res.ok){
+              const h = await res.json();
+              if(h && h.summary){
+                container.innerHTML = '<div class="status-item"><div class="status-name">Netflix (help)</div><div class="status-badge unknown">'+escapeHtml(h.summary.slice(0,200))+'</div></div>';
+                return;
+              }
+            }
+          }catch(_){/* ignore */}
         }
-      }catch(e){ /* ignore */ */
+      }catch(e){
+        // fetch threw (network) — fallback to help page summary
+        try{
+          const res = await fetch(VERCEL_BASE + '/api/netflixstatus', {cache:'no-store'});
+          if(res.ok){
+            const h = await res.json();
+            if(h && h.summary){
+              container.innerHTML = '<div class="status-item"><div class="status-name">Netflix (help)</div><div class="status-badge unknown">'+escapeHtml(h.summary.slice(0,200))+'</div></div>';
+              return;
+            }
+          }
+        }catch(_){/* ignore */}
+      }
 
     // 2) Try local cached data produced by CI (data/netflix.json)
     try{
