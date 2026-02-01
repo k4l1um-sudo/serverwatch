@@ -1,0 +1,6 @@
+{
+  "endpoints": [
+    { "name": "Fortnite summary", "url": "https://status.epicgames.com/api/v2/summary.json" },
+    { "name": "Netflix summary", "url": "https://netflix.statuspage.io/api/v2/summary.json" }
+  ]
+}
