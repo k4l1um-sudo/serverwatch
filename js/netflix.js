@@ -45,8 +45,17 @@
 
   async function fetchStatus(){
     container.innerHTML = '<p class="muted">Lade Status…</p>';
+    // 1) Try Vercel serverless endpoint (live, CORS-enabled)
+    try{
+      const svc = await fetch('/api/netflix', {cache:'no-store'});
+      if(svc.ok){
+        const j = await svc.json();
+        const comps = (j.components||[]).filter(c => /netflix|playback|stream|video|account|login/i.test(c.name));
+        if(comps.length){ render(comps); return; }
+      }
+    }catch(e){ /* ignore */ }
 
-    // 1) Try local cached data produced by CI (data/netflix.json)
+    // 2) Try local cached data produced by CI (data/netflix.json)
     try{
       const local = await fetch('/data/netflix.json', {cache: 'no-store'});
       if(local.ok){
@@ -56,7 +65,7 @@
       }
     }catch(e){ /* ignore */ }
 
-    // 2) First try direct client-side requests
+    // 3) First try direct client-side requests
     for(const url of ENDPOINTS){
       const data = await tryFetch(url);
       if(data && data.components){
@@ -66,7 +75,7 @@
       }
     }
 
-    // 3) If direct requests fail (likely CORS), try proxying via proxy.php on the same host
+    // 4) Fallback: try proxy.php on same host (if available)
     for(const url of ENDPOINTS){
       try{
         const proxyUrl = '/proxy.php?url=' + encodeURIComponent(url);
@@ -78,13 +87,27 @@
           render(comps);
           return;
         }
-      }catch(e){
-        // continue to next
-      }
+      }catch(e){ /* continue */ }
     }
 
-    container.innerHTML = '<p class="muted">Konnte Netflix-Status nicht ermitteln (CORS oder kein passender Endpoint).</p>';
+    container.innerHTML = '<p class="muted">Konnte Netflix-Status nicht ermitteln (kein Endpoint erreichbar).</p>';
   }
+
+  // Fetch Netflix help page summary (is-netflix-down)
+  async function fetchHelp(){
+    const helpEl = document.getElementById('netflix-help');
+    if(!helpEl) return;
+    try{
+      const res = await fetch('/api/netflixstatus', {cache:'no-store'});
+      if(!res.ok) return;
+      const j = await res.json();
+      if(j && j.summary){
+        helpEl.textContent = j.summary;
+      }
+    }catch(e){ /* ignore */ }
+  }
+
+  fetchHelp();
 
   fetchStatus();
   setInterval(fetchStatus, 60*1000);
