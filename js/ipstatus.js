@@ -3,24 +3,8 @@
   const container = document.getElementById('ip-status-list');
   if(!container) return;
 
+  // Nur die letzten drei Einträge anzeigen (Google, Cloudflare, Quad9)
   const ENTRIES = [
-    { id:'A', name:'A Root (Verisign)', ip:'198.41.0.4' },
-    { id:'B', name:'B Root (ISI)', ip:'199.9.14.201' },
-    { id:'C', name:'C Root (Cogent)', ip:'192.33.4.12' },
-    { id:'D', name:'D Root (UMD)', ip:'199.7.91.13' },
-    { id:'E', name:'E Root (NASA)', ip:'192.203.230.10' },
-    { id:'F', name:'F Root (ISC)', ip:'192.5.5.241' },
-    { id:'G', name:'G Root (US DoD)', ip:'192.112.36.4' },
-    { id:'H', name:'H Root (ARL)', ip:'198.97.190.53' },
-    { id:'I', name:'I Root (Netnod)', ip:'192.36.148.17' },
-    { id:'J', name:'J Root (Verisign)', ip:'192.58.128.30' },
-    { id:'K', name:'K Root (RIPE NCC)', ip:'193.0.14.129' },
-    { id:'L', name:'L Root (ICANN)', ip:'199.7.83.42' },
-    { id:'M', name:'M Root (WIDE)', ip:'202.12.27.33' },
-    { id:'com', name:'.com TLD (Verisign)', ip:'192.5.6.30' },
-    { id:'net', name:'.net TLD (Verisign)', ip:'192.5.6.30' },
-    { id:'org', name:'.org TLD (PIR)', ip:'192.12.94.30' },
-    { id:'de', name:'.de TLD (DENIC)', ip:'194.25.0.68' },
     { id:'google', name:'Google Public DNS', ip:'8.8.8.8' },
     { id:'cloudflare', name:'Cloudflare DNS', ip:'1.1.1.1' },
     { id:'quad9', name:'Quad9 DNS', ip:'9.9.9.9' }
