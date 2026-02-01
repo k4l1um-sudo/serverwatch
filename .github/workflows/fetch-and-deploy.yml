@@ -1,0 +1,52 @@
+name: Fetch status + FTP deploy
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # alle 15 Minuten
+  workflow_dispatch: {}
+
+jobs:
+  fetch-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch Netflix status
+        run: |
+          mkdir -p data
+          if curl -sS 'https://netflix.statuspage.io/api/v2/summary.json' -o data/netflix.json; then
+            echo 'fetched netflix'
+          else
+            echo '{}' > data/netflix.json
+          fi
+
+      - name: Fetch EpicGames status
+        run: |
+          if curl -sS 'https://status.epicgames.com/api/v2/summary.json' -o data/epic.json; then
+            echo 'fetched epic'
+          else
+            echo '{}' > data/epic.json
+          fi
+
+      - name: Commit fetched data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "actions@github.com"
+          git add data/netflix.json data/epic.json || true
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto: update status data"
+            git push
+          else
+            echo "No changes"
+          fi
+
+      - name: FTP Deploy to webspace
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          local-dir: ./
+          server-dir: /public_html/
+          git-ftp-args: --insecure

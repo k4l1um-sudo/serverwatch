@@ -46,7 +46,17 @@
   async function fetchStatus(){
     container.innerHTML = '<p class="muted">Lade Status…</p>';
 
-    // First try direct client-side requests
+    // 1) Try local cached data produced by CI (data/netflix.json)
+    try{
+      const local = await fetch('/data/netflix.json', {cache: 'no-store'});
+      if(local.ok){
+        const j = await local.json();
+        const comps = (j.components||[]).filter(c => /netflix|playback|stream|video|account|login/i.test(c.name));
+        if(comps.length){ render(comps); return; }
+      }
+    }catch(e){ /* ignore */ }
+
+    // 2) First try direct client-side requests
     for(const url of ENDPOINTS){
       const data = await tryFetch(url);
       if(data && data.components){
@@ -56,7 +66,7 @@
       }
     }
 
-    // If direct requests fail (likely CORS), try proxying via proxy.php on the same host
+    // 3) If direct requests fail (likely CORS), try proxying via proxy.php on the same host
     for(const url of ENDPOINTS){
       try{
         const proxyUrl = '/proxy.php?url=' + encodeURIComponent(url);

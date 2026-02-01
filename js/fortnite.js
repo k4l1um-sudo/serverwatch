@@ -41,6 +41,17 @@
   }
 
   async function fetchStatus(){
+    // 1) Try local cached file produced by CI
+    try{
+      const local = await fetch('/data/epic.json', {cache:'no-store'});
+      if(local.ok){
+        const j = await local.json();
+        const comps = (j.components||[]).filter(c => /fortnite/i.test(c.name));
+        if(comps.length){ render(comps); return; }
+      }
+    }catch(e){ /* ignore */ }
+
+    // 2) Fall back to live request
     try{
       const res = await fetch(ENDPOINT, {cache: 'no-store'});
       if(!res.ok) throw new Error('HTTP ' + res.status);
