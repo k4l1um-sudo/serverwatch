@@ -3,8 +3,8 @@
   const container = document.getElementById('starcitizen-status');
   if(!container) return;
 
-  const PAGE = 'https://robertsspaceindustries.com/';
-  const API = 'https://robertsspaceindustries.statuspage.io/api/v2/summary.json';
+  const PAGE = 'https://status.robertsspaceindustries.com/';
+  const API = 'https://status.robertsspaceindustries.com/api/v2/summary.json';
 
   function renderBadge(text, cls){
     container.innerHTML = '';
