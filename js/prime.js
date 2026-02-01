@@ -11,7 +11,13 @@
 
   async function update(){
     container.innerHTML = '<p class="muted">Lade Status…</p>';
-    showLink();
+    try{
+      const res = await fetch(STATUS_PAGE, { cache: 'no-store' });
+      if(!res.ok){ showLink(); return; }
+      showLink();
+    }catch(e){
+      showLink();
+    }
   }
 
   update();

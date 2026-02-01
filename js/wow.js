@@ -11,8 +11,15 @@
 
   async function update(){
     container.innerHTML = '<p class="muted">Lade Status…</p>';
-    // No reliable public status API used here — show link as primary information.
-    showLink();
+    try{
+      const res = await fetch(STATUS_PAGE, { cache: 'no-store' });
+      if(!res.ok){ showLink(); return; }
+      // We don't have a reliable machine-parseable status, so show the page link if reachable
+      showLink();
+    }catch(e){
+      // CORS / network — just show link
+      showLink();
+    }
   }
 
   update();

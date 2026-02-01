@@ -18,11 +18,14 @@
       const overall = j.status && j.status.description ? j.status.description : 'Status verfügbar';
       container.innerHTML = '<div class="status-item"><div class="status-name">Spotify</div><div class="status-badge online">' + overall + '</div></div>';
       return;
+    } else {
+      // if API endpoint responds but with non-OK, show link
+      showLink();
     }
   }catch(e){
-    // likely CORS — fallthrough to link
+    // likely CORS — show link only
+    showLink();
   }
 
-  showLink();
-  setInterval(()=>{ /* no-op periodic refresh for now */ }, 60*1000);
+  setInterval(()=>{ /* periodic refresh */ }, 60*1000);
 })();
