@@ -10,16 +10,30 @@
     container.innerHTML = '<p>Spotify Status: <a href="' + PAGE + '" target="_blank" rel="noopener">' + PAGE + '</a></p>';
   }
 
+  function renderStatus(text, cls){
+    container.innerHTML = '<div class="status-item"><div class="status-name">Spotify</div><div class="status-badge ' + cls + '">' + text + '</div></div>';
+  }
+
   container.innerHTML = '<p class="muted">Lade Status…</p>';
   try{
     const res = await fetch(API, { cache: 'no-store' });
     if(res.ok){
       const j = await res.json();
-      const overall = j.status && j.status.description ? j.status.description : 'Status verfügbar';
-      container.innerHTML = '<div class="status-item"><div class="status-name">Spotify</div><div class="status-badge online">' + overall + '</div></div>';
+      const indicator = j.status && j.status.indicator ? j.status.indicator : null;
+      const desc = j.status && j.status.description ? j.status.description : 'Status verfügbar';
+      if(indicator === 'none'){
+        renderStatus('Online', 'online');
+      } else if(indicator === 'minor'){
+        renderStatus(desc || 'Eingeschränkte Leistung', 'degraded');
+      } else if(indicator === 'major'){
+        renderStatus(desc || 'Ausfall', 'down');
+      } else {
+        // unknown indicator — show description
+        renderStatus(desc, 'unknown');
+      }
       return;
     } else {
-      // if API endpoint responds but with non-OK, show link
+      // API responded with non-OK — show link
       showLink();
     }
   }catch(e){
