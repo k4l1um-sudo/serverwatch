@@ -18,8 +18,8 @@
     try{
       const res = await fetch(EXTERNAL_URL, { cache: 'no-store' });
       if(!res.ok){
-        // can't fetch the page — show link
-        container.innerHTML = '<p>Direkte Abfrage nicht möglich. Siehe <a href="' + EXTERNAL_URL + '" target="_blank" rel="noopener">Statusseite</a></p>';
+        // can't fetch the page — show link styled as button
+        container.innerHTML = '<p>Direkte Abfrage nicht möglich. Siehe <a class="btn" href="' + EXTERNAL_URL + '" target="_blank" rel="noopener">Statusseite</a></p>';
         return;
       }
       const html = await res.text();
@@ -29,11 +29,10 @@
       else { renderDown(); }
     }catch(err){
       // likely CORS or network error — show link only
-      container.innerHTML = '<p>Direkte Abfrage blockiert. Siehe <a href="' + EXTERNAL_URL + '" target="_blank" rel="noopener">Statusseite</a></p>';
+      container.innerHTML = '<p>Direkte Abfrage blockiert. Siehe <a class="btn" href="' + EXTERNAL_URL + '" target="_blank" rel="noopener">Statusseite</a></p>';
     }
   }
 
   update();
   setInterval(update, 60*1000);
 })();
-            if(!res.ok){

@@ -6,7 +6,7 @@
   const STATUS_PAGE = 'https://worldofwarcraft.com/de-de/status';
 
   function showLink(){
-    container.innerHTML = '<p>Offizielle Statusseite: <a href="' + STATUS_PAGE + '" target="_blank" rel="noopener">' + STATUS_PAGE + '</a></p>';
+    container.innerHTML = '<p><a class="btn" href="' + STATUS_PAGE + '" target="_blank" rel="noopener">Offizielle Statusseite</a></p>';
   }
 
   function renderStatus(text, cls){

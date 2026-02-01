@@ -6,7 +6,7 @@
   const STATUS_PAGE = 'https://www.amazon.de/gp/help/customer/display.html?nodeId=201910060';
 
   function showLink(){
-    container.innerHTML = '<p>Offizielle Hilfe/Status: <a href="' + STATUS_PAGE + '" target="_blank" rel="noopener">' + STATUS_PAGE + '</a></p>';
+    container.innerHTML = '<p><a class="btn" href="' + STATUS_PAGE + '" target="_blank" rel="noopener">Amazon Prime Video Hilfe</a></p>';
   }
 
   async function update(){

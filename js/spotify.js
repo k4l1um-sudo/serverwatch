@@ -7,7 +7,7 @@
   const PAGE = 'https://status.spotify.com/';
 
   function showLink(){
-    container.innerHTML = '<p>Spotify Status: <a href="' + PAGE + '" target="_blank" rel="noopener">' + PAGE + '</a></p>';
+    container.innerHTML = '<p><a class="btn" href="' + PAGE + '" target="_blank" rel="noopener">Spotify Status</a></p>';
   }
 
   function renderStatus(text, cls){

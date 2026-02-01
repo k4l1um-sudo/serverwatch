@@ -48,6 +48,13 @@ footer{margin-top:auto;padding:18px;color:var(--muted)}
 .status-badge.unknown{background:rgba(255,255,255,0.03);color:var(--muted)}
 .muted{color:var(--muted)}
 
+/* Generic button style for external status links */
+.btn{display:inline-block;padding:8px 12px;background:linear-gradient(90deg,var(--accent),#1ec8dc);color:#022126;font-weight:700;border-radius:8px;text-decoration:none;box-shadow:0 8px 24px rgba(30,200,220,0.06);transition:transform .12s ease,filter .12s ease}
+.btn:hover{transform:translateY(-2px);filter:brightness(0.98)}
+.btn:active{transform:translateY(0)}
+.btn:focus{outline:2px solid rgba(61,241,255,0.14);outline-offset:3px}
+.status-list p a.btn{font-size:0.95rem}
+
 
 /* Custom visible scrollbar (WebKit + Firefox) */
 html { scrollbar-width: thin; scrollbar-color: linear-gradient(180deg,var(--accent),#1ec8dc) rgba(255,255,255,0.06); }
