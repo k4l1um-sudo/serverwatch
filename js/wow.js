@@ -8,14 +8,16 @@
   // make the wow section collapsible by adding a toggle button to the section header
   const section = container.closest('.status-panel');
   const header = section ? section.querySelector('h3') : null;
-  let expanded = true;
+  let expanded = false; // default collapsed
   if(header){
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'toggle-btn';
-    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-expanded', 'false');
     btn.title = 'Auf- / zuklappen';
-    btn.textContent = '▾';
+    btn.textContent = '▸';
+    // start collapsed
+    container.style.display = 'none';
     btn.addEventListener('click', ()=>{
       expanded = !expanded;
       btn.setAttribute('aria-expanded', String(expanded));
