@@ -5,9 +5,9 @@
 
   const STATUS_PAGE = 'https://worldofwarcraft.com/de-de/status';
 
-  function renderBadge(text, cls){
-    // layout like Fortnite: left name, right badge/button
-    container.innerHTML = '';
+    function renderBadge(text, cls){
+      // layout like Star Citizen: left name, right badge + button
+      container.innerHTML = '';
     const el = document.createElement('div');
     el.className = 'status-item';
 
@@ -38,17 +38,26 @@
     container.appendChild(el);
   }
 
-  function showLink(){
-    container.innerHTML = '';
-    const p = document.createElement('p');
-    const a = document.createElement('a');
-    a.className = 'status-btn unknown';
-    a.href = STATUS_PAGE;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.textContent = 'Offizielle Statusseite';
-    p.appendChild(a);
-    container.appendChild(p);
+    function renderLink(){
+      container.innerHTML = '';
+      const el = document.createElement('div');
+      el.className = 'status-item';
+      const name = document.createElement('div');
+      name.className = 'status-name';
+      name.textContent = 'World of Warcraft';
+      const right = document.createElement('div');
+      right.style.display = 'flex';
+      right.style.gap = '8px';
+      const btn = document.createElement('a');
+      btn.className = 'status-btn unknown';
+      btn.href = STATUS_PAGE;
+      btn.target = '_blank';
+      btn.rel = 'noopener';
+      btn.textContent = 'Offizielle Statusseite';
+      right.appendChild(btn);
+      el.appendChild(name);
+      el.appendChild(right);
+      container.appendChild(el);
   }
 
   async function update(){
