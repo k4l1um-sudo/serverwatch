@@ -6,9 +6,10 @@ export default async function handler(req, res){
     const upstream = await fetch(url, { headers: { 'User-Agent': 'serverwatch-scraper/1.0' } });
     const text = await upstream.text();
 
-    // Look for the exact phrase in German
+    // Look for the exact phrase in German in the visible text
     const phrase = 'Netflix ist verfügbar';
-    const found = text.includes(phrase);
+    const visible = text.replace(/<[^>]+>/g, ' ');
+    const found = visible.includes(phrase);
 
     // Try to extract a short summary (meta description or first <p>)
     const meta = text.match(/<meta\s+(?:name|property)=["'](?:description|og:description)["']\s+content=["']([\s\S]*?)["'][^>]*>/i);
