@@ -18,25 +18,13 @@
     left.className = 'status-name';
     left.innerHTML = '<strong>' + e.name + '</strong><div style="font-size:0.85rem;color:var(--muted)">' + e.ip + '</div>';
 
-    const right = document.createElement('div');
-    right.style.display = 'flex';
-    right.style.alignItems = 'center';
-    right.style.gap = '8px';
-
-    const badge = document.createElement('div');
+    const badge = document.createElement('span');
     badge.className = 'status-badge unknown';
     badge.textContent = 'Unbekannt';
 
-    const btn = document.createElement('button');
-    btn.className = 'status-btn unknown';
-    btn.textContent = 'Test';
-    btn.addEventListener('click', ()=> runTest(e, badge));
-
-    right.appendChild(badge);
-    right.appendChild(btn);
-
     el.appendChild(left);
-    el.appendChild(right);
+    el.appendChild(badge);
+    // keep test via global refresh only (no per-item button) to match Fortnite layout
     return {el,badge};
   }
 

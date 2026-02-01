@@ -15,20 +15,12 @@
     name.className = 'status-name';
     name.textContent = 'Netflix';
 
-    const right = document.createElement('div');
-    right.style.display = 'flex';
-    right.style.gap = '8px';
+    const badge = document.createElement('span');
+    badge.className = 'status-badge unknown';
+    badge.textContent = 'Info';
 
-    const btn = document.createElement('a');
-    btn.className = 'status-btn unknown';
-    btn.href = EXTERNAL_URL;
-    btn.target = '_blank';
-    btn.rel = 'noopener';
-    btn.textContent = 'Statusseite';
-
-    right.appendChild(btn);
     el.appendChild(name);
-    el.appendChild(right);
+    el.appendChild(badge);
     container.appendChild(el);
   }
 

@@ -12,26 +12,12 @@
     left.className = 'status-name';
     left.innerHTML = '<strong>Brawl Stars</strong><div style="font-size:0.85rem;color:var(--muted)">Status: ' + state.label + '</div>';
 
-    const right = document.createElement('div');
-    right.style.display = 'flex';
-    right.style.alignItems = 'center';
-    right.style.gap = '8px';
-
-    const badge = document.createElement('div');
+    const badge = document.createElement('span');
     badge.className = 'status-badge ' + state.cls;
     badge.textContent = state.text;
 
-    const btn = document.createElement('a');
-    btn.className = 'status-btn';
-    btn.textContent = 'Support/Status';
-    btn.href = url || 'https://supercell.com/';
-    btn.target = '_blank';
-
-    right.appendChild(badge);
-    right.appendChild(btn);
-
     el.appendChild(left);
-    el.appendChild(right);
+    el.appendChild(badge);
     container.appendChild(el);
   }
 

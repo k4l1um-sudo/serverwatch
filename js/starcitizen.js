@@ -15,26 +15,12 @@
     name.className = 'status-name';
     name.textContent = 'Star Citizen';
 
-    const right = document.createElement('div');
-    right.style.display = 'flex';
-    right.style.gap = '8px';
-
-    const badge = document.createElement('div');
+    const badge = document.createElement('span');
     badge.className = 'status-badge ' + cls;
     badge.textContent = text;
 
-    const btn = document.createElement('a');
-    btn.className = 'status-btn ' + cls;
-    btn.href = PAGE;
-    btn.target = '_blank';
-    btn.rel = 'noopener';
-    btn.textContent = 'Offizielle Seite';
-
-    right.appendChild(badge);
-    right.appendChild(btn);
-
     el.appendChild(name);
-    el.appendChild(right);
+    el.appendChild(badge);
     container.appendChild(el);
   }
 
@@ -45,18 +31,11 @@
     const name = document.createElement('div');
     name.className = 'status-name';
     name.textContent = 'Star Citizen';
-    const right = document.createElement('div');
-    right.style.display = 'flex';
-    right.style.gap = '8px';
-    const btn = document.createElement('a');
-    btn.className = 'status-btn unknown';
-    btn.href = PAGE;
-    btn.target = '_blank';
-    btn.rel = 'noopener';
-    btn.textContent = 'Offizielle Seite';
-    right.appendChild(btn);
+    const badge = document.createElement('span');
+    badge.className = 'status-badge unknown';
+    badge.textContent = 'Info';
     el.appendChild(name);
-    el.appendChild(right);
+    el.appendChild(badge);
     container.appendChild(el);
   }
 
