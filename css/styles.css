@@ -49,3 +49,12 @@ footer{margin-top:auto;padding:18px;color:var(--muted)}
 .muted{color:var(--muted)}
 
 
+/* Custom visible scrollbar (WebKit + Firefox) */
+html { scrollbar-width: thin; scrollbar-color: linear-gradient(180deg,var(--accent),#1ec8dc) rgba(255,255,255,0.06); }
+
+body::-webkit-scrollbar{ width:12px }
+body::-webkit-scrollbar-track{ background: rgba(255,255,255,0.03); border-radius:999px }
+body::-webkit-scrollbar-thumb{ background: linear-gradient(180deg, rgba(61,241,255,0.95), rgba(30,200,220,0.95)); border-radius:999px; border:3px solid rgba(0,0,0,0.12) }
+body::-webkit-scrollbar-thumb:hover{ filter:brightness(0.95) }
+
+
