@@ -6,7 +6,7 @@
   --muted:#8ea9bd;
 }
 *{box-sizing:border-box}
-html,body{height:100%;overflow:hidden}
+html,body{height:100%}
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
@@ -16,7 +16,7 @@ body{
   overflow:hidden;
 }
 #bg{position:fixed;inset:0;z-index:0}
-.ui{position:relative;z-index:2;height:100vh;display:flex;flex-direction:column;align-items:center}
+.ui{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center}
 .site-header{padding:42px 20px 6px;text-align:center}
 .site-header h1{font-size:2.6rem;margin:0;text-shadow:0 6px 20px rgba(61,177,255,0.08);letter-spacing:0.6px}
 .tagline{margin:6px 0 0;color:var(--muted)}
