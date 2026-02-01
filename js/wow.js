@@ -6,12 +6,49 @@
   const STATUS_PAGE = 'https://worldofwarcraft.com/de-de/status';
 
   function renderBadge(text, cls){
-    container.innerHTML = '<div class="status-item"><div class="status-name">World of Warcraft</div><div class="status-badge ' + cls + '">' + text + '</div></div>' +
-      '<p><a class="status-btn ' + cls + '" href="' + STATUS_PAGE + '" target="_blank" rel="noopener">Offizielle Statusseite</a></p>';
+    // layout like Fortnite: left name, right badge/button
+    container.innerHTML = '';
+    const el = document.createElement('div');
+    el.className = 'status-item';
+
+    const name = document.createElement('div');
+    name.className = 'status-name';
+    name.textContent = 'World of Warcraft';
+
+    const right = document.createElement('div');
+    right.style.display = 'flex';
+    right.style.gap = '8px';
+
+    const badge = document.createElement('div');
+    badge.className = 'status-badge ' + cls;
+    badge.textContent = text;
+
+    const btn = document.createElement('a');
+    btn.className = 'status-btn ' + cls;
+    btn.href = STATUS_PAGE;
+    btn.target = '_blank';
+    btn.rel = 'noopener';
+    btn.textContent = 'Statusseite';
+
+    right.appendChild(badge);
+    right.appendChild(btn);
+
+    el.appendChild(name);
+    el.appendChild(right);
+    container.appendChild(el);
   }
 
   function showLink(){
-    container.innerHTML = '<p><a class="status-btn unknown" href="' + STATUS_PAGE + '" target="_blank" rel="noopener">Offizielle Statusseite</a></p>';
+    container.innerHTML = '';
+    const p = document.createElement('p');
+    const a = document.createElement('a');
+    a.className = 'status-btn unknown';
+    a.href = STATUS_PAGE;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = 'Offizielle Statusseite';
+    p.appendChild(a);
+    container.appendChild(p);
   }
 
   async function update(){
