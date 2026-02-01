@@ -1,0 +1,37 @@
+
+:root{
+  --bg-1:#041022;
+  --bg-2:#081826;
+  --accent:#3df1ff;
+  --muted:#8ea9bd;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  color:#dff3ff;
+  -webkit-font-smoothing:antialiased;
+  background:linear-gradient(180deg,var(--bg-1),var(--bg-2));
+  overflow:hidden;
+}
+#bg{position:fixed;inset:0;z-index:0}
+.ui{position:relative;z-index:2;height:100vh;display:flex;flex-direction:column;align-items:center}
+.site-header{padding:42px 20px 6px;text-align:center}
+.site-header h1{font-size:2.6rem;margin:0;text-shadow:0 6px 20px rgba(61,177,255,0.08);letter-spacing:0.6px}
+.tagline{margin:6px 0 0;color:var(--muted)}
+.controls{display:flex;gap:10px;margin:12px 0}
+.chip{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:0.9rem}
+.chip strong{color:var(--accent)}
+.panel{width:min(1100px,94%);margin-top:18px}
+.hero{background:rgba(0,0,0,0.25);backdrop-filter:blur(6px);padding:28px;border-radius:10px;box-shadow:0 8px 30px rgba(2,8,15,0.6)}
+.hero h2{margin:0 0 6px;font-size:1.6rem;color:#e6fbff}
+.hero p{margin:0;color:var(--muted)}
+footer{margin-top:auto;padding:18px;color:var(--muted)}
+
+/* small devices */
+@media (max-width:600px){
+  .site-header h1{font-size:1.6rem}
+  .hero{padding:18px}
+}
+
