@@ -12,15 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fetch Netflix status
-        run: |
-          mkdir -p data
-          if curl -sS 'https://netflix.statuspage.io/api/v2/summary.json' -o data/netflix.json; then
-            echo 'fetched netflix'
-          else
-            echo '{}' > data/netflix.json
-          fi
-
       - name: Fetch EpicGames status
         run: |
           if curl -sS 'https://status.epicgames.com/api/v2/summary.json' -o data/epic.json; then
@@ -33,7 +24,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "actions@github.com"
-          git add data/netflix.json data/epic.json || true
+          git add data/epic.json || true
           if ! git diff --staged --quiet; then
             git commit -m "Auto: update status data"
             git push
