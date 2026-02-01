@@ -5,27 +5,7 @@
 
   const STATUS_PAGE = 'https://worldofwarcraft.blizzard.com/de-de/game/status/eu';
 
-  // make the wow section collapsible by adding a toggle button to the section header
-  const section = container.closest('.status-panel');
-  const header = section ? section.querySelector('h3') : null;
-  let expanded = false; // default collapsed
-  if(header){
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'toggle-btn';
-    btn.setAttribute('aria-expanded', 'false');
-    btn.title = 'Auf- / zuklappen';
-    btn.textContent = '▸';
-    // start collapsed
-    container.style.display = 'none';
-    btn.addEventListener('click', ()=>{
-      expanded = !expanded;
-      btn.setAttribute('aria-expanded', String(expanded));
-      btn.textContent = expanded ? '▾' : '▸';
-      container.style.display = expanded ? '' : 'none';
-    });
-    header.appendChild(btn);
-  }
+  // WoW displayed like other services (no collapse toggle)
 
     function renderBadge(text, cls){
       // layout like Star Citizen: left name, right badge + button
