@@ -3,7 +3,27 @@
   const container = document.getElementById('wow-status');
   if(!container) return;
 
-  const STATUS_PAGE = 'https://worldofwarcraft.com/de-de/status';
+  const STATUS_PAGE = 'https://worldofwarcraft.blizzard.com/de-de/game/status/eu';
+
+  // make the wow section collapsible by adding a toggle button to the section header
+  const section = container.closest('.status-panel');
+  const header = section ? section.querySelector('h3') : null;
+  let expanded = true;
+  if(header){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'toggle-btn';
+    btn.setAttribute('aria-expanded', 'true');
+    btn.title = 'Auf- / zuklappen';
+    btn.textContent = '▾';
+    btn.addEventListener('click', ()=>{
+      expanded = !expanded;
+      btn.setAttribute('aria-expanded', String(expanded));
+      btn.textContent = expanded ? '▾' : '▸';
+      container.style.display = expanded ? '' : 'none';
+    });
+    header.appendChild(btn);
+  }
 
     function renderBadge(text, cls){
       // layout like Star Citizen: left name, right badge + button
@@ -64,7 +84,7 @@
     container.innerHTML = '<p class="muted">Lade Status…</p>';
     try{
       const res = await fetch(STATUS_PAGE, { cache: 'no-store' });
-      if(!res.ok){ showLink(); return; }
+      if(!res.ok){ renderLink(); return; }
       const html = await res.text();
       const visible = html.replace(/<[^>]+>/g, ' ').toLowerCase();
       const keywordsOnline = ['verfügbar','online','operational','available','running'];
@@ -80,9 +100,9 @@
         return;
       }
 
-      showLink();
+      renderLink();
     }catch(e){
-      showLink();
+      renderLink();
     }
   }
 
