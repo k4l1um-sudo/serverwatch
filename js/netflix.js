@@ -13,14 +13,29 @@
 
   async function update(){
     container.innerHTML = '<p class="muted">Lade Status…</p>';
+    // Try local serverless path first (works when site is deployed together with functions)
+    const VERCEL_BASE = 'https://serverwatch-qskejdd38-k4l1um-sudos-projects.vercel.app';
     try{
-      const res = await fetch('/api/netflixstatus', {cache: 'no-store'});
+      let res = await fetch('/api/netflixstatus', {cache: 'no-store'});
+      if(!res.ok){
+        // fallback to Vercel deployment (if functions are hosted there)
+        res = await fetch(VERCEL_BASE + '/api/netflixstatus', {cache: 'no-store'});
+      }
       if(!res.ok){ renderDown(); return; }
       const j = await res.json();
-      // Expect { available: true|false, summary: '...' }
       if(j && j.available === true){ renderOk(); }
       else { renderDown(); }
-    }catch(e){ renderDown(); }
+    }catch(e){
+      // try Vercel as last resort
+      try{
+        const res2 = await fetch(VERCEL_BASE + '/api/netflixstatus', {cache: 'no-store'});
+        if(res2.ok){
+          const j2 = await res2.json();
+          if(j2 && j2.available === true) { renderOk(); return; }
+        }
+      }catch(_){/* ignore */}
+      renderDown();
+    }
   }
 
   update();
