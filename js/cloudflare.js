@@ -2,7 +2,12 @@
 (function(){
   const ENDPOINT = 'https://www.cloudflarestatus.com/api/v2/summary.json';
   const container = document.getElementById('cloudflare-status');
-  if(!container) return;
+  const section = document.getElementById('cloudflare');
+  const toggle = document.getElementById('cloudflare-toggle');
+  if(!container || !section || !toggle) return;
+
+  let pollTimer = null;
+  const POLL_MS = 5 * 60 * 1000; // 5 minutes
 
   const mapStatus = s => {
     if(!s) return 'unknown';
@@ -46,7 +51,6 @@
       const res = await fetch(ENDPOINT, { cache: 'no-store' });
       if(!res.ok) throw new Error('HTTP ' + res.status);
       const j = await res.json();
-      // the API returns components array
       const comps = j.components || [];
       render(comps);
     }catch(err){
@@ -55,6 +59,37 @@
     }
   }
 
-  fetchStatus();
-  setInterval(fetchStatus, 60*1000);
+  function startPolling(){
+    if(pollTimer) return;
+    fetchStatus();
+    pollTimer = setInterval(fetchStatus, POLL_MS);
+  }
+
+  function stopPolling(){
+    if(!pollTimer) return;
+    clearInterval(pollTimer);
+    pollTimer = null;
+  }
+
+  // initial collapsed state: container hidden (index.html sets display:none)
+  toggle.addEventListener('click', ()=>{
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    if(expanded){
+      // collapse
+      container.style.display = 'none';
+      toggle.textContent = '+';
+      toggle.setAttribute('aria-expanded','false');
+      section.classList.add('collapsed');
+      stopPolling();
+    }else{
+      // expand
+      container.style.display = '';
+      toggle.textContent = '-';
+      toggle.setAttribute('aria-expanded','true');
+      section.classList.remove('collapsed');
+      startPolling();
+    }
+  });
+
+  // do not start polling until expanded by user; keep collapsed by default
 })();
