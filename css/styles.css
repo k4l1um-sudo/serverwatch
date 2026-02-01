@@ -35,3 +35,17 @@ footer{margin-top:auto;padding:18px;color:var(--muted)}
   .hero{padding:18px}
 }
 
+/* Fortnite status styles */
+.status-panel{margin-top:18px}
+.status-list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.status-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:rgba(255,255,255,0.02);border-radius:8px}
+.status-name{font-size:0.98rem;color:#eafaff}
+.status-badge{padding:6px 10px;border-radius:999px;font-weight:600;font-size:0.85rem}
+.status-badge.online{background:linear-gradient(90deg,#19c37d,#00e5a8);color:#04221a}
+.status-badge.degraded{background:linear-gradient(90deg,#ffb86b,#ff8a4b);color:#2b1408}
+.status-badge.down{background:linear-gradient(90deg,#ff5b6a,#ff2e4a);color:#2b0a0f}
+.status-badge.maintenance{background:linear-gradient(90deg,#9fb5ff,#6bb0ff);color:#05102a}
+.status-badge.unknown{background:rgba(255,255,255,0.03);color:var(--muted)}
+.muted{color:var(--muted)}
+
+
