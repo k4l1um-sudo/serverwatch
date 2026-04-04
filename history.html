@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Questio - Home</title>
+  <title>Questio - Historie</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/quest.css">
   <link rel="icon" type="image/png" href="assets/questio-logo.png">
   <link rel="apple-touch-icon" href="assets/questio-logo.png">
   <meta name="theme-color" content="#0b1320">
-  <meta name="description" content="Quest- und Levelsystem fuer Kinder mit XP und lokaler Spieler-ID.">
+  <meta name="description" content="Historie erledigter Quests.">
 </head>
 <body>
   <canvas id="bg"></canvas>
@@ -41,32 +41,21 @@
   </aside>
 
   <div class="ui">
-    <main class="panel landing-panel">
-      <section class="hero landing-title-only">
-        <h2>Willkommen bei Questio</h2>
-        <p class="muted">Eine gemeinsame Reise mit kleinen Missionen und grossen Erfolgen.</p>
+    <header class="site-header">
+      <h1>Questio</h1>
+      <p class="tagline">Der Weg des Sohnes.</p>
+    </header>
+
+    <main class="panel quest-panel">
+      <section class="hero">
+        <h2>Historie</h2>
+        <p id="history-summary" class="muted">Lade Historie...</p>
       </section>
 
       <section class="status-panel">
-        <h3>Bildbereich</h3>
-        <figure class="landing-header-figure">
-          <img class="landing-header-image" src="assets/questio-header.webp" alt="Questio Headerbild">
-        </figure>
-      </section>
-
-      <section class="status-panel">
-        <h3>Worum geht es auf dieser Seite?</h3>
-        <div class="landing-info">
-          <p>
-            Questio hilft dabei, Aufgaben spielerisch zu erledigen. Dein Sohn sammelt Erfahrungspunkte,
-            steigt im Level auf und sieht seine Entwicklung Schritt fuer Schritt.
-          </p>
-          <div class="landing-links">
-            <a class="chip" href="progress.html">Zur Seite Fortschritt</a>
-            <a class="chip" href="achievements.html">Zur Seite Achievements</a>
-            <a class="chip" href="history.html">Zur Seite Historie</a>
-            <a class="chip" href="shop.html">Zur Seite Shop</a>
-          </div>
+        <h3>Erledigte Quests</h3>
+        <div id="history-list" class="status-list">
+          <p class="muted">Lade erledigte Quests...</p>
         </div>
       </section>
     </main>
@@ -78,5 +67,6 @@
 
   <script src="js/main.js"></script>
   <script src="js/menu.js"></script>
+  <script src="js/history.js"></script>
 </body>
 </html>

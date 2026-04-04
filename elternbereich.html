@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Questio - Elternbereich</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/quest.css">
+  <link rel="icon" type="image/png" href="assets/questio-logo.png">
+  <link rel="apple-touch-icon" href="assets/questio-logo.png">
+  <meta name="theme-color" content="#0b1320">
+  <meta name="description" content="Elternbereich von Questio – Verwaltung und Einstellungen.">
+  <script>
+    (function () {
+      var pin = window.prompt('PIN eingeben:');
+      if (pin !== '6407') {
+        window.location.replace('index.html');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <a class="corner-logo-link" href="index.html" aria-label="Questio Home">
+    <img class="corner-logo" src="assets/questio-logo.png" alt="Questio Logo">
+  </a>
+
+  <button id="menu-toggle" class="menu-toggle" aria-label="Menue oeffnen" aria-expanded="false" aria-controls="side-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <aside id="side-menu" class="side-menu" aria-hidden="true">
+    <div class="side-menu-inner">
+      <h2>Menue</h2>
+      <p class="muted">Schnellnavigation</p>
+      <nav class="side-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="progress.html">Fortschritt</a>
+        <a href="achievements.html">Achievements</a>
+        <a href="history.html">Historie</a>
+        <a href="shop.html">Shop</a>
+        <a href="profil.html">Mein Profil</a>
+        <a href="elternbereich.html">Elternbereich</a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="ui">
+    <header class="site-header">
+      <h1>Questio</h1>
+      <p class="tagline">Der Weg des Sohnes.</p>
+    </header>
+
+    <main class="panel quest-panel">
+      <section class="hero">
+        <h2>Elternbereich</h2>
+        <p class="muted">Verwaltung, Einstellungen und Übersicht für Eltern.</p>
+      </section>
+
+      <section class="status-panel">
+        <h3>Fortschrittsgraph (Level 1 - 1000)</h3>
+        <p class="quest-meta">Die dicke Linie zeigt den bereits erreichten Weg, die dünne Linie den verbleibenden Teil.</p>
+        <div class="parent-graph-wrap">
+          <canvas id="progress-curve" width="900" height="320" aria-label="Level und EP Fortschrittskurve"></canvas>
+        </div>
+        <p id="graph-stats" class="quest-meta">Lade Fortschrittsdaten...</p>
+        <div id="parent-system-messages" class="parent-system-messages"></div>
+      </section>
+
+      <section class="status-panel">
+        <h3>Spielstatistiken</h3>
+        <div class="parent-stats-grid">
+          <article class="quest-item">
+            <h4 class="quest-title">Achievements</h4>
+            <p class="quest-meta">Insgesamt geschafft: <strong id="stats-achievements-total">-</strong></p>
+            <p class="quest-meta">Diese Woche geschafft: <strong id="stats-achievements-week">-</strong></p>
+          </article>
+          <article class="quest-item">
+            <h4 class="quest-title">Quests</h4>
+            <p class="quest-meta">Insgesamt abgeschlossen: <strong id="stats-quests-total">-</strong></p>
+            <p class="quest-meta">Diese Woche abgeschlossen: <strong id="stats-quests-week">-</strong></p>
+          </article>
+          <article class="quest-item">
+            <h4 class="quest-title">Coins</h4>
+            <p class="quest-meta">Bisher ausgegeben: <strong id="stats-coins-spent">-</strong></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="status-panel">
+        <h3>Aktive Quests</h3>
+        <p class="quest-meta">Getrennt nach verfuegbar, angenommen und zur Bestaetigung markiert.</p>
+        <div class="parent-quest-grid">
+          <article class="quest-item quest-group quest-group-available">
+            <h4 class="quest-title">Verfuegbare Quests</h4>
+            <div id="parent-quests-available" class="parent-quest-list">
+              <p class="muted">Lade Quests...</p>
+            </div>
+          </article>
+
+          <article class="quest-item quest-group quest-group-accepted">
+            <h4 class="quest-title">Angenommene Quests</h4>
+            <div id="parent-quests-accepted" class="parent-quest-list">
+              <p class="muted">Lade Quests...</p>
+            </div>
+          </article>
+
+          <article class="quest-item quest-group quest-group-pending">
+            <h4 class="quest-title">Zur Bestaetigung markiert</h4>
+            <div id="parent-quests-pending" class="parent-quest-list">
+              <p class="muted">Lade Quests...</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="parent-create-quest-wrap">
+          <button id="toggle-new-quest" type="button" class="status-btn">Neue Quest anlegen</button>
+
+          <div id="new-quest-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="new-quest-panel" aria-label="Formular schließen">x</button>
+            <form id="new-quest-form" class="security-form">
+              <label for="new-quest-title" class="field-label">Quest-Titel</label>
+              <input id="new-quest-title" type="text" maxlength="120" placeholder="Titel der Quest" autocomplete="off" required>
+
+              <label for="new-quest-description" class="field-label">Quest-Beschreibung</label>
+              <textarea id="new-quest-description" maxlength="500" placeholder="Beschreibung der Quest" required></textarea>
+
+              <label for="new-quest-coins" class="field-label">Coins-Belohnung</label>
+              <input id="new-quest-coins" type="number" min="0" max="100000" step="1" value="0" placeholder="Coins">
+
+              <label for="new-quest-difficulty" class="field-label">Schwierigkeitsgrad</label>
+              <select id="new-quest-difficulty" required>
+                <option value="leicht">Leicht</option>
+                <option value="mittel" selected>Mittel</option>
+                <option value="schwer">Schwer</option>
+              </select>
+
+              <p class="quest-meta">EP-Vorschlag (nach Schwierigkeit und aktuellem Level): <strong id="new-quest-ep-value">100</strong></p>
+              <button type="submit" class="status-btn">Quest speichern</button>
+            </form>
+            <p id="new-quest-msg" class="rename-msg"></p>
+          </div>
+
+          <div id="edit-quest-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="edit-quest-panel" aria-label="Formular schließen">x</button>
+            <h4 class="quest-title">Quest bearbeiten</h4>
+            <form id="edit-quest-form" class="security-form">
+              <input id="edit-quest-id" type="hidden">
+
+              <label for="edit-quest-title" class="field-label">Quest-Titel</label>
+              <input id="edit-quest-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="edit-quest-description" class="field-label">Quest-Beschreibung</label>
+              <textarea id="edit-quest-description" maxlength="500" required></textarea>
+
+              <label for="edit-quest-coins" class="field-label">Coins-Belohnung</label>
+              <input id="edit-quest-coins" type="number" min="0" max="100000" step="1" required>
+
+              <label for="edit-quest-difficulty" class="field-label">Schwierigkeitsgrad</label>
+              <select id="edit-quest-difficulty" required>
+                <option value="leicht">Leicht</option>
+                <option value="mittel">Mittel</option>
+                <option value="schwer">Schwer</option>
+              </select>
+
+              <label for="edit-quest-xp" class="field-label">EP-Belohnung</label>
+              <input id="edit-quest-xp" type="number" min="1" max="1000" step="1" required>
+
+              <div class="parent-edit-actions">
+                <button type="submit" class="status-btn">Speichern</button>
+                <button id="delete-quest-btn" type="button" class="chip danger">Löschen</button>
+              </div>
+            </form>
+            <p id="edit-quest-msg" class="rename-msg"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="status-panel collapsible-section">
+        <button type="button" class="collapsible-toggle" aria-expanded="false">
+          <h3>Einstellungen</h3>
+          <span class="collapsible-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="collapsible-body" hidden>
+        <div class="status-list">
+          <article class="quest-item">
+            <h4 class="quest-title">Kinderpasswort ändern</h4>
+            <p class="quest-meta">Nur mit Eingabe des aktuellen Eltern-PIN.</p>
+
+            <form id="child-password-form" class="security-form">
+              <label for="child-current-parent-pin" class="field-label">Aktueller Eltern-PIN</label>
+              <input id="child-current-parent-pin" type="password" inputmode="numeric" placeholder="Aktueller Eltern-PIN" autocomplete="off" required>
+
+              <label for="new-child-password" class="field-label">Neues Kinderpasswort</label>
+              <input id="new-child-password" type="text" placeholder="Neues Kinderpasswort" autocomplete="off" required>
+
+              <button type="submit" class="status-btn">Kinderpasswort speichern</button>
+            </form>
+            <p id="child-security-msg" class="rename-msg"></p>
+          </article>
+
+          <article class="quest-item">
+            <h4 class="quest-title">Eltern-PIN ändern</h4>
+            <p class="quest-meta">Nur mit Eingabe des aktuellen Eltern-PIN.</p>
+
+            <form id="parent-pin-form" class="security-form">
+              <label for="parent-current-parent-pin" class="field-label">Aktueller Eltern-PIN</label>
+              <input id="parent-current-parent-pin" type="password" inputmode="numeric" placeholder="Aktueller Eltern-PIN" autocomplete="off" required>
+
+              <label for="new-parent-pin" class="field-label">Neuer Eltern-PIN</label>
+              <input id="new-parent-pin" type="password" inputmode="numeric" placeholder="Neuer Eltern-PIN" autocomplete="off" required>
+
+              <button type="submit" class="status-btn">Eltern-PIN speichern</button>
+            </form>
+            <p id="parent-security-msg" class="rename-msg"></p>
+          </article>
+        </div>
+        </div>
+      </section>
+
+      <section class="status-panel collapsible-section">
+        <button type="button" class="collapsible-toggle" aria-expanded="false">
+          <h3>Shopbereich</h3>
+          <span class="collapsible-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="collapsible-body" hidden>
+        <p class="quest-meta">Uebersicht aller Shopitems mit Preis, ausklappbarer Beschreibung und Bearbeitung.</p>
+
+        <div id="parent-shop-items" class="parent-shop-list">
+          <p class="muted">Lade Shopitems...</p>
+        </div>
+
+        <div class="parent-create-quest-wrap">
+          <button id="toggle-new-shop-item" type="button" class="status-btn">Shopitem anlegen</button>
+
+          <div id="new-shop-item-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="new-shop-item-panel" aria-label="Formular schließen">x</button>
+            <form id="new-shop-item-form" class="security-form">
+              <label for="new-shop-item-title" class="field-label">Titel</label>
+              <input id="new-shop-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="new-shop-item-description" class="field-label">Beschreibung (optional)</label>
+              <textarea id="new-shop-item-description" maxlength="500"></textarea>
+
+              <label for="new-shop-item-type" class="field-label">Typ</label>
+              <select id="new-shop-item-type">
+                <option value="reallife_item">Reallife Gegenstand</option>
+                <option value="profile_image">Profilbild</option>
+                <option value="xp_boost_perk">EP-Boost Perk</option>
+              </select>
+
+              <div id="new-shop-item-image-row" class="shop-type-fields" hidden>
+                <label for="new-shop-item-image" class="field-label">Bildpfad (assets/...)</label>
+                <input id="new-shop-item-image" type="text" maxlength="300" placeholder="assets/avatars/deinbild.png" autocomplete="off">
+              </div>
+
+              <div id="new-shop-item-boost-row" class="shop-type-fields" hidden>
+                <label for="new-shop-item-boost-percent" class="field-label">EP-Boost (% pro Quest)</label>
+                <input id="new-shop-item-boost-percent" type="number" min="1" max="200" step="1" value="5">
+                <label for="new-shop-item-boost-quests" class="field-label">Gilt fuer (Anzahl Quests)</label>
+                <input id="new-shop-item-boost-quests" type="number" min="1" max="100" step="1" value="5">
+              </div>
+
+              <label for="new-shop-item-coins" class="field-label">Coinwert</label>
+              <input id="new-shop-item-coins" type="number" min="0" max="100000" step="1" value="0" required>
+
+              <button type="submit" class="status-btn">Shopitem speichern</button>
+            </form>
+            <p id="new-shop-item-msg" class="rename-msg"></p>
+          </div>
+
+          <div id="edit-shop-item-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="edit-shop-item-panel" aria-label="Formular schließen">x</button>
+            <h4 class="quest-title">Shopitem bearbeiten</h4>
+            <form id="edit-shop-item-form" class="security-form">
+              <input id="edit-shop-item-id" type="hidden">
+
+              <label for="edit-shop-item-title" class="field-label">Titel</label>
+              <input id="edit-shop-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="edit-shop-item-description" class="field-label">Beschreibung (optional)</label>
+              <textarea id="edit-shop-item-description" maxlength="500"></textarea>
+
+              <label for="edit-shop-item-type" class="field-label">Typ</label>
+              <select id="edit-shop-item-type">
+                <option value="reallife_item">Reallife Gegenstand</option>
+                <option value="profile_image">Profilbild</option>
+                <option value="xp_boost_perk">EP-Boost Perk</option>
+              </select>
+
+              <div id="edit-shop-item-image-row" class="shop-type-fields" hidden>
+                <label for="edit-shop-item-image" class="field-label">Bildpfad (assets/...)</label>
+                <input id="edit-shop-item-image" type="text" maxlength="300" placeholder="assets/avatars/deinbild.png" autocomplete="off">
+              </div>
+
+              <div id="edit-shop-item-boost-row" class="shop-type-fields" hidden>
+                <label for="edit-shop-item-boost-percent" class="field-label">EP-Boost (% pro Quest)</label>
+                <input id="edit-shop-item-boost-percent" type="number" min="1" max="200" step="1" value="5">
+                <label for="edit-shop-item-boost-quests" class="field-label">Gilt fuer (Anzahl Quests)</label>
+                <input id="edit-shop-item-boost-quests" type="number" min="1" max="100" step="1" value="5">
+              </div>
+
+              <label for="edit-shop-item-coins" class="field-label">Coinwert</label>
+              <input id="edit-shop-item-coins" type="number" min="0" max="100000" step="1" required>
+
+              <div class="parent-edit-actions">
+                <button type="submit" class="status-btn">Speichern</button>
+                <button id="delete-shop-item-btn" type="button" class="chip danger">Löschen</button>
+              </div>
+            </form>
+            <p id="edit-shop-item-msg" class="rename-msg"></p>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <section class="status-panel collapsible-section">
+        <button type="button" class="collapsible-toggle" aria-expanded="false">
+          <h3>Achievementbereich</h3>
+          <span class="collapsible-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="collapsible-body" hidden>
+        <p class="quest-meta">Achievements mit Meilenstein, Titel und Bildpfad verwalten.</p>
+
+        <div id="parent-achievement-items" class="parent-shop-list">
+          <p class="muted">Lade Achievements...</p>
+        </div>
+
+        <div class="parent-create-quest-wrap">
+          <button id="toggle-new-achievement-item" type="button" class="status-btn">Achievement anlegen</button>
+
+          <div id="new-achievement-item-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="new-achievement-item-panel" aria-label="Formular schließen">x</button>
+            <form id="new-achievement-item-form" class="security-form">
+              <label for="new-achievement-item-title" class="field-label">Titel</label>
+              <input id="new-achievement-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="new-achievement-item-target" class="field-label">Meilenstein (Quests)</label>
+              <input id="new-achievement-item-target" type="number" min="1" max="100000" step="1" required>
+
+              <label for="new-achievement-item-image" class="field-label">Bildpfad</label>
+              <input id="new-achievement-item-image" type="text" maxlength="300" placeholder="assets/avatars/deinbild.png" autocomplete="off" required>
+
+              <button type="submit" class="status-btn">Achievement speichern</button>
+            </form>
+            <p id="new-achievement-item-msg" class="rename-msg"></p>
+          </div>
+
+          <div id="edit-achievement-item-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="edit-achievement-item-panel" aria-label="Formular schließen">x</button>
+            <h4 class="quest-title">Achievement bearbeiten</h4>
+            <form id="edit-achievement-item-form" class="security-form">
+              <input id="edit-achievement-item-id" type="hidden">
+
+              <label for="edit-achievement-item-title" class="field-label">Titel</label>
+              <input id="edit-achievement-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="edit-achievement-item-target" class="field-label">Meilenstein (Quests)</label>
+              <input id="edit-achievement-item-target" type="number" min="1" max="100000" step="1" required>
+
+              <label for="edit-achievement-item-image" class="field-label">Bildpfad</label>
+              <input id="edit-achievement-item-image" type="text" maxlength="300" autocomplete="off" required>
+
+              <div class="parent-edit-actions">
+                <button type="submit" class="status-btn">Speichern</button>
+                <button id="delete-achievement-item-btn" type="button" class="chip danger">Löschen</button>
+              </div>
+            </form>
+            <p id="edit-achievement-item-msg" class="rename-msg"></p>
+          </div>
+        </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>© Questio</small> - <a href="impressum.html">Impressum</a>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/elternbereich.js"></script>
+</body>
+</html>

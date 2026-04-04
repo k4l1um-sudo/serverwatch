@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Questio - Shop</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/quest.css">
+  <link rel="icon" type="image/png" href="assets/questio-logo.png">
+  <link rel="apple-touch-icon" href="assets/questio-logo.png">
+  <meta name="theme-color" content="#0b1320">
+  <meta name="description" content="Shop-Bereich von Questio.">
+  <script>
+    (async function () {
+      document.documentElement.style.visibility = 'hidden';
+      var secret = window.prompt('Passwort eingeben:');
+      if (secret === null) {
+        window.location.replace('index.html');
+        return;
+      }
+
+      try {
+        var response = await fetch('api/security.php?action=verify_access', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ area: 'child', secret: secret })
+        });
+        var data = await response.json();
+        if (!response.ok || !data.ok || !data.allowed) {
+          window.location.replace('index.html');
+          return;
+        }
+        document.documentElement.style.visibility = 'visible';
+      } catch (e) {
+        window.location.replace('index.html');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <a class="corner-logo-link" href="index.html" aria-label="Questio Home">
+    <img class="corner-logo" src="assets/questio-logo.png" alt="Questio Logo">
+  </a>
+
+  <button id="menu-toggle" class="menu-toggle" aria-label="Menue oeffnen" aria-expanded="false" aria-controls="side-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <aside id="side-menu" class="side-menu" aria-hidden="true">
+    <div class="side-menu-inner">
+      <h2>Menue</h2>
+      <p class="muted">Schnellnavigation</p>
+      <nav class="side-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="progress.html">Fortschritt</a>
+        <a href="achievements.html">Achievements</a>
+        <a href="history.html">Historie</a>
+        <a href="shop.html">Shop</a>
+        <a href="profil.html">Mein Profil</a>
+        <a href="elternbereich.html">Elternbereich</a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="ui">
+    <header class="site-header">
+      <h1>Questio</h1>
+      <p class="tagline">Der Weg des Sohnes.</p>
+    </header>
+
+    <main class="panel quest-panel">
+      <section class="status-panel">
+        <h3>Shop Header</h3>
+        <figure class="landing-header-figure">
+          <picture>
+            <source srcset="assets/shop-header.webp" type="image/webp">
+            <img class="landing-header-image" src="assets/shop-header.png" alt="Questio Shop Headerbild">
+          </picture>
+        </figure>
+      </section>
+
+      <section class="hero">
+        <h2>Shop</h2>
+        <p class="muted">Kaufe Profilbilder mit deinen Coins.</p>
+      </section>
+
+      <section class="status-panel">
+        <h3>Dein Kontostand</h3>
+        <p class="quest-meta quest-coins-line">
+          <span>Coins: <strong id="shop-coins">0</strong></span>
+          <img class="coin-icon" src="assets/coin.png" alt="Coin Symbol">
+        </p>
+        <p id="shop-msg" class="shop-msg"></p>
+      </section>
+
+      <section class="status-panel">
+        <h3 id="shop-items-heading">Items</h3>
+        <div id="shop-items" class="shop-grid">
+          <p class="muted">Lade Shop-Items...</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>© Questio</small> - <a href="impressum.html">Impressum</a>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/shop.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "players": {
+        "kid_7s9apz6h": {
+            "xp": 0,
+            "coins": 0,
+            "name": "Spieler",
+            "profileImageItemId": null,
+            "ownedShopItems": [],
+            "quests": [],
+            "createdAt": "2026-04-04T15:59:24+00:00",
+            "updatedAt": "2026-04-04T15:59:29+00:00"
+        }
+    }
+}

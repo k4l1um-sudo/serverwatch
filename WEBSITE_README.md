@@ -1,17 +1,67 @@
 # Deployment / Upload per FTP
 
-Kurzanleitung, um die gerade erstellte statische Website auf einen reinen FTP-Webspace zu bringen.
+Kurzanleitung, um das Serverwatch-Layout als Questsystem auf einen Webspace zu bringen.
 
-1) Lokale Prüfung
+## Questsystem (neu)
 
-Öffne die Datei `index.html` lokal im Browser, um das Ergebnis zu prüfen.
+Das Repo enthaelt ein Quest- und Levelsystem fuer Kinder (ohne Login):
+
+- Seite: `index.html`
+- Seite: `progress.html` (aktuelles Level + offene Quests)
+- Seite: `achievements.html` (erreichte/offene Achievements)
+- Seite: `history.html` (erledigte Quests als Historie)
+- Frontend-Logik: `js/questsystem.js`
+- Frontend-Logik: `js/progress.js`, `js/achievements.js`, `js/history.js`
+- API-Endpoint: `api/quest.php`
+- API-Endpoint fuer zentralen Quest-Katalog: `api/quest_catalog.php`
+- Datenspeicher (Datei-DB): `data/quest_db.json` (wird automatisch erzeugt)
+- Zentral gepflegte Quest-Vorlagen: `data/quest_catalog.json`
+
+## Quest-Bereich auf dem Webspace pflegen
+
+Ja, ihr koennt Quests zentral auf dem Webspace ablegen und pflegen:
+
+- Datei: `data/quest_catalog.json`
+- Per FTP editierbar (Titel, Beschreibung, rewardXp, active)
+- Auslesen per API: `api/quest_catalog.php`
+
+Beispiel fuer eine Quest in `quest_catalog.json`:
+
+```json
+{
+	"id": "zimmer_aufr",
+	"title": "Zimmer aufraeumen",
+	"description": "Raeume dein Zimmer auf und stelle alles an seinen Platz.",
+	"rewardXp": 25,
+	"category": "Alltag",
+	"active": true
+}
+```
+
+Wichtig fuer den Webspace:
+
+- PHP muss verfuegbar sein.
+- Der Ordner `data/` muss Schreibrechte fuer PHP haben, damit XP und Quests gespeichert werden.
+- Kein Login noetig: Der Browser erzeugt eine lokale Spieler-ID und verwendet diese fuer den API-Aufruf.
+
+1) Lokale Pruefung
+
+Fuer das Questsystem mit API rufe die Seite ueber einen lokalen Webserver mit PHP auf, z. B.:
+
+```bash
+php -S localhost:8000
+```
+
+Dann:
+
+- `http://localhost:8000/index.html`
 
 2) Manuelles Hochladen (Finder / FileZilla)
 
 - Verbinde dich mit deinem FTP-Server (Host, Benutzer, Passwort).
-- Lade die Dateien und Ordner (`index.html`, `css/`) in das Webroot-Verzeichnis hoch (z. B. `public_html` oder `www`).
+- Lade das komplette Repo (inkl. `api/`, `js/`, `css/`, `data/`) in das Webroot-Verzeichnis hoch (z. B. `public_html` oder `www`).
 
-3) Upload per Kommandozeile (empfohlen für Reproduzierbarkeit)
+3) Upload per Kommandozeile (empfohlen fuer Reproduzierbarkeit)
 
 Mit `lftp` (empfohlen):
 
@@ -26,7 +76,7 @@ quit
 EOF
 ```
 
-Erläuterung: `mirror -R` spiegelt lokal nach remote; `--delete` entfernt entfernte Dateien, die lokal gelöscht wurden.
+Erlaeuterung: `mirror -R` spiegelt lokal nach remote; `--delete` entfernt entfernte Dateien, die lokal geloescht wurden.
 
 Alternativ mit `curl` (einzelne Dateien):
 
@@ -40,7 +90,8 @@ Du kannst ein kleines Skript `upload.sh` anlegen, das `lftp` nutzt. Achte darauf
 
 5) Nach dem Upload
 
-- Prüfe die Seite im Browser unter deiner Domain.
+- Pruefe die Seite im Browser unter deiner Domain:
+	- `/index.html`
 - Wenn du `--delete` verwendest: Vorsicht, entfernte Dateien werden gelöscht.
 
-Wenn du möchtest, erstelle ich ein `upload.sh` Script oder commite die neuen Dateien direkt in dein Git-Repo und pushe sie. Sage mir kurz, welche Option du willst.
+Wenn du moechtest, erstelle ich als naechsten Schritt noch ein Admin-Bereich mit PIN (nur Eltern duerfen Quests anlegen/loeschen) und eine reine Kind-Ansicht zum Abhaken.
