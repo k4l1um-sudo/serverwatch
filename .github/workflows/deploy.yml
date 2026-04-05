@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # Node 24 erzwingen
 
     steps:
       - name: Repository laden
@@ -16,11 +18,12 @@ jobs:
       - name: Upload zu FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_HOST }}
+          server: www.k4l1um.de
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
           server-dir: /httpdocs/
           protocol: ftps
-          secure: true
+          secure: explicit
           port: 21
+          passive: true
