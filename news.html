@@ -31,7 +31,6 @@
       <nav class="side-menu-nav">
         <a href="index.html">Home</a>
         <a href="progress.html">Fortschritt</a>
-        <a href="achievements.html">Achievements</a>
         <a href="news.html">News</a>
         <a href="spieler.html">Spieler</a>
         <a href="elternbereich.html">Elternbereich</a>
@@ -52,8 +51,19 @@
       </section>
 
       <section class="status-panel">
-        <div id="news-list" class="news-grid">
+        <h3>Aktuelle News</h3>
+        <div id="news-list-latest" class="news-list-stack">
           <p class="muted">Lade News...</p>
+        </div>
+      </section>
+
+      <section id="news-archive-section" class="status-panel" hidden>
+        <button type="button" id="news-archive-toggle" class="collapsible-toggle" aria-expanded="false">
+          <h3>Aeltere News</h3>
+          <span class="collapsible-chevron" aria-hidden="true"></span>
+        </button>
+        <div id="news-archive-body" class="collapsible-body" hidden>
+          <div id="news-list-archive" class="news-list-stack"></div>
         </div>
       </section>
     </main>

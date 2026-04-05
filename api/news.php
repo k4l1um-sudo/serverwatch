@@ -175,6 +175,35 @@ if ($action === 'save') {
     respond(['ok' => true, 'item' => $savedItem]);
 }
 
+if ($action === 'delete') {
+    $id = trim((string)($body['id'] ?? ''));
+    if ($id === '') {
+        flock($fp, LOCK_UN);
+        fclose($fp);
+        respond(['ok' => false, 'error' => 'News-ID fehlt.'], 400);
+    }
+
+    $beforeCount = count($db['items']);
+    $db['items'] = array_values(array_filter($db['items'], function ($item) use ($id) {
+        return (string)($item['id'] ?? '') !== $id;
+    }));
+
+    if (count($db['items']) === $beforeCount) {
+        flock($fp, LOCK_UN);
+        fclose($fp);
+        respond(['ok' => false, 'error' => 'News-Eintrag nicht gefunden.'], 404);
+    }
+
+    ftruncate($fp, 0);
+    rewind($fp);
+    fwrite($fp, json_encode($db, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    fflush($fp);
+    flock($fp, LOCK_UN);
+    fclose($fp);
+
+    respond(['ok' => true, 'deletedId' => $id]);
+}
+
 flock($fp, LOCK_UN);
 fclose($fp);
 respond(['ok' => false, 'error' => 'Ungueltige Aktion.'], 400);

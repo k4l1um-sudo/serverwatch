@@ -6,6 +6,7 @@
   const formTitleEl = document.getElementById('news-form-title');
   const msgEl = document.getElementById('news-form-msg');
   const cancelEditBtn = document.getElementById('news-cancel-edit');
+  const deleteEditBtn = document.getElementById('news-delete-edit');
 
   const idEl = document.getElementById('news-id');
   const titleEl = document.getElementById('news-title');
@@ -69,6 +70,9 @@
       if (cancelEditBtn) {
         cancelEditBtn.hidden = true;
       }
+      if (deleteEditBtn) {
+        deleteEditBtn.hidden = true;
+      }
       return;
     }
 
@@ -82,6 +86,9 @@
     }
     if (cancelEditBtn) {
       cancelEditBtn.hidden = false;
+    }
+    if (deleteEditBtn) {
+      deleteEditBtn.hidden = false;
     }
     window.scrollTo({ top: form.offsetTop - 80, behavior: 'smooth' });
   }
@@ -183,6 +190,38 @@
     }
   }
 
+  async function deleteNews() {
+    setMsg('', false);
+
+    const id = String(idEl.value || '').trim();
+    if (!id) {
+      setMsg('Bitte zuerst eine News zum Bearbeiten auswaehlen.', true);
+      return;
+    }
+
+    if (!window.confirm('Diese News wirklich loeschen?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(API_URL + '?action=delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || 'News konnte nicht geloescht werden.');
+      }
+
+      setMsg('News geloescht.', false);
+      setEditMode(null);
+      await refresh();
+    } catch (err) {
+      setMsg(String(err && err.message ? err.message : 'Unbekannter Fehler'), true);
+    }
+  }
+
   document.querySelectorAll('[data-cmd]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       const cmd = btn.getAttribute('data-cmd');
@@ -199,6 +238,10 @@
       setEditMode(null);
       setMsg('', false);
     });
+  }
+
+  if (deleteEditBtn) {
+    deleteEditBtn.addEventListener('click', deleteNews);
   }
 
   if (form) {

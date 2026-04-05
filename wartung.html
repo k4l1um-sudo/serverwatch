@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Questio - Achievements</title>
+  <title>Questio - Wartungsarbeiten</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/quest.css">
   <link rel="icon" type="image/png" href="assets/questio-logo.png">
   <link rel="apple-touch-icon" href="assets/questio-logo.png">
   <meta name="theme-color" content="#0b1320">
-  <meta name="description" content="Erreichte und offene Achievements.">
+  <meta name="description" content="Questio befindet sich derzeit in Wartungsarbeiten.">
 </head>
 <body>
   <canvas id="bg"></canvas>
@@ -31,7 +31,6 @@
       <nav class="side-menu-nav">
         <a href="index.html">Home</a>
         <a href="progress.html">Fortschritt</a>
-        <a href="achievements.html">Achievements</a>
         <a href="news.html">News</a>
         <a href="spieler.html">Spieler</a>
         <a href="elternbereich.html">Elternbereich</a>
@@ -47,25 +46,29 @@
 
     <main class="panel quest-panel">
       <section class="hero">
-        <h2>Achievements</h2>
-        <p id="achievement-summary" class="muted">Lade Achievements...</p>
+        <h2>Wartungsarbeiten</h2>
+        <p class="muted">Wir arbeiten gerade an Verbesserungen. Bitte versuche es spaeter erneut.</p>
       </section>
 
       <section class="status-panel">
-        <h3>Pfad</h3>
-        <div id="achievement-path" class="achievement-path-wrap">
-          <p class="muted">Lade Achievement-Pfad...</p>
+        <h3>Was passiert gerade?</h3>
+        <p class="quest-meta">Systeme werden aktualisiert, Inhalte optimiert und neue Funktionen vorbereitet.</p>
+        <p class="quest-meta">Vielen Dank fuer deine Geduld.</p>
+        <div class="landing-links">
+          <a class="status-btn" href="index.html">Zur Startseite</a>
         </div>
       </section>
     </main>
 
     <footer>
       <small>© Questio</small> - <a href="impressum.html">Impressum</a>
+      <button id="wartung-disable-btn" type="button" class="chip" style="margin-left:10px">Wartung aufheben</button>
+      <small id="wartung-disable-msg" class="muted" style="margin-left:8px"></small>
     </footer>
   </div>
 
   <script src="js/main.js"></script>
   <script src="js/menu.js"></script>
-  <script src="js/achievements.js"></script>
+  <script src="js/wartung.js"></script>
 </body>
 </html>

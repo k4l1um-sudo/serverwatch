@@ -157,6 +157,31 @@ body{
   box-shadow:0 8px 18px rgba(12,52,76,0.45);
   color:#f3fdff;
 }
+
+button.spieler-top-nav-link{
+  font:inherit;
+  cursor:pointer;
+}
+
+.spieler-top-nav-link.wartung-toggle-btn{
+  border-color:rgba(255,110,110,0.72);
+  color:#ffd7d7;
+  background:rgba(80,14,18,0.26);
+}
+
+.spieler-top-nav-link.wartung-toggle-btn:hover,
+.spieler-top-nav-link.wartung-toggle-btn:focus-visible{
+  border-color:rgba(255,130,130,0.95);
+  background:rgba(110,20,25,0.35);
+  box-shadow:0 8px 18px rgba(80,15,18,0.4);
+}
+
+.spieler-top-nav-link.wartung-toggle-btn.active,
+.spieler-top-nav-link.wartung-toggle-btn[aria-pressed="true"]{
+  border-color:rgba(255,95,95,1);
+  background:rgba(150,24,28,0.42);
+  color:#ffe8e8;
+}
 .controls{display:flex;gap:10px;margin:12px 0}
 .chip{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:0.9rem}
 .chip strong{color:var(--accent)}

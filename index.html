@@ -10,6 +10,20 @@
   <link rel="apple-touch-icon" href="assets/questio-logo.png">
   <meta name="theme-color" content="#0b1320">
   <meta name="description" content="Quest- und Levelsystem fuer Kinder mit XP und lokaler Spieler-ID.">
+  <script>
+    (function () {
+      fetch('api/maintenance.php?action=get', { cache: 'no-store' })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+          if (data && data.ok && data.enabled) {
+            window.location.replace('wartung.html');
+          }
+        })
+        .catch(function () {
+          /* silently ignore and keep normal landing page */
+        });
+    })();
+  </script>
 </head>
 <body>
   <canvas id="bg"></canvas>
@@ -31,7 +45,6 @@
       <nav class="side-menu-nav">
         <a href="index.html">Home</a>
         <a href="progress.html">Fortschritt</a>
-        <a href="achievements.html">Achievements</a>
         <a href="news.html">News</a>
         <a href="spieler.html">Spieler</a>
         <a href="elternbereich.html">Elternbereich</a>
@@ -50,6 +63,13 @@
         <figure class="landing-header-figure">
           <img class="landing-header-image" src="assets/questio-header.webp" alt="Questio Headerbild">
         </figure>
+      </section>
+
+      <section class="status-panel">
+        <h3>Spieler-Dashboard</h3>
+        <div id="landing-player-dashboard" class="landing-player-dashboard" aria-live="polite">
+          <p class="muted">Lade Spielerdaten...</p>
+        </div>
       </section>
 
       <section class="status-panel">
@@ -73,6 +93,7 @@
 
   <script src="js/main.js"></script>
   <script src="js/menu.js"></script>
+  <script src="js/landing-dashboard.js"></script>
   <script src="js/news.js"></script>
 </body>
 </html>

@@ -135,22 +135,59 @@
   }
 
   function renderNewsPage() {
-    const container = document.getElementById('news-list');
-    if (!container) {
+    const latestContainer = document.getElementById('news-list-latest');
+    const archiveSection = document.getElementById('news-archive-section');
+    const archiveBody = document.getElementById('news-archive-body');
+    const archiveContainer = document.getElementById('news-list-archive');
+    const archiveToggle = document.getElementById('news-archive-toggle');
+
+    if (!latestContainer) {
       return;
     }
 
+    if (archiveToggle && archiveBody) {
+      archiveToggle.addEventListener('click', function () {
+        const isOpen = archiveToggle.getAttribute('aria-expanded') === 'true';
+        archiveToggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        archiveBody.hidden = isOpen;
+      });
+    }
+
     loadNews().then(function (items) {
-      container.innerHTML = '';
+      latestContainer.innerHTML = '';
+
       if (!items.length) {
-        container.innerHTML = '<p class="muted">Noch keine News vorhanden.</p>';
+        latestContainer.innerHTML = '<p class="muted">Noch keine News vorhanden.</p>';
+        if (archiveSection) {
+          archiveSection.hidden = true;
+        }
         return;
       }
-      items.forEach(function (item) {
-        container.appendChild(createNewsArticle(item));
+
+      const latestItems = items.slice(0, 5);
+      const archivedItems = items.slice(5);
+
+      latestItems.forEach(function (item) {
+        latestContainer.appendChild(createNewsArticle(item));
       });
+
+      if (archiveSection && archiveContainer) {
+        archiveContainer.innerHTML = '';
+
+        if (archivedItems.length > 0) {
+          archivedItems.forEach(function (item) {
+            archiveContainer.appendChild(createNewsArticle(item));
+          });
+          archiveSection.hidden = false;
+        } else {
+          archiveSection.hidden = true;
+        }
+      }
     }).catch(function (err) {
-      container.innerHTML = '<p class="muted">Fehler: ' + escapeHtml(err.message || 'Unbekannter Fehler') + '</p>';
+      latestContainer.innerHTML = '<p class="muted">Fehler: ' + escapeHtml(err.message || 'Unbekannter Fehler') + '</p>';
+      if (archiveSection) {
+        archiveSection.hidden = true;
+      }
     });
   }
 

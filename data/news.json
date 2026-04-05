@@ -1,3 +1,13 @@
 {
-  "items": []
+    "items": [
+        {
+            "id": "news_668596378b",
+            "title": "Nach der 1.0",
+            "teaser": "...kommt die 1.1",
+            "contentHtml": "Hallo Welt,<br>nach der 1.0 kommt die 1.1. Wir haben die Menüführung vereinfacht. Eisntellungen wurde einfacher gestaltet. Eininge Layoutänderungen wurdeen umgesetzt.&nbsp;<br>LGMegatron",
+            "image": "assets\/News.png",
+            "createdAt": "2026-04-05T12:48:55+00:00",
+            "updatedAt": "2026-04-05T12:49:00+00:00"
+        }
+    ]
 }

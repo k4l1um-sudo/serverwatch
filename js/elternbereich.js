@@ -60,10 +60,12 @@
   const parentCoinsAddBtn = document.getElementById('parent-coins-add-btn');
   const parentCoinsSubtractBtn = document.getElementById('parent-coins-subtract-btn');
   const parentCoinsMsg = document.getElementById('parent-coins-msg');
+  const maintenanceToggleButtons = Array.from(document.querySelectorAll('.wartung-toggle-btn'));
   let currentPlayer = null;
   let currentCatalogQuests = [];
   let currentShopItems = [];
   let currentAchievementItems = [];
+  let maintenanceEnabled = false;
 
   function getOrCreatePlayerId() {
     localStorage.setItem(PLAYER_STORAGE_KEY, SHARED_PLAYER_ID);
@@ -166,10 +168,59 @@
         editBtn.addEventListener('click', function () {
           openQuestEditor(quest);
         });
+
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'chip';
+        copyBtn.textContent = 'Kopieren';
+        copyBtn.addEventListener('click', function () {
+          duplicateCatalogQuest(quest);
+        });
+
+        item.appendChild(copyBtn);
         item.appendChild(editBtn);
       }
       container.appendChild(item);
     });
+  }
+
+  function buildQuestCopyTitle(title) {
+    const sourceTitle = String(title || '').trim() || 'Ohne Titel';
+    const cleanTitle = sourceTitle.replace(/^(Kopie\s*-\s*)+/i, '').trim() || sourceTitle;
+    return 'Kopie - ' + cleanTitle;
+  }
+
+  async function duplicateCatalogQuest(quest) {
+    const title = buildQuestCopyTitle(quest && quest.title);
+    const description = String((quest && quest.description) || '').trim();
+    const difficultyRaw = String((quest && quest.difficulty) || 'mittel').toLowerCase();
+    const difficulty = ['leicht', 'mittel', 'schwer'].indexOf(difficultyRaw) >= 0 ? difficultyRaw : 'mittel';
+    const rewardXp = Math.max(1, Math.min(1000, Number(quest && quest.rewardXp) || 100));
+    const rewardCoins = Math.max(0, Math.min(100000, Number(quest && quest.rewardCoins) || 0));
+
+    try {
+      const response = await fetch('api/quest_catalog.php?action=create_quest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          difficulty: difficulty,
+          rewardXp: rewardXp,
+          rewardCoins: rewardCoins
+        })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        window.alert(data.error || 'Quest konnte nicht kopiert werden.');
+        return;
+      }
+
+      await refreshParentQuestLists();
+      window.alert('Quest wurde als Kopie angelegt.');
+    } catch (e) {
+      window.alert('Verbindungsfehler beim Kopieren der Quest.');
+    }
   }
 
   function renderParentQuestStatus(player, catalogQuests) {
@@ -1819,6 +1870,77 @@
     target.className = 'rename-msg ' + (type || '');
   }
 
+  async function getMaintenanceStatus() {
+    const response = await fetch('api/maintenance.php?action=get', {
+      method: 'GET',
+      cache: 'no-store'
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'Wartungsstatus konnte nicht geladen werden.');
+    }
+    return Boolean(data.enabled);
+  }
+
+  async function setMaintenanceStatus(enabled) {
+    const response = await fetch('api/maintenance.php?action=set', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled: Boolean(enabled) })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'Wartungsstatus konnte nicht gespeichert werden.');
+    }
+    return Boolean(data.enabled);
+  }
+
+  function renderMaintenanceButtons() {
+    maintenanceToggleButtons.forEach(function (btn) {
+      btn.setAttribute('aria-pressed', maintenanceEnabled ? 'true' : 'false');
+      btn.classList.toggle('active', maintenanceEnabled);
+      btn.textContent = maintenanceEnabled ? 'Wartung: AN' : 'Wartung: AUS';
+    });
+  }
+
+  async function toggleMaintenanceMode() {
+    if (!maintenanceToggleButtons.length) {
+      return;
+    }
+
+    maintenanceToggleButtons.forEach(function (btn) {
+      btn.disabled = true;
+    });
+
+    try {
+      maintenanceEnabled = await setMaintenanceStatus(!maintenanceEnabled);
+      renderMaintenanceButtons();
+    } catch (err) {
+      window.alert(String(err && err.message ? err.message : 'Wartungsstatus konnte nicht geaendert werden.'));
+    } finally {
+      maintenanceToggleButtons.forEach(function (btn) {
+        btn.disabled = false;
+      });
+    }
+  }
+
+  async function initMaintenanceToggle() {
+    if (!maintenanceToggleButtons.length) {
+      return;
+    }
+
+    maintenanceToggleButtons.forEach(function (btn) {
+      btn.addEventListener('click', toggleMaintenanceMode);
+    });
+
+    try {
+      maintenanceEnabled = await getMaintenanceStatus();
+    } catch (err) {
+      maintenanceEnabled = false;
+    }
+    renderMaintenanceButtons();
+  }
+
   function renderParentCoinsSection(player) {
     if (!parentCoinsCurrentEl) {
       return;
@@ -1954,6 +2076,7 @@
   }
 
   setupNewQuestPanel();
+  initMaintenanceToggle();
 
   Promise.all([loadPlayerState(), loadShopItems(), loadQuestCatalog(), loadAchievementItems()])
     .then(function (results) {

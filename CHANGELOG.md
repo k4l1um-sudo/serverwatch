@@ -4,6 +4,35 @@ Dieses Protokoll dokumentiert fortlaufend alle funktionalen und visuellen Aender
 
 ---
 
+## 2026-04-05 14:52:55
+
+### Elternbereich: News-Bearbeitung erweitert
+- Auf `eltern-news.html` wurde im Bearbeitungsmodus neben **Speichern** ein **Loeschen**-Button ergaenzt.
+- `js/eltern-news.js` erweitert:
+  - Loeschen-Button wird nur bei aktiver Bearbeitung einer bestehenden News angezeigt.
+  - Sicherheitsabfrage vor dem Loeschen eingebaut.
+  - Nach erfolgreichem Loeschen werden Formular und Liste automatisch aktualisiert.
+- `api/news.php` um neue Aktion `delete` erweitert (Loeschen per `id` inkl. Fehlerbehandlung).
+
+### Elternbereich: Aktive Quests kopieren
+- In der Liste der Quests (`eltern-aktive-quests.html` via `js/elternbereich.js`) wurde neben **Bearbeiten** ein Button **Kopieren** eingefuegt.
+- Der Button erstellt eine neue Quest im Katalog auf Basis der gewaehlten Quest.
+- Der Titel der neuen Quest erhaelt automatisch den Praefix **Kopie -**.
+
+### Neue Wartungsseite
+- Neue Seite `wartung.html` im bestehenden Questio-Design erstellt.
+- Enthalten sind Hintergrundanimation, Header, Hamburger-Menue, Hinweistext zu Wartungsarbeiten und Ruecklink zur Startseite.
+
+### Landingpage: Spieler-Dashboard hinzugefuegt
+- Auf `index.html` wurde zwischen Headerbild und News ein neues kleines **Spieler-Dashboard** eingebaut.
+- Neue Datei `js/landing-dashboard.js` hinzugefuegt:
+  - Laedt aktuellen Spielerstatus (`api/quest.php?action=get_state`).
+  - Laedt Achievement-Daten (`api/achievement_items.php`) fuer den aktuellen Rang im Pfad.
+  - Zeigt aktuelles Level, Profilbild, EP-Stand, Coins, erledigte Quests sowie Rang mit passendem Bild.
+- `css/quest.css` um die noetigen Dashboard-Styles erweitert (responsive Darstellung fuer Desktop/Mobil).
+
+---
+
 ## 2026-04-05 14:31:33
 
 ### Elternbereich: News anlegen
