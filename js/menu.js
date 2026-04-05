@@ -6,6 +6,25 @@
     return;
   }
 
+  function markCurrentMenuEntry() {
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    const links = menu.querySelectorAll('a[href]');
+
+    links.forEach(function (link) {
+      const href = link.getAttribute('href') || '';
+      const targetPath = href.split('/').pop();
+      const isCurrent = targetPath === currentPath;
+      link.classList.toggle('active', isCurrent);
+      if (isCurrent) {
+        link.setAttribute('aria-current', 'page');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  markCurrentMenuEntry();
+
   function setOpen(isOpen) {
     toggle.classList.toggle('open', isOpen);
     menu.classList.toggle('open', isOpen);

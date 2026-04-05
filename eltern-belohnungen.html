@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Questio - Elternbereich Belohnungen</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/quest.css">
+  <link rel="icon" type="image/png" href="assets/questio-logo.png">
+  <link rel="apple-touch-icon" href="assets/questio-logo.png">
+  <meta name="theme-color" content="#0b1320">
+  <meta name="description" content="Elternbereich: Belohnungen verwalten.">
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <a class="corner-logo-link" href="index.html" aria-label="Questio Home">
+    <img class="corner-logo" src="assets/questio-logo.png" alt="Questio Logo">
+  </a>
+
+  <button id="menu-toggle" class="menu-toggle" aria-label="Menue oeffnen" aria-expanded="false" aria-controls="side-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <aside id="side-menu" class="side-menu" aria-hidden="true">
+    <div class="side-menu-inner">
+      <h2>Menue</h2>
+      <p class="muted">Schnellnavigation</p>
+      <nav class="side-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="progress.html">Fortschritt</a>
+        <a href="achievements.html">Achievements</a>
+        <a href="news.html">News</a>
+        <a href="spieler.html">Spieler</a>
+        <a href="elternbereich.html">Elternbereich</a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="ui">
+    <header class="site-header">
+      <h1>Questio</h1>
+      <p class="tagline">Der Weg des Sohnes.</p>
+    </header>
+
+    <main class="panel quest-panel">
+      <section class="hero">
+        <h2>Belohnungen</h2>
+        <p class="muted">Hier werden nur Items mit einer ID angezeigt, die mit belohnung beginnen.</p>
+      </section>
+
+      <section class="status-panel">
+        <h3>Menueleiste</h3>
+        <nav class="spieler-top-nav" aria-label="Elternbereich Navigation">
+          <a href="elternbereich.html" class="spieler-top-nav-link">Elternbereich</a>
+          <a href="eltern-aktive-quests.html" class="spieler-top-nav-link">Aktive Quests</a>
+          <a href="eltern-coins.html" class="spieler-top-nav-link">Coins</a>
+          <a href="eltern-shopbereich.html" class="spieler-top-nav-link">Shopbereich</a>
+          <a href="eltern-belohnungen.html" class="spieler-top-nav-link active" aria-current="page">Belohnungen</a>
+          <a href="eltern-achievementbereich.html" class="spieler-top-nav-link">Achievementbereich</a>
+          <a href="eltern-news.html" class="spieler-top-nav-link">News anlegen</a>
+        </nav>
+      </section>
+
+      <section class="status-panel collapsible-section">
+        <button type="button" class="collapsible-toggle" aria-expanded="false">
+          <h4>Aktive Belohnungen</h4>
+          <span class="collapsible-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="collapsible-body" hidden>
+          <div id="parent-rewards-active" class="parent-shop-list">
+            <p class="muted">Lade Belohnungen...</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="status-panel collapsible-section">
+        <button type="button" class="collapsible-toggle" aria-expanded="false">
+          <h4>Nicht aktive Belohnungen</h4>
+          <span class="collapsible-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="collapsible-body" hidden>
+          <div id="parent-rewards-redeemed" class="parent-shop-list">
+            <p class="muted">Lade eingeloeste Belohnungen...</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="status-panel">
+        <div class="parent-create-quest-wrap">
+          <button id="toggle-new-reward-item" type="button" class="status-btn">Belohnung anlegen</button>
+
+          <div id="new-reward-item-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="new-reward-item-panel" aria-label="Formular schließen">x</button>
+            <form id="new-reward-item-form" class="security-form">
+              <label for="new-reward-item-title" class="field-label">Titel</label>
+              <input id="new-reward-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="new-reward-item-description" class="field-label">Beschreibung (optional)</label>
+              <textarea id="new-reward-item-description" maxlength="500"></textarea>
+
+              <div id="new-reward-coins-row" class="shop-type-fields">
+                <label for="new-reward-item-coins" class="field-label">Coinwert</label>
+                <input id="new-reward-item-coins" type="number" min="0" max="100000" step="1" value="0" required>
+              </div>
+
+              <label for="new-reward-condition" class="field-label">Bedingung</label>
+              <select id="new-reward-condition" required>
+                <option value="coins_purchase" selected>Mit Coins kaufbar</option>
+                <option value="reach_level">Beim Erreichen von Level</option>
+              </select>
+
+              <div id="new-reward-condition-level-row" class="shop-type-fields" hidden>
+                <label for="new-reward-condition-level" class="field-label">Level-Ziel</label>
+                <input id="new-reward-condition-level" type="number" min="1" max="1000" step="1" value="2">
+              </div>
+
+              <label for="new-reward-item-image" class="field-label">Bildpfad (optional)</label>
+              <input id="new-reward-item-image" type="text" maxlength="300" placeholder="assets/avatars/belohnung.png" autocomplete="off">
+
+              <button type="submit" class="status-btn">Belohnung speichern</button>
+            </form>
+            <p id="new-reward-item-msg" class="rename-msg"></p>
+          </div>
+
+          <div id="edit-reward-item-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="edit-reward-item-panel" aria-label="Formular schließen">x</button>
+            <h4 class="quest-title">Belohnung bearbeiten</h4>
+            <form id="edit-reward-item-form" class="security-form">
+              <input id="edit-reward-item-id" type="hidden">
+
+              <label for="edit-reward-item-title" class="field-label">Titel</label>
+              <input id="edit-reward-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="edit-reward-item-description" class="field-label">Beschreibung (optional)</label>
+              <textarea id="edit-reward-item-description" maxlength="500"></textarea>
+
+              <div id="edit-reward-coins-row" class="shop-type-fields">
+                <label for="edit-reward-item-coins" class="field-label">Coinwert</label>
+                <input id="edit-reward-item-coins" type="number" min="0" max="100000" step="1" value="0" required>
+              </div>
+
+              <label for="edit-reward-condition" class="field-label">Bedingung</label>
+              <select id="edit-reward-condition" required>
+                <option value="coins_purchase">Mit Coins kaufbar</option>
+                <option value="reach_level">Beim Erreichen von Level</option>
+              </select>
+
+              <div id="edit-reward-condition-level-row" class="shop-type-fields" hidden>
+                <label for="edit-reward-condition-level" class="field-label">Level-Ziel</label>
+                <input id="edit-reward-condition-level" type="number" min="1" max="1000" step="1" value="2">
+              </div>
+
+              <label for="edit-reward-item-image" class="field-label">Bildpfad (optional)</label>
+              <input id="edit-reward-item-image" type="text" maxlength="300" placeholder="assets/avatars/belohnung.png" autocomplete="off">
+
+              <div class="parent-edit-actions">
+                <button type="submit" class="status-btn">Speichern</button>
+                <button id="delete-reward-item-btn" type="button" class="chip danger">Loeschen</button>
+                <button id="unlock-reward-item-btn" type="button" class="chip">Freischalten</button>
+              </div>
+            </form>
+            <p id="edit-reward-item-msg" class="rename-msg"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>© Questio</small> - <a href="impressum.html">Impressum</a>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/elternbereich.js"></script>
+</body>
+</html>

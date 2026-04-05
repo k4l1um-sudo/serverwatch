@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Questio - Elternbereich Aktive Quests</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/quest.css">
+  <link rel="icon" type="image/png" href="assets/questio-logo.png">
+  <link rel="apple-touch-icon" href="assets/questio-logo.png">
+  <meta name="theme-color" content="#0b1320">
+  <meta name="description" content="Elternbereich: Aktive Quests verwalten.">
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <a class="corner-logo-link" href="index.html" aria-label="Questio Home">
+    <img class="corner-logo" src="assets/questio-logo.png" alt="Questio Logo">
+  </a>
+
+  <button id="menu-toggle" class="menu-toggle" aria-label="Menue oeffnen" aria-expanded="false" aria-controls="side-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <aside id="side-menu" class="side-menu" aria-hidden="true">
+    <div class="side-menu-inner">
+      <h2>Menue</h2>
+      <p class="muted">Schnellnavigation</p>
+      <nav class="side-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="progress.html">Fortschritt</a>
+        <a href="achievements.html">Achievements</a>
+        <a href="news.html">News</a>
+        <a href="spieler.html">Spieler</a>
+        <a href="elternbereich.html">Elternbereich</a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="ui">
+    <header class="site-header">
+      <h1>Questio</h1>
+      <p class="tagline">Der Weg des Sohnes.</p>
+    </header>
+
+    <main class="panel quest-panel">
+      <section class="hero">
+        <h2>Aktive Quests</h2>
+        <p class="muted">Getrennt nach verfuegbar, angenommen und zur Bestaetigung markiert.</p>
+      </section>
+
+      <section class="status-panel">
+        <h3>Menueleiste</h3>
+        <nav class="spieler-top-nav" aria-label="Elternbereich Navigation">
+          <a href="elternbereich.html" class="spieler-top-nav-link">Elternbereich</a>
+          <a href="eltern-aktive-quests.html" class="spieler-top-nav-link active" aria-current="page">Aktive Quests</a>
+          <a href="eltern-coins.html" class="spieler-top-nav-link">Coins</a>
+          <a href="eltern-shopbereich.html" class="spieler-top-nav-link">Shopbereich</a>
+          <a href="eltern-belohnungen.html" class="spieler-top-nav-link">Belohnungen</a>
+          <a href="eltern-achievementbereich.html" class="spieler-top-nav-link">Achievementbereich</a>
+          <a href="eltern-news.html" class="spieler-top-nav-link">News anlegen</a>
+        </nav>
+      </section>
+
+      <section class="status-panel">
+        <div class="parent-quest-grid">
+          <article class="quest-item quest-group quest-group-available">
+            <h4 class="quest-title">Verfuegbare Quests</h4>
+            <div id="parent-quests-available" class="parent-quest-list">
+              <p class="muted">Lade Quests...</p>
+            </div>
+          </article>
+
+          <article class="quest-item quest-group quest-group-accepted">
+            <h4 class="quest-title">Angenommene Quests</h4>
+            <div id="parent-quests-accepted" class="parent-quest-list">
+              <p class="muted">Lade Quests...</p>
+            </div>
+          </article>
+
+          <article class="quest-item quest-group quest-group-pending">
+            <h4 class="quest-title">Zur Bestaetigung markiert</h4>
+            <div id="parent-quests-pending" class="parent-quest-list">
+              <p class="muted">Lade Quests...</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="parent-create-quest-wrap">
+          <button id="toggle-new-quest" type="button" class="status-btn">Neue Quest anlegen</button>
+
+          <div id="new-quest-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="new-quest-panel" aria-label="Formular schließen">x</button>
+            <form id="new-quest-form" class="security-form">
+              <label for="new-quest-title" class="field-label">Quest-Titel</label>
+              <input id="new-quest-title" type="text" maxlength="120" placeholder="Titel der Quest" autocomplete="off" required>
+
+              <label for="new-quest-description" class="field-label">Quest-Beschreibung</label>
+              <textarea id="new-quest-description" maxlength="500" placeholder="Beschreibung der Quest" required></textarea>
+
+              <label for="new-quest-coins" class="field-label">Coins-Belohnung</label>
+              <input id="new-quest-coins" type="number" min="0" max="100000" step="1" value="0" placeholder="Coins">
+
+              <label for="new-quest-difficulty" class="field-label">Schwierigkeitsgrad</label>
+              <select id="new-quest-difficulty" required>
+                <option value="leicht">Leicht</option>
+                <option value="mittel" selected>Mittel</option>
+                <option value="schwer">Schwer</option>
+              </select>
+
+              <p class="quest-meta">EP-Vorschlag (nach Schwierigkeit und aktuellem Level): <strong id="new-quest-ep-value">100</strong></p>
+              <button type="submit" class="status-btn">Quest speichern</button>
+            </form>
+            <p id="new-quest-msg" class="rename-msg"></p>
+          </div>
+
+          <div id="edit-quest-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="edit-quest-panel" aria-label="Formular schließen">x</button>
+            <h4 class="quest-title">Quest bearbeiten</h4>
+            <form id="edit-quest-form" class="security-form">
+              <input id="edit-quest-id" type="hidden">
+
+              <label for="edit-quest-title" class="field-label">Quest-Titel</label>
+              <input id="edit-quest-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="edit-quest-description" class="field-label">Quest-Beschreibung</label>
+              <textarea id="edit-quest-description" maxlength="500" required></textarea>
+
+              <label for="edit-quest-coins" class="field-label">Coins-Belohnung</label>
+              <input id="edit-quest-coins" type="number" min="0" max="100000" step="1" required>
+
+              <label for="edit-quest-difficulty" class="field-label">Schwierigkeitsgrad</label>
+              <select id="edit-quest-difficulty" required>
+                <option value="leicht">Leicht</option>
+                <option value="mittel">Mittel</option>
+                <option value="schwer">Schwer</option>
+              </select>
+
+              <label for="edit-quest-xp" class="field-label">EP-Belohnung</label>
+              <input id="edit-quest-xp" type="number" min="1" max="1000" step="1" required>
+
+              <div class="parent-edit-actions">
+                <button type="submit" class="status-btn">Speichern</button>
+                <button id="delete-quest-btn" type="button" class="chip danger">Löschen</button>
+              </div>
+            </form>
+            <p id="edit-quest-msg" class="rename-msg"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>© Questio</small> - <a href="impressum.html">Impressum</a>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/elternbereich.js"></script>
+</body>
+</html>

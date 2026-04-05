@@ -10,32 +10,6 @@
   <link rel="apple-touch-icon" href="assets/questio-logo.png">
   <meta name="theme-color" content="#0b1320">
   <meta name="description" content="Dein persönliches Profil bei Questio.">
-  <script>
-    (async function () {
-      document.documentElement.style.visibility = 'hidden';
-      var secret = window.prompt('Passwort eingeben:');
-      if (secret === null) {
-        window.location.replace('index.html');
-        return;
-      }
-
-      try {
-        var response = await fetch('api/security.php?action=verify_access', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ area: 'child', secret: secret })
-        });
-        var data = await response.json();
-        if (!response.ok || !data.ok || !data.allowed) {
-          window.location.replace('index.html');
-          return;
-        }
-        document.documentElement.style.visibility = 'visible';
-      } catch (e) {
-        window.location.replace('index.html');
-      }
-    })();
-  </script>
 </head>
 <body>
   <canvas id="bg"></canvas>
@@ -58,9 +32,8 @@
         <a href="index.html">Home</a>
         <a href="progress.html">Fortschritt</a>
         <a href="achievements.html">Achievements</a>
-        <a href="shop.html">Shop</a>
+        <a href="news.html">News</a>
         <a href="spieler.html">Spieler</a>
-        <a href="profil.html">Mein Profil</a>
         <a href="elternbereich.html">Elternbereich</a>
       </nav>
     </div>
@@ -76,6 +49,19 @@
       <section class="hero">
         <h2>Mein Profil</h2>
         <p class="muted">Deine persönlichen Daten und dein Fortschritt auf einen Blick.</p>
+      </section>
+
+      <section class="status-panel">
+        <h3>Menueleiste</h3>
+        <nav class="spieler-top-nav" aria-label="Spieler Schnellnavigation">
+          <a href="spieler.html" class="spieler-top-nav-link">Spieler</a>
+          <a href="spieler-quests.html" class="spieler-top-nav-link">Quest</a>
+          <a href="spieler-level-meilensteine.html" class="spieler-top-nav-link">Level-Meilensteine</a>
+          <a href="spieler-belohnungen.html" class="spieler-top-nav-link">Belohnungen</a>
+          <a href="spieler-historie.html" class="spieler-top-nav-link">Historie</a>
+          <a href="shop.html" class="spieler-top-nav-link">Shop</a>
+          <a href="profil.html" class="spieler-top-nav-link active" aria-current="page">Mein Profil</a>
+        </nav>
       </section>
 
       <section class="status-panel">

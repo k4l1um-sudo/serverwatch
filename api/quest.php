@@ -664,7 +664,6 @@ if ($action === 'create_quest') {
     $rewardCoins = sanitizeRewardCoins($body['rewardCoins'] ?? 0);
     $description = sanitizeQuestDescription($body['description'] ?? '');
     $catalogId = sanitizeCatalogId($body['catalogId'] ?? null);
-    $acceptPassword = (string)($body['acceptPassword'] ?? '');
 
     if ($title === null) {
         flock($fp, LOCK_UN);
@@ -691,12 +690,6 @@ if ($action === 'create_quest') {
     }
 
     if ($catalogId !== null) {
-        if ($acceptPassword !== $childPasswordCurrent) {
-            flock($fp, LOCK_UN);
-            fclose($fp);
-            respond(['ok' => false, 'error' => 'Falsches Passwort fuer die Quest-Annahme.'], 403);
-        }
-
         foreach ($player['quests'] as $existingQuest) {
             $existingCatalogId = $existingQuest['catalogId'] ?? null;
             if ($existingCatalogId !== null && (string)$existingCatalogId === (string)$catalogId) {
@@ -750,13 +743,6 @@ if ($action === 'complete_quest') {
 
 if ($action === 'confirm_quest_completion') {
     $questId = (string)($body['questId'] ?? '');
-    $confirmationPin = (string)($body['confirmationPin'] ?? '');
-
-    if ($confirmationPin !== $parentPinCurrent) {
-        flock($fp, LOCK_UN);
-        fclose($fp);
-        respond(['ok' => false, 'error' => 'Falsche PIN fuer die Bestaetigung.'], 403);
-    }
 
     $found = false;
 

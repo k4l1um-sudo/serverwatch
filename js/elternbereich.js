@@ -232,19 +232,13 @@
       return;
     }
 
-    const confirmationPin = window.prompt('PIN fuer finale Bestaetigung eingeben:');
-    if (confirmationPin === null) {
-      return;
-    }
-
     try {
       const response = await fetch('api/quest.php?action=confirm_quest_completion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           player_id: getOrCreatePlayerId(),
-          questId: questId,
-          confirmationPin: confirmationPin
+          questId: questId
         })
       });
       const data = await response.json();

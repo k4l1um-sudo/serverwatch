@@ -3,21 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Questio - Elternbereich</title>
+  <title>Questio - Elternbereich News anlegen</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/quest.css">
   <link rel="icon" type="image/png" href="assets/questio-logo.png">
   <link rel="apple-touch-icon" href="assets/questio-logo.png">
   <meta name="theme-color" content="#0b1320">
-  <meta name="description" content="Elternbereich von Questio – Verwaltung und Einstellungen.">
-  <script>
-    (function () {
-      var pin = window.prompt('PIN eingeben:');
-      if (pin !== '6407' && pin !== '24112013') {
-        window.location.replace('index.html');
-      }
-    })();
-  </script>
+  <meta name="description" content="Elternbereich: News fuer Landingpage und News-Seite anlegen.">
 </head>
 <body>
   <canvas id="bg"></canvas>
@@ -55,55 +47,57 @@
 
     <main class="panel quest-panel">
       <section class="hero">
-        <h2>Elternbereich</h2>
-        <p class="muted">Verwaltung, Einstellungen und Übersicht für Eltern.</p>
+        <h2>News anlegen</h2>
+        <p class="muted">Erstelle News fuer die Landingpage und den News-Bereich.</p>
       </section>
 
       <section class="status-panel">
         <h3>Menueleiste</h3>
         <nav class="spieler-top-nav" aria-label="Elternbereich Navigation">
-          <a href="elternbereich.html" class="spieler-top-nav-link active" aria-current="page">Elternbereich</a>
+          <a href="elternbereich.html" class="spieler-top-nav-link">Elternbereich</a>
           <a href="eltern-aktive-quests.html" class="spieler-top-nav-link">Aktive Quests</a>
           <a href="eltern-coins.html" class="spieler-top-nav-link">Coins</a>
           <a href="eltern-shopbereich.html" class="spieler-top-nav-link">Shopbereich</a>
           <a href="eltern-belohnungen.html" class="spieler-top-nav-link">Belohnungen</a>
           <a href="eltern-achievementbereich.html" class="spieler-top-nav-link">Achievementbereich</a>
-          <a href="eltern-news.html" class="spieler-top-nav-link">News anlegen</a>
+          <a href="eltern-news.html" class="spieler-top-nav-link active" aria-current="page">News anlegen</a>
         </nav>
       </section>
 
       <section class="status-panel">
-        <h3>Fortschrittsgraph (Level 1 - 1000)</h3>
-        <p class="quest-meta">Die dicke Linie zeigt den bereits erreichten Weg, die dünne Linie den verbleibenden Teil.</p>
-        <div class="parent-graph-wrap">
-          <canvas id="progress-curve" width="900" height="320" aria-label="Level und EP Fortschrittskurve"></canvas>
-        </div>
-        <p id="graph-stats" class="quest-meta">Lade Fortschrittsdaten...</p>
-        <div id="parent-system-messages" class="parent-system-messages"></div>
-      </section>
-
-      <section class="status-panel">
-        <h3>Spielstatistiken</h3>
-        <div class="parent-stats-grid">
-          <article class="quest-item">
-            <h4 class="quest-title">Achievements</h4>
-            <p class="quest-meta">Insgesamt geschafft: <strong id="stats-achievements-total">-</strong></p>
-            <p class="quest-meta">Diese Woche geschafft: <strong id="stats-achievements-week">-</strong></p>
-          </article>
-          <article class="quest-item">
-            <h4 class="quest-title">Quests</h4>
-            <p class="quest-meta">Insgesamt abgeschlossen: <strong id="stats-quests-total">-</strong></p>
-            <p class="quest-meta">Diese Woche abgeschlossen: <strong id="stats-quests-week">-</strong></p>
-          </article>
-          <article class="quest-item">
-            <h4 class="quest-title">Coins</h4>
-            <p class="quest-meta">Bisher ausgegeben: <strong id="stats-coins-spent">-</strong></p>
-          </article>
+        <h3>Aktuelle News (letzte 5)</h3>
+        <div id="parent-news-list" class="parent-news-list">
+          <p class="muted">Lade News...</p>
         </div>
       </section>
 
       <section class="status-panel">
-        <p class="muted">Die Verwaltungsbereiche wurden in eigene Seiten ausgelagert und sind oben direkt erreichbar.</p>
+        <h3 id="news-form-title">Neue News</h3>
+        <form id="parent-news-form" class="security-form">
+          <input id="news-id" type="hidden">
+
+          <label for="news-title" class="field-label">Titel</label>
+          <input id="news-title" type="text" maxlength="120" autocomplete="off" required>
+
+          <label for="news-teaser" class="field-label">Teaser</label>
+          <input id="news-teaser" type="text" maxlength="240" autocomplete="off" required>
+
+          <label class="field-label">Inhalt</label>
+          <div class="editor-toolbar" role="toolbar" aria-label="Texteditor Werkzeugleiste">
+            <button type="button" class="chip" data-cmd="bold"><strong>B</strong></button>
+            <button type="button" class="chip" data-cmd="italic"><em>I</em></button>
+            <button type="button" class="chip" data-cmd="underline"><u>U</u></button>
+            <button type="button" class="chip" data-cmd="insertUnorderedList">Liste</button>
+          </div>
+          <div id="news-editor" class="news-editor" contenteditable="true" aria-label="News Texteditor"></div>
+          <input id="news-content" type="hidden" required>
+
+          <div class="parent-edit-actions">
+            <button type="submit" class="status-btn">Speichern</button>
+            <button id="news-cancel-edit" type="button" class="chip" hidden>Bearbeitung abbrechen</button>
+          </div>
+        </form>
+        <p id="news-form-msg" class="rename-msg"></p>
       </section>
     </main>
 
@@ -114,6 +108,6 @@
 
   <script src="js/main.js"></script>
   <script src="js/menu.js"></script>
-  <script src="js/elternbereich.js"></script>
+  <script src="js/eltern-news.js"></script>
 </body>
 </html>

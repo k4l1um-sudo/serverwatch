@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Questio - Achievements</title>
+  <title>Questio - News</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/quest.css">
   <link rel="icon" type="image/png" href="assets/questio-logo.png">
   <link rel="apple-touch-icon" href="assets/questio-logo.png">
   <meta name="theme-color" content="#0b1320">
-  <meta name="description" content="Erreichte und offene Achievements.">
+  <meta name="description" content="Aktuelle News und Systemnachrichten aus Questio.">
 </head>
 <body>
   <canvas id="bg"></canvas>
@@ -45,16 +45,15 @@
       <p class="tagline">Der Weg des Sohnes.</p>
     </header>
 
-    <main class="panel quest-panel">
-      <section class="hero">
-        <h2>Achievements</h2>
-        <p id="achievement-summary" class="muted">Lade Achievements...</p>
+    <main class="panel landing-panel">
+      <section class="hero landing-title-only">
+        <h2>News</h2>
+        <p class="muted">Alle aktuellen Systemnachrichten auf einen Blick.</p>
       </section>
 
       <section class="status-panel">
-        <h3>Pfad</h3>
-        <div id="achievement-path" class="achievement-path-wrap">
-          <p class="muted">Lade Achievement-Pfad...</p>
+        <div id="news-list" class="news-grid">
+          <p class="muted">Lade News...</p>
         </div>
       </section>
     </main>
@@ -66,6 +65,6 @@
 
   <script src="js/main.js"></script>
   <script src="js/menu.js"></script>
-  <script src="js/achievements.js"></script>
+  <script src="js/news.js"></script>
 </body>
 </html>

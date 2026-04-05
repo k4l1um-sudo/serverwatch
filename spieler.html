@@ -9,7 +9,15 @@
   <link rel="icon" type="image/png" href="assets/questio-logo.png">
   <link rel="apple-touch-icon" href="assets/questio-logo.png">
   <meta name="theme-color" content="#0b1320">
-  <meta name="description" content="Spielerbereich von Questio.">
+  <meta name="description" content="Spielerbereich mit Uebersicht und Schnellzugriffen.">
+  <script>
+    (function () {
+      var password = window.prompt('Passwort fuer Spielerbereich eingeben:');
+      if (password !== 'DortMund1.0') {
+        window.location.replace('index.html');
+      }
+    })();
+  </script>
 </head>
 <body>
   <canvas id="bg"></canvas>
@@ -32,9 +40,8 @@
         <a href="index.html">Home</a>
         <a href="progress.html">Fortschritt</a>
         <a href="achievements.html">Achievements</a>
-        <a href="shop.html">Shop</a>
+        <a href="news.html">News</a>
         <a href="spieler.html">Spieler</a>
-        <a href="profil.html">Mein Profil</a>
         <a href="elternbereich.html">Elternbereich</a>
       </nav>
     </div>
@@ -49,12 +56,54 @@
     <main class="panel quest-panel">
       <section class="hero">
         <h2>Spieler</h2>
-        <p class="muted">Hier findest du kuenftig alle wichtigen Spielerinformationen auf einer Seite.</p>
+        <p id="player-id" class="muted">Spieler-ID: wird geladen...</p>
       </section>
 
       <section class="status-panel">
-        <h3>Uebersicht</h3>
-        <p class="muted">Dieser Bereich wird als neue Spieler-Seite vorbereitet.</p>
+        <h3>Menueleiste</h3>
+        <nav class="spieler-top-nav" aria-label="Spieler Schnellnavigation">
+          <a href="spieler.html" class="spieler-top-nav-link active" aria-current="page">Spieler</a>
+          <a href="spieler-quests.html" class="spieler-top-nav-link">Quest</a>
+          <a href="spieler-level-meilensteine.html" class="spieler-top-nav-link">Level-Meilensteine</a>
+          <a href="spieler-belohnungen.html" class="spieler-top-nav-link">Belohnungen</a>
+          <a href="spieler-historie.html" class="spieler-top-nav-link">Historie</a>
+          <a href="shop.html" class="spieler-top-nav-link">Shop</a>
+          <a href="profil.html" class="spieler-top-nav-link">Mein Profil</a>
+        </nav>
+      </section>
+
+      <section class="status-panel">
+        <h3>Aktuelles Level</h3>
+        <div class="level-card">
+          <div class="level-main">
+            <div class="level-identity">
+              <img id="progress-avatar" class="progress-avatar" src="assets/avatar-placeholder.svg" alt="Profilbild">
+              <div>
+                <p class="muted">Level</p>
+                <p id="level-number" class="level-number">1</p>
+              </div>
+            </div>
+            <div>
+              <p class="muted">Gesamt EP</p>
+              <p id="xp-total" class="level-xp">0</p>
+              <p class="muted">Coins: <strong id="coins-total">0</strong></p>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div id="level-progress" class="progress-bar"></div>
+          </div>
+          <p id="level-progress-text" class="muted">0 / 100 EP</p>
+          <div id="boost-indicator" class="boost-indicator"></div>
+        </div>
+      </section>
+
+      <section class="status-panel">
+        <h3>Systemnachrichten</h3>
+        <div class="system-messages-box">
+          <ul id="system-messages-list" class="system-messages-list">
+            <li class="muted">Noch keine Nachrichten vorhanden.</li>
+          </ul>
+        </div>
       </section>
     </main>
 
@@ -65,5 +114,6 @@
 
   <script src="js/main.js"></script>
   <script src="js/menu.js"></script>
+  <script src="js/progress.js"></script>
 </body>
 </html>

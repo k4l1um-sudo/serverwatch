@@ -4,6 +4,135 @@ Dieses Protokoll dokumentiert fortlaufend alle funktionalen und visuellen Aender
 
 ---
 
+## 2026-04-05 14:31:33
+
+### Elternbereich: News anlegen
+- Neue Seite `eltern-news.html` hinzugefuegt (im Eltern-Menue erreichbar).
+- Neuer Bereich **Aktuelle News** zeigt die letzten 5 News mit **Bearbeiten**-Button.
+- Formular fuer News erstellt mit:
+  - Titel
+  - Teaser
+  - grossem Inhaltsfeld mit einfachem Texteditor (Fett, Kursiv, Unterstrichen, Liste)
+  - Speichern-Button
+- Beim Bearbeiten wird das Formular mit den bestehenden Werten vorbefuellt.
+
+### News-Backend und Datenhaltung
+- Neue API `api/news.php` hinzugefuegt (`list`, `save`).
+- Neue Datei `data/news.json` als persistenter News-Speicher hinzugefuegt.
+- News werden serverseitig mit Titel, Teaser, HTML-Inhalt, Zeitstempeln und Standardbild gespeichert.
+
+### Landingpage und News-Seite wieder mit echten News
+- `js/news.js` von Platzhaltermodus auf echte News-Daten (`api/news.php`) umgestellt.
+- Landingpage zeigt wieder News-Kacheln.
+- Klick auf eine Kachel auf der Landingpage fuehrt in den News-Bereich (`news.html`) zum passenden Eintrag.
+- `news.html` rendert die News nun als Artikelliste mit Titel, Teaser, Inhalt und Zeit.
+
+### Elternnavigation erweitert
+- Eltern-Menueleiste um den Punkt **News anlegen** erweitert auf:
+  - `elternbereich.html`
+  - `eltern-aktive-quests.html`
+  - `eltern-coins.html`
+  - `eltern-shopbereich.html`
+  - `eltern-belohnungen.html`
+  - `eltern-achievementbereich.html`
+  - `eltern-news.html`
+- Aktive Seite bleibt auf allen Eltern-Unterseiten korrekt gehighlightet.
+
+### Passwort-/PIN-Abfragen weiter reduziert
+- PIN-Abfrage auf Eltern-Unterseiten entfernt:
+  - `eltern-aktive-quests.html`
+  - `eltern-coins.html`
+  - `eltern-shopbereich.html`
+  - `eltern-belohnungen.html`
+  - `eltern-achievementbereich.html`
+- Quest-Bestaetigung in **Aktive Quests** (Elternbereich) benoetigt keine PIN mehr:
+  - Frontend-Anpassung in `js/elternbereich.js`
+  - Backend-Anpassung in `api/quest.php` (`confirm_quest_completion` ohne PIN-Pruefung)
+
+---
+
+## 2026-04-05 14:16:37
+
+### Landingpage und News
+- Auf `index.html` wurde der Textbereich „Worum geht es auf dieser Seite?“ durch den Bereich **News** ersetzt.
+- Das Headerbild auf der Landingpage bleibt aktiv und wurde wieder oberhalb des News-Bereichs eingebunden.
+- Neue Seite `news.html` erstellt und im Hamburgermenue verlinkt.
+- Neuer Menuepunkt **News** im Hamburgermenue auf allen Seiten ausgerollt.
+- `js/menu.js` erweitert: aktueller Menuepunkt im Hamburgermenue wird automatisch gehighlightet (`active` / `aria-current`).
+
+### News-Logik (vorlaeufig deaktiviert)
+- `js/news.js` eingefuehrt und anschliessend auf Platzhalterbetrieb umgestellt.
+- Aktuell werden **keine** News aus Systemnachrichten angezeigt.
+- Landingpage-News und News-Seite zeigen bewusst nur einen Hinweistext.
+- Standard-Newsbild auf `assets/News.png` gesetzt.
+
+### Quest-Annahme ohne Passwort
+- Passwortabfrage beim Annehmen von Quests im Frontend entfernt (`js/progress.js`).
+- Backend-Pruefung auf `acceptPassword` bei `create_quest` entfernt (`api/quest.php`).
+- Quest-Annahme funktioniert nun ohne Passwort, Duplikatpruefung bleibt bestehen.
+
+### Elternbereich in Unterseiten aufgeteilt
+- Neue Eltern-Menueleiste im Stil der Spieler-Menueleiste eingefuehrt.
+- Ausklappbereiche aus dem Elternbereich in eigene Seiten ausgelagert und verlinkt:
+  - `eltern-aktive-quests.html`
+  - `eltern-coins.html`
+  - `eltern-shopbereich.html`
+  - `eltern-belohnungen.html`
+  - `eltern-achievementbereich.html`
+- Auf allen neuen Elternseiten ist die Menueleiste enthalten und die jeweils aktive Seite gehighlightet.
+- `elternbereich.html` dient jetzt als Uebersichtsseite (Graph + Statistik + Navigation), die ausgelagerten Bereiche wurden dort entfernt.
+
+### Shop-Seite
+- Reihenfolge auf `shop.html` angepasst: Menueleiste steht jetzt oberhalb des Shop-Headers.
+
+---
+
+## 2026-04-05 13:58:09
+
+### Spielerbereich umgebaut und erweitert
+- `spieler.html` von Platzhalter auf vollwertige Spieler-Uebersicht umgestellt.
+- Obere Spieler-Menueleiste eingefuehrt und visuell an das Hamburgermenue angepasst (inkl. Hover-Effekte und eigener Abhebung).
+- Menueleiste um zusaetzlichen Punkt **Spieler** erweitert.
+- Aktive Seite in der Spieler-Menueleiste wird nun klar gehighlightet (`active` / `aria-current="page"`).
+
+### Inhalte auf eigene Seiten ausgelagert
+- Die ausklappbaren Bereiche **Quest**, **Level-Meilensteine**, **Belohnungen** und **Historie** aus der Spielerseite entfernt und in eigene Seiten ueberfuehrt:
+  - `spieler-quests.html`
+  - `spieler-level-meilensteine.html`
+  - `spieler-belohnungen.html`
+  - `spieler-historie.html`
+- Diese Seiten wurden mit den benoetigten bestehenden Skripten verbunden, damit Daten weiterhin dynamisch geladen werden.
+
+### Navigation angepasst
+- Shop und Mein Profil aus allen Hamburgermenues entfernt.
+- Gewuenschter Zugriffspfad umgesetzt: Navigation zu Shop/Profil ueber den Spielerbereich und die dortige Menueleiste.
+- Spieler-Menueleiste auf folgende Seiten ausgerollt:
+  - `spieler.html`
+  - `spieler-quests.html`
+  - `spieler-level-meilensteine.html`
+  - `spieler-belohnungen.html`
+  - `spieler-historie.html`
+  - `shop.html`
+  - `profil.html`
+
+### Passwortschutz angepasst
+- Passwortschutz fuer `spieler.html` gesetzt (`DortMund1.0`).
+- Passwortschutz anschliessend fuer folgende Seiten entfernt:
+  - `spieler-quests.html`
+  - `spieler-level-meilensteine.html`
+  - `spieler-belohnungen.html`
+  - `spieler-historie.html`
+  - `shop.html`
+  - `profil.html`
+
+### Fortschritt-Seite bereinigt
+- Aus `progress.html` folgende Bereiche entfernt:
+  - Quests (ausklappbar)
+  - Belohnungen (ausklappbar)
+  - Systemnachrichten
+
+---
+
 ## 🚀 Release 1.0 — 2026-04-04
 
 **Erstes vollstaendiges Release von Questio.**

@@ -853,18 +853,12 @@
             actionLabel: 'Quest annehmen',
             onAction: async function () {
               try {
-                const enteredPassword = window.prompt('Passwort fuer Quest-Annahme eingeben:');
-                if (enteredPassword === null) {
-                  return;
-                }
-
                 await requestQuestApi('create_quest', {
                   title: quest.title || 'Quest',
                   rewardXp: Number(quest.rewardXp) || 0,
                   rewardCoins: Number(quest.rewardCoins) || 0,
                   description: quest.description || '',
-                  catalogId: quest.id,
-                  acceptPassword: enteredPassword
+                  catalogId: quest.id
                 });
                 await refresh();
               } catch (err) {

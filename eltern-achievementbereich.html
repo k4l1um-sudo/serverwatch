@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Questio - Elternbereich Achievementbereich</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/quest.css">
+  <link rel="icon" type="image/png" href="assets/questio-logo.png">
+  <link rel="apple-touch-icon" href="assets/questio-logo.png">
+  <meta name="theme-color" content="#0b1320">
+  <meta name="description" content="Elternbereich: Achievementbereich verwalten.">
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <a class="corner-logo-link" href="index.html" aria-label="Questio Home">
+    <img class="corner-logo" src="assets/questio-logo.png" alt="Questio Logo">
+  </a>
+
+  <button id="menu-toggle" class="menu-toggle" aria-label="Menue oeffnen" aria-expanded="false" aria-controls="side-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <aside id="side-menu" class="side-menu" aria-hidden="true">
+    <div class="side-menu-inner">
+      <h2>Menue</h2>
+      <p class="muted">Schnellnavigation</p>
+      <nav class="side-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="progress.html">Fortschritt</a>
+        <a href="achievements.html">Achievements</a>
+        <a href="news.html">News</a>
+        <a href="spieler.html">Spieler</a>
+        <a href="elternbereich.html">Elternbereich</a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="ui">
+    <header class="site-header">
+      <h1>Questio</h1>
+      <p class="tagline">Der Weg des Sohnes.</p>
+    </header>
+
+    <main class="panel quest-panel">
+      <section class="hero">
+        <h2>Achievementbereich</h2>
+        <p class="muted">Achievements mit Meilenstein, Titel und Bildpfad verwalten.</p>
+      </section>
+
+      <section class="status-panel">
+        <h3>Menueleiste</h3>
+        <nav class="spieler-top-nav" aria-label="Elternbereich Navigation">
+          <a href="elternbereich.html" class="spieler-top-nav-link">Elternbereich</a>
+          <a href="eltern-aktive-quests.html" class="spieler-top-nav-link">Aktive Quests</a>
+          <a href="eltern-coins.html" class="spieler-top-nav-link">Coins</a>
+          <a href="eltern-shopbereich.html" class="spieler-top-nav-link">Shopbereich</a>
+          <a href="eltern-belohnungen.html" class="spieler-top-nav-link">Belohnungen</a>
+          <a href="eltern-achievementbereich.html" class="spieler-top-nav-link active" aria-current="page">Achievementbereich</a>
+          <a href="eltern-news.html" class="spieler-top-nav-link">News anlegen</a>
+        </nav>
+      </section>
+
+      <section class="status-panel">
+        <div id="parent-achievement-items" class="parent-shop-list">
+          <p class="muted">Lade Achievements...</p>
+        </div>
+
+        <div class="parent-create-quest-wrap">
+          <button id="toggle-new-achievement-item" type="button" class="status-btn">Achievement anlegen</button>
+
+          <div id="new-achievement-item-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="new-achievement-item-panel" aria-label="Formular schließen">x</button>
+            <form id="new-achievement-item-form" class="security-form">
+              <label for="new-achievement-item-title" class="field-label">Titel</label>
+              <input id="new-achievement-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="new-achievement-item-target" class="field-label">Meilenstein (Quests)</label>
+              <input id="new-achievement-item-target" type="number" min="1" max="100000" step="1" required>
+
+              <label for="new-achievement-item-image" class="field-label">Bildpfad</label>
+              <input id="new-achievement-item-image" type="text" maxlength="300" placeholder="assets/avatars/deinbild.png" autocomplete="off" required>
+
+              <button type="submit" class="status-btn">Achievement speichern</button>
+            </form>
+            <p id="new-achievement-item-msg" class="rename-msg"></p>
+          </div>
+
+          <div id="edit-achievement-item-panel" class="parent-new-quest-panel" hidden>
+            <button type="button" class="panel-close-btn" data-close-panel="edit-achievement-item-panel" aria-label="Formular schließen">x</button>
+            <h4 class="quest-title">Achievement bearbeiten</h4>
+            <form id="edit-achievement-item-form" class="security-form">
+              <input id="edit-achievement-item-id" type="hidden">
+
+              <label for="edit-achievement-item-title" class="field-label">Titel</label>
+              <input id="edit-achievement-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+              <label for="edit-achievement-item-target" class="field-label">Meilenstein (Quests)</label>
+              <input id="edit-achievement-item-target" type="number" min="1" max="100000" step="1" required>
+
+              <label for="edit-achievement-item-image" class="field-label">Bildpfad</label>
+              <input id="edit-achievement-item-image" type="text" maxlength="300" autocomplete="off" required>
+
+              <div class="parent-edit-actions">
+                <button type="submit" class="status-btn">Speichern</button>
+                <button id="delete-achievement-item-btn" type="button" class="chip danger">Löschen</button>
+              </div>
+            </form>
+            <p id="edit-achievement-item-msg" class="rename-msg"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>© Questio</small> - <a href="impressum.html">Impressum</a>
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/elternbereich.js"></script>
+</body>
+</html>
