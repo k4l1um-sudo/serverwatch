@@ -22,7 +22,8 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
-          server-dir: /httpdocs/
+          server-dir: /data/web/1/000/070/429/289304/htdocs/
           protocol: ftps
           port: 21
           security: loose
+          log-level: verbose
