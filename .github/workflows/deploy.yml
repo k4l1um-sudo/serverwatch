@@ -25,4 +25,4 @@ jobs:
           server-dir: /httpdocs/
           protocol: ftps
           port: 21
-          security: explicit
+          security: loose
