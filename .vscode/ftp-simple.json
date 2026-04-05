@@ -1,0 +1,13 @@
+[
+    {
+        "name": "k4l1um Webspace",
+        "host": "www.k4l1um.de",
+        "port": 21,
+        "type": "ftps",
+        "username": "70429f56742",
+        "password": "AW31612w131287",
+        "path": "/htdocs/",
+        "autosave": true,
+        "secure": true
+    }
+]
