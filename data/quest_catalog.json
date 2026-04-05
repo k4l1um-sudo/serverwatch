@@ -1,5 +1,215 @@
 {
     "version": 1,
-    "updatedAt": "2026-04-04T15:59:47+00:00",
-    "quests": []
+    "updatedAt": "2026-04-04T19:15:19+00:00",
+    "quests": [
+        {
+            "id": 1,
+            "title": "Lernen - Deutscharbeit",
+            "description": "Auf Mama zukommen für spezifische Aufgabe\n(voraussichtlich eine Seite...)",
+            "rewardXp": 112,
+            "rewardCoins": 0,
+            "rewardText": "112 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 2,
+            "title": "Lernen - Englisch",
+            "description": "Bei Mama melden\n(voraussichtlich eine Seite Arbeitsblatt)",
+            "rewardXp": 112,
+            "rewardCoins": 0,
+            "rewardText": "112 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 3,
+            "title": "Lernen - Deutscharbeit",
+            "description": "Melden bei Mama\n(voraussichtlich eine Seite...)",
+            "rewardXp": 112,
+            "rewardCoins": 0,
+            "rewardText": "112 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 4,
+            "title": "Lernen - Englisch",
+            "description": "Melden bei Mama\n(voraussichtlich eine Seite...)",
+            "rewardXp": 112,
+            "rewardCoins": 0,
+            "rewardText": "112 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 5,
+            "title": "Lernen - Englisch",
+            "description": "Melden bei Mama\n(voraussichtlich eine Seite...)",
+            "rewardXp": 112,
+            "rewardCoins": 0,
+            "rewardText": "112 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 6,
+            "title": "Lernen - Deutsch",
+            "description": "Melden bei Mama\n(voraussichtlich eine Seite...)",
+            "rewardXp": 112,
+            "rewardCoins": 0,
+            "rewardText": "112 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 7,
+            "title": "Hausmüll rausstellen",
+            "description": "09.04.2026\nMüllsack Küche Hausmüll in graue Tonne (Nr.7 und Nr.2)\nAbends graue Mülltonne rausstellen",
+            "rewardXp": 68,
+            "rewardCoins": 0,
+            "rewardText": "68 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 8,
+            "title": "Gelber Sack rausstellen",
+            "description": "06.04.2026\nGelber Sack Küche in vorhandenen Sack\nGelben SAck komplett dann rausstellen",
+            "rewardXp": 68,
+            "rewardCoins": 0,
+            "rewardText": "68 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 9,
+            "title": "Einkaufen - Ergänzung Wocheneinkauf",
+            "description": "Nach Rücksprache mit Mama\n(einfach fragen ob was besorgt werden muss)",
+            "rewardXp": 177,
+            "rewardCoins": 0,
+            "rewardText": "177 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 10,
+            "title": "Wäsche sortieren",
+            "description": "Nach Rücksprache (+Einweisung) mit Mama",
+            "rewardXp": 68,
+            "rewardCoins": 0,
+            "rewardText": "68 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 11,
+            "title": "Wäsche Waschen",
+            "description": "Nach Rücksprache (+Einweisung) mit Mama",
+            "rewardXp": 112,
+            "rewardCoins": 0,
+            "rewardText": "112 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 12,
+            "title": "Spühlmaschine",
+            "description": "Geschirr der Maschine entnehmen und dann in die Schränke räumen.",
+            "rewardXp": 68,
+            "rewardCoins": 0,
+            "rewardText": "68 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 13,
+            "title": "Spühlen (prä neue Küche)",
+            "description": "Spühlen im Waschbecken bis Küche steht",
+            "rewardXp": 68,
+            "rewardCoins": 0,
+            "rewardText": "68 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 14,
+            "title": "Spühlen (prä neue Küche)",
+            "description": "Spühlen im Waschbecken bis Küche steht",
+            "rewardXp": 68,
+            "rewardCoins": 0,
+            "rewardText": "68 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 15,
+            "title": "Kleidung einräumen",
+            "description": "NAch dem Waschen eigene Kleidung in den Schrank einräumen",
+            "rewardXp": 68,
+            "rewardCoins": 0,
+            "rewardText": "68 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 16,
+            "title": "Glas rausbringen",
+            "description": "Zum Container",
+            "rewardXp": 177,
+            "rewardCoins": 5,
+            "rewardText": "177 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 17,
+            "title": "Wäsche abnehmen",
+            "description": "vom Ständer nehmen",
+            "rewardXp": 75,
+            "rewardCoins": 0,
+            "rewardText": "75 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 18,
+            "title": "Kleidung einräumen",
+            "description": "eingene Kleidung in eigenen Schrank",
+            "rewardXp": 75,
+            "rewardCoins": 0,
+            "rewardText": "75 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 19,
+            "title": "Wäsche sortieren - zum Waschen",
+            "description": "nach Rücksprache Mama",
+            "rewardXp": 131,
+            "rewardCoins": 0,
+            "rewardText": "131 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        }
+    ]
 }

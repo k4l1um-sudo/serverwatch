@@ -8,7 +8,178 @@
             "ownedShopItems": [],
             "quests": [],
             "createdAt": "2026-04-04T15:59:24+00:00",
-            "updatedAt": "2026-04-04T15:59:29+00:00"
+            "updatedAt": "2026-04-04T16:46:15+00:00",
+            "systemMessages": [
+                {
+                    "text": "Neue Belohnung verfuegbar: \"Unternehmung\". Bedingung: Level 15 erreichen.",
+                    "timestamp": "2026-04-04T18:08:44+00:00"
+                }
+            ]
+        },
+        "kid_5fpuldwu": {
+            "xp": 0,
+            "coins": 0,
+            "name": "Spieler",
+            "profileImageItemId": null,
+            "ownedShopItems": [],
+            "quests": [],
+            "createdAt": "2026-04-04T16:46:32+00:00",
+            "updatedAt": "2026-04-04T16:46:32+00:00",
+            "systemMessages": [
+                {
+                    "text": "Neue Belohnung verfuegbar: \"Unternehmung\". Bedingung: Level 15 erreichen.",
+                    "timestamp": "2026-04-04T18:08:44+00:00"
+                }
+            ]
+        },
+        "kid_shared_main": {
+            "xp": 652,
+            "coins": 56,
+            "name": "Alex",
+            "profileImageItemId": "ach_beginner_1",
+            "ownedShopItems": [],
+            "achievementRewardClaimedIds": [
+                "ach_beginner_1"
+            ],
+            "quests": [
+                {
+                    "id": "q_b52820b75b",
+                    "title": "Glas rausbringen",
+                    "description": "Zum Container",
+                    "rewardXp": 177,
+                    "rewardCoins": 5,
+                    "difficulty": null,
+                    "catalogId": "16",
+                    "completionRequested": false,
+                    "completionRequestedAt": "2026-04-04T17:13:52+00:00",
+                    "completed": true,
+                    "createdAt": "2026-04-04T17:13:50+00:00",
+                    "completedAt": "2026-04-04T17:14:15+00:00"
+                },
+                {
+                    "id": "q_f2ca3b6054",
+                    "title": "Kleidung einräumen",
+                    "description": "NAch dem Waschen eigene Kleidung in den Schrank einräumen",
+                    "rewardXp": 68,
+                    "rewardCoins": 0,
+                    "difficulty": null,
+                    "catalogId": "15",
+                    "completionRequested": false,
+                    "completionRequestedAt": "2026-04-04T18:32:29+00:00",
+                    "completed": true,
+                    "createdAt": "2026-04-04T18:18:56+00:00",
+                    "completedAt": "2026-04-04T18:33:36+00:00"
+                },
+                {
+                    "id": "q_6bf0d07790",
+                    "title": "Wäsche sortieren",
+                    "description": "Nach Rücksprache (+Einweisung) mit Mama",
+                    "rewardXp": 68,
+                    "rewardCoins": 0,
+                    "difficulty": null,
+                    "catalogId": "10",
+                    "completionRequested": false,
+                    "completionRequestedAt": "2026-04-04T19:09:15+00:00",
+                    "completed": true,
+                    "createdAt": "2026-04-04T18:55:16+00:00",
+                    "completedAt": "2026-04-04T19:11:41+00:00"
+                },
+                {
+                    "id": "q_40713dfc92",
+                    "title": "Wäsche abnehmen",
+                    "description": "vom Ständer nehmen",
+                    "rewardXp": 75,
+                    "rewardCoins": 0,
+                    "difficulty": null,
+                    "catalogId": "17",
+                    "completionRequested": false,
+                    "completionRequestedAt": "2026-04-04T19:07:33+00:00",
+                    "completed": true,
+                    "createdAt": "2026-04-04T19:02:07+00:00",
+                    "completedAt": "2026-04-04T19:11:44+00:00"
+                },
+                {
+                    "id": "q_89182ca3df",
+                    "title": "Kleidung einräumen",
+                    "description": "eingene Kleidung in eigenen Schrank",
+                    "rewardXp": 75,
+                    "rewardCoins": 0,
+                    "difficulty": null,
+                    "catalogId": "18",
+                    "completionRequested": false,
+                    "completionRequestedAt": "2026-04-04T19:11:04+00:00",
+                    "completed": true,
+                    "createdAt": "2026-04-04T19:11:02+00:00",
+                    "completedAt": "2026-04-04T19:11:47+00:00"
+                },
+                {
+                    "id": "q_aaf453e21d",
+                    "title": "Wäsche sortieren - zum Waschen",
+                    "description": "nach Rücksprache Mama",
+                    "rewardXp": 131,
+                    "rewardCoins": 0,
+                    "difficulty": null,
+                    "catalogId": "19",
+                    "completionRequested": false,
+                    "completionRequestedAt": "2026-04-04T19:35:44+00:00",
+                    "completed": true,
+                    "createdAt": "2026-04-04T19:17:38+00:00",
+                    "completedAt": "2026-04-04T19:37:55+00:00"
+                }
+            ],
+            "createdAt": "2026-04-04T17:13:09+00:00",
+            "updatedAt": "2026-04-05T08:20:10+00:00",
+            "activeBoosts": [
+                {
+                    "id": "boost_lu_3_366c945d",
+                    "label": "Level-Up Boost (Level 3)",
+                    "multiplier": 1.05,
+                    "source": "level_up",
+                    "sourceLevel": 3,
+                    "remainingQuests": 1
+                },
+                {
+                    "id": "boost_lu_4_24358d85",
+                    "label": "Level-Up Boost (Level 4)",
+                    "multiplier": 1.05,
+                    "source": "level_up",
+                    "sourceLevel": 4,
+                    "remainingQuests": 3
+                },
+                {
+                    "id": "boost_lu_5_924d2a08",
+                    "label": "Level-Up Boost (Level 5)",
+                    "multiplier": 1.05,
+                    "source": "level_up",
+                    "sourceLevel": 5,
+                    "remainingQuests": 4
+                }
+            ],
+            "systemMessages": [
+                {
+                    "text": "Quest \"Wäsche sortieren\" abgeschlossen! 75 EP erhalten (68 + 7 EP Boost).",
+                    "timestamp": "2026-04-04T19:11:41+00:00"
+                },
+                {
+                    "text": "Quest \"Wäsche abnehmen\" abgeschlossen! 83 EP erhalten (75 + 8 EP Boost). Coins: +5 (5 Level-Up-Coins). Level-Up auf Level 4! Naechste Quest gibt +5 % EP.",
+                    "timestamp": "2026-04-04T19:11:44+00:00"
+                },
+                {
+                    "text": "Belohnung freigeschaltet: Döner 4 free",
+                    "timestamp": "2026-04-04T19:11:44+00:00"
+                },
+                {
+                    "text": "Quest \"Kleidung einräumen\" abgeschlossen! 87 EP erhalten (75 + 12 EP Boost). Coins: +5 (5 Level-Up-Coins). Level-Up auf Level 5! Naechste Quest gibt +5 % EP.",
+                    "timestamp": "2026-04-04T19:11:47+00:00"
+                },
+                {
+                    "text": "Quest \"Wäsche sortieren - zum Waschen\" abgeschlossen! 159 EP erhalten (131 + 28 EP Boost).",
+                    "timestamp": "2026-04-04T19:37:55+00:00"
+                }
+            ],
+            "unlockedRewardItemIds": [
+                "belohnung_d_ner_4_free"
+            ]
         }
     }
 }

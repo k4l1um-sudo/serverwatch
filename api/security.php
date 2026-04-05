@@ -5,7 +5,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 const DEFAULT_CHILD_PASSWORD = 'DortMund1.0';
-const DEFAULT_PARENT_PIN = '6407';
+const DEFAULT_PARENT_PIN = '24112013';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);

@@ -2,6 +2,7 @@
   const API_URL = 'api/quest.php';
   const ACHIEVEMENT_API_URL = 'api/achievement_items.php';
   const PLAYER_STORAGE_KEY = 'serverwatch_quest_player_id';
+  const SHARED_PLAYER_ID = 'kid_shared_main';
 
   const DEFAULT_ACHIEVEMENTS = [
     { id: 'ach_beginner_1', title: 'Beginner', target: 1, image: 'assets/avatars/beginner.png' },
@@ -16,14 +17,40 @@
     { id: 'ach_grossmeister_2000', title: 'Grossmeister', target: 2000, image: 'assets/avatars/grossmeister.png' }
   ];
 
-  function getOrCreatePlayerId() {
-    const existing = localStorage.getItem(PLAYER_STORAGE_KEY);
-    if (existing && /^[a-zA-Z0-9_-]{4,40}$/.test(existing)) {
-      return existing;
+  function achievementMilestoneCoins(target) {
+    const t = Math.max(1, Number(target) || 1);
+
+    if (t <= 10) {
+      return 25;
     }
-    const id = 'kid_' + Math.random().toString(36).slice(2, 10);
-    localStorage.setItem(PLAYER_STORAGE_KEY, id);
-    return id;
+    if (t <= 50) {
+      return 60;
+    }
+    if (t <= 200) {
+      return 120;
+    }
+    if (t <= 400) {
+      return 180;
+    }
+    if (t <= 600) {
+      return 240;
+    }
+    if (t <= 800) {
+      return 320;
+    }
+    if (t <= 1000) {
+      return 380;
+    }
+    if (t <= 1500) {
+      return 450;
+    }
+
+    return 500;
+  }
+
+  function getOrCreatePlayerId() {
+    localStorage.setItem(PLAYER_STORAGE_KEY, SHARED_PLAYER_ID);
+    return SHARED_PLAYER_ID;
   }
 
   async function loadAchievementCatalog() {
@@ -67,6 +94,7 @@
         id: entry.id || ('quests_' + target),
         title: title,
         target: target,
+        rewardCoins: achievementMilestoneCoins(target),
         progress: completedCount,
         description: 'Erledige insgesamt ' + target + ' Quest(s), um das Profilbild ' + title + ' freizuschalten.',
         done: completedCount >= target,
@@ -106,6 +134,23 @@
     title.className = 'achievement-path-title';
     title.textContent = item.title;
 
+    const coins = document.createElement('p');
+    coins.className = 'achievement-coins';
+
+    const coinsText = document.createElement('span');
+    coinsText.textContent = '+' + String(item.rewardCoins || 0) + ' Coins';
+    coins.appendChild(coinsText);
+
+    const coinIcon = document.createElement('img');
+    coinIcon.className = 'coin-icon';
+    coinIcon.src = 'assets/coin.png';
+    coinIcon.alt = 'Coin Symbol';
+    coinIcon.loading = 'lazy';
+    coinIcon.addEventListener('error', function () {
+      coinIcon.style.display = 'none';
+    });
+    coins.appendChild(coinIcon);
+
     const state = document.createElement('span');
     state.className = done ? 'achievement-state done' : 'achievement-state open';
     state.textContent = done ? 'Errungen' : 'Offen';
@@ -121,6 +166,7 @@
     node.appendChild(point);
     node.appendChild(target);
     node.appendChild(title);
+    node.appendChild(coins);
     node.appendChild(state);
 
     return node;

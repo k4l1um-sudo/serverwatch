@@ -13,7 +13,7 @@
   <script>
     (function () {
       var pin = window.prompt('PIN eingeben:');
-      if (pin !== '6407') {
+      if (pin !== '6407' && pin !== '24112013') {
         window.location.replace('index.html');
       }
     })();
@@ -40,8 +40,8 @@
         <a href="index.html">Home</a>
         <a href="progress.html">Fortschritt</a>
         <a href="achievements.html">Achievements</a>
-        <a href="history.html">Historie</a>
         <a href="shop.html">Shop</a>
+        <a href="spieler.html">Spieler</a>
         <a href="profil.html">Mein Profil</a>
         <a href="elternbereich.html">Elternbereich</a>
       </nav>
@@ -90,8 +90,12 @@
         </div>
       </section>
 
-      <section class="status-panel">
-        <h3>Aktive Quests</h3>
+      <section class="status-panel collapsible-section">
+        <button type="button" class="collapsible-toggle" aria-expanded="false">
+          <h3>Aktive Quests</h3>
+          <span class="collapsible-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="collapsible-body" hidden>
         <p class="quest-meta">Getrennt nach verfuegbar, angenommen und zur Bestaetigung markiert.</p>
         <div class="parent-quest-grid">
           <article class="quest-item quest-group quest-group-available">
@@ -177,47 +181,28 @@
             <p id="edit-quest-msg" class="rename-msg"></p>
           </div>
         </div>
+        </div>
       </section>
 
       <section class="status-panel collapsible-section">
         <button type="button" class="collapsible-toggle" aria-expanded="false">
-          <h3>Einstellungen</h3>
+          <h3>Coints</h3>
           <span class="collapsible-chevron" aria-hidden="true"></span>
         </button>
         <div class="collapsible-body" hidden>
-        <div class="status-list">
+          <p class="quest-meta">Coins fuer das Kind direkt gutschreiben oder abziehen.</p>
           <article class="quest-item">
-            <h4 class="quest-title">Kinderpasswort ändern</h4>
-            <p class="quest-meta">Nur mit Eingabe des aktuellen Eltern-PIN.</p>
-
-            <form id="child-password-form" class="security-form">
-              <label for="child-current-parent-pin" class="field-label">Aktueller Eltern-PIN</label>
-              <input id="child-current-parent-pin" type="password" inputmode="numeric" placeholder="Aktueller Eltern-PIN" autocomplete="off" required>
-
-              <label for="new-child-password" class="field-label">Neues Kinderpasswort</label>
-              <input id="new-child-password" type="text" placeholder="Neues Kinderpasswort" autocomplete="off" required>
-
-              <button type="submit" class="status-btn">Kinderpasswort speichern</button>
+            <p class="quest-meta">Aktuelle Coins: <strong id="parent-coins-current">-</strong></p>
+            <form id="parent-coins-form" class="security-form">
+              <label for="parent-coins-amount" class="field-label">Anzahl Coins</label>
+              <input id="parent-coins-amount" type="number" min="1" max="100000" step="1" value="1" required>
+              <div class="parent-edit-actions">
+                <button id="parent-coins-add-btn" type="button" class="status-btn">Hinzufuegen</button>
+                <button id="parent-coins-subtract-btn" type="button" class="chip">Abziehen</button>
+              </div>
             </form>
-            <p id="child-security-msg" class="rename-msg"></p>
+            <p id="parent-coins-msg" class="rename-msg"></p>
           </article>
-
-          <article class="quest-item">
-            <h4 class="quest-title">Eltern-PIN ändern</h4>
-            <p class="quest-meta">Nur mit Eingabe des aktuellen Eltern-PIN.</p>
-
-            <form id="parent-pin-form" class="security-form">
-              <label for="parent-current-parent-pin" class="field-label">Aktueller Eltern-PIN</label>
-              <input id="parent-current-parent-pin" type="password" inputmode="numeric" placeholder="Aktueller Eltern-PIN" autocomplete="off" required>
-
-              <label for="new-parent-pin" class="field-label">Neuer Eltern-PIN</label>
-              <input id="new-parent-pin" type="password" inputmode="numeric" placeholder="Neuer Eltern-PIN" autocomplete="off" required>
-
-              <button type="submit" class="status-btn">Eltern-PIN speichern</button>
-            </form>
-            <p id="parent-security-msg" class="rename-msg"></p>
-          </article>
-        </div>
         </div>
       </section>
 
@@ -248,13 +233,13 @@
               <label for="new-shop-item-type" class="field-label">Typ</label>
               <select id="new-shop-item-type">
                 <option value="reallife_item">Reallife Gegenstand</option>
-                <option value="profile_image">Profilbild</option>
+                <option value="profile_image" selected>Profilbild</option>
                 <option value="xp_boost_perk">EP-Boost Perk</option>
               </select>
 
               <div id="new-shop-item-image-row" class="shop-type-fields" hidden>
                 <label for="new-shop-item-image" class="field-label">Bildpfad (assets/...)</label>
-                <input id="new-shop-item-image" type="text" maxlength="300" placeholder="assets/avatars/deinbild.png" autocomplete="off">
+                <input id="new-shop-item-image" type="text" maxlength="300" value="assets/deinbild.png" placeholder="assets/deinbild.png" autocomplete="off">
               </div>
 
               <div id="new-shop-item-boost-row" class="shop-type-fields" hidden>
@@ -293,7 +278,7 @@
 
               <div id="edit-shop-item-image-row" class="shop-type-fields" hidden>
                 <label for="edit-shop-item-image" class="field-label">Bildpfad (assets/...)</label>
-                <input id="edit-shop-item-image" type="text" maxlength="300" placeholder="assets/avatars/deinbild.png" autocomplete="off">
+                <input id="edit-shop-item-image" type="text" maxlength="300" value="assets/deinbild.png" placeholder="assets/deinbild.png" autocomplete="off">
               </div>
 
               <div id="edit-shop-item-boost-row" class="shop-type-fields" hidden>
@@ -314,6 +299,117 @@
             <p id="edit-shop-item-msg" class="rename-msg"></p>
           </div>
         </div>
+        </div>
+      </section>
+
+      <section class="status-panel collapsible-section">
+        <button type="button" class="collapsible-toggle" aria-expanded="false">
+          <h3>Belohnungen</h3>
+          <span class="collapsible-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="collapsible-body" hidden>
+          <p class="quest-meta">Hier werden nur Items mit einer ID angezeigt, die mit <strong>belohnung</strong> beginnt.</p>
+
+          <section class="collapsible-section">
+            <button type="button" class="collapsible-toggle" aria-expanded="false">
+              <h4>Aktive Belohnungen</h4>
+              <span class="collapsible-chevron" aria-hidden="true"></span>
+            </button>
+            <div class="collapsible-body" hidden>
+              <div id="parent-rewards-active" class="parent-shop-list">
+                <p class="muted">Lade Belohnungen...</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="collapsible-section">
+            <button type="button" class="collapsible-toggle" aria-expanded="false">
+              <h4>Nicht aktive Belohnungen</h4>
+              <span class="collapsible-chevron" aria-hidden="true"></span>
+            </button>
+            <div class="collapsible-body" hidden>
+              <div id="parent-rewards-redeemed" class="parent-shop-list">
+                <p class="muted">Lade eingeloeste Belohnungen...</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="parent-create-quest-wrap">
+            <button id="toggle-new-reward-item" type="button" class="status-btn">Belohnung anlegen</button>
+
+            <div id="new-reward-item-panel" class="parent-new-quest-panel" hidden>
+              <button type="button" class="panel-close-btn" data-close-panel="new-reward-item-panel" aria-label="Formular schließen">x</button>
+              <form id="new-reward-item-form" class="security-form">
+                <label for="new-reward-item-title" class="field-label">Titel</label>
+                <input id="new-reward-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+                <label for="new-reward-item-description" class="field-label">Beschreibung (optional)</label>
+                <textarea id="new-reward-item-description" maxlength="500"></textarea>
+
+                <div id="new-reward-coins-row" class="shop-type-fields">
+                  <label for="new-reward-item-coins" class="field-label">Coinwert</label>
+                  <input id="new-reward-item-coins" type="number" min="0" max="100000" step="1" value="0" required>
+                </div>
+
+                <label for="new-reward-condition" class="field-label">Bedingung</label>
+                <select id="new-reward-condition" required>
+                  <option value="coins_purchase" selected>Mit Coins kaufbar</option>
+                  <option value="reach_level">Beim Erreichen von Level</option>
+                </select>
+
+                <div id="new-reward-condition-level-row" class="shop-type-fields" hidden>
+                  <label for="new-reward-condition-level" class="field-label">Level-Ziel</label>
+                  <input id="new-reward-condition-level" type="number" min="1" max="1000" step="1" value="2">
+                </div>
+
+                <label for="new-reward-item-image" class="field-label">Bildpfad (optional)</label>
+                <input id="new-reward-item-image" type="text" maxlength="300" placeholder="assets/avatars/belohnung.png" autocomplete="off">
+
+                <button type="submit" class="status-btn">Belohnung speichern</button>
+              </form>
+              <p id="new-reward-item-msg" class="rename-msg"></p>
+            </div>
+
+            <div id="edit-reward-item-panel" class="parent-new-quest-panel" hidden>
+              <button type="button" class="panel-close-btn" data-close-panel="edit-reward-item-panel" aria-label="Formular schließen">x</button>
+              <h4 class="quest-title">Belohnung bearbeiten</h4>
+              <form id="edit-reward-item-form" class="security-form">
+                <input id="edit-reward-item-id" type="hidden">
+
+                <label for="edit-reward-item-title" class="field-label">Titel</label>
+                <input id="edit-reward-item-title" type="text" maxlength="120" autocomplete="off" required>
+
+                <label for="edit-reward-item-description" class="field-label">Beschreibung (optional)</label>
+                <textarea id="edit-reward-item-description" maxlength="500"></textarea>
+
+                <div id="edit-reward-coins-row" class="shop-type-fields">
+                  <label for="edit-reward-item-coins" class="field-label">Coinwert</label>
+                  <input id="edit-reward-item-coins" type="number" min="0" max="100000" step="1" value="0" required>
+                </div>
+
+                <label for="edit-reward-condition" class="field-label">Bedingung</label>
+                <select id="edit-reward-condition" required>
+                  <option value="coins_purchase">Mit Coins kaufbar</option>
+                  <option value="reach_level">Beim Erreichen von Level</option>
+                </select>
+
+                <div id="edit-reward-condition-level-row" class="shop-type-fields" hidden>
+                  <label for="edit-reward-condition-level" class="field-label">Level-Ziel</label>
+                  <input id="edit-reward-condition-level" type="number" min="1" max="1000" step="1" value="2">
+                </div>
+
+                <label for="edit-reward-item-image" class="field-label">Bildpfad (optional)</label>
+                <input id="edit-reward-item-image" type="text" maxlength="300" placeholder="assets/avatars/belohnung.png" autocomplete="off">
+
+                <div class="parent-edit-actions">
+                  <button type="submit" class="status-btn">Speichern</button>
+                  <button id="delete-reward-item-btn" type="button" class="chip danger">Loeschen</button>
+                  <button id="unlock-reward-item-btn" type="button" class="chip">Freischalten</button>
+                </div>
+              </form>
+              <p id="edit-reward-item-msg" class="rename-msg"></p>
+            </div>
+          </div>
         </div>
       </section>
 

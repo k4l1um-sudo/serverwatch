@@ -6,7 +6,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 const MAX_LEVEL = 1000;
 const DEFAULT_CHILD_PASSWORD = 'DortMund1.0';
-const DEFAULT_PARENT_PIN = '6407';
+const DEFAULT_PARENT_PIN = '24112013';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
@@ -93,6 +93,87 @@ function calculateLevel($xpTotal) {
     ];
 }
 
+function levelUpBaseCoins($levelReached) {
+    $lvl = max(2, (int)$levelReached);
+
+    if ($lvl <= 50) {
+        return 5;
+    }
+    if ($lvl <= 100) {
+        return 8;
+    }
+    if ($lvl <= 200) {
+        return 12;
+    }
+    if ($lvl <= 500) {
+        return 18;
+    }
+
+    return 25;
+}
+
+function levelMilestoneBonusCoins($levelReached) {
+    $lvl = (int)$levelReached;
+
+    $bonusByLevel = [
+        10 => 20,
+        25 => 35,
+        50 => 60,
+        75 => 90,
+        100 => 130,
+        150 => 180,
+        200 => 230,
+        300 => 300,
+        500 => 380,
+        750 => 450,
+        1000 => 475
+    ];
+
+    return isset($bonusByLevel[$lvl]) ? (int)$bonusByLevel[$lvl] : 0;
+}
+
+function levelUpCoins($levelReached) {
+    $base = levelUpBaseCoins($levelReached);
+    $milestoneBonus = levelMilestoneBonusCoins($levelReached);
+
+    if ($milestoneBonus > 0) {
+        return min(500, $base + $milestoneBonus);
+    }
+
+    return $base;
+}
+
+function achievementMilestoneCoins($target) {
+    $t = max(1, (int)$target);
+
+    if ($t <= 10) {
+        return 25;
+    }
+    if ($t <= 50) {
+        return 60;
+    }
+    if ($t <= 200) {
+        return 120;
+    }
+    if ($t <= 400) {
+        return 180;
+    }
+    if ($t <= 600) {
+        return 240;
+    }
+    if ($t <= 800) {
+        return 320;
+    }
+    if ($t <= 1000) {
+        return 380;
+    }
+    if ($t <= 1500) {
+        return 450;
+    }
+
+    return 500;
+}
+
 function sanitizePlayerId($value) {
     $value = (string)$value;
     if (!preg_match('/^[a-zA-Z0-9_-]{4,40}$/', $value)) {
@@ -141,6 +222,19 @@ function sanitizeRewardCoins($value) {
     }
 
     return $coins;
+}
+
+function sanitizeCoinAdjustAmount($value) {
+    if ($value === null || $value === '') {
+        return null;
+    }
+
+    $amount = (int)$value;
+    if ($amount < 1 || $amount > 100000) {
+        return null;
+    }
+
+    return $amount;
 }
 
 function sanitizeShopItemId($value) {
@@ -247,6 +341,36 @@ function getAchievementProfileUnlocks($completedCount, $catalogItems) {
     return $unlocked;
 }
 
+function countCompletedQuests($quests) {
+    $count = 0;
+    foreach ((array)$quests as $quest) {
+        if (!empty($quest['completed'])) {
+            $count++;
+        }
+    }
+    return $count;
+}
+
+function findNewlyUnlockedAchievements($beforeCompleted, $afterCompleted, $catalogItems) {
+    $before = max(0, (int)$beforeCompleted);
+    $after = max(0, (int)$afterCompleted);
+    $newlyUnlocked = [];
+
+    foreach ((array)$catalogItems as $item) {
+        $target = (int)($item['target'] ?? 0);
+        if ($target > 0 && $before < $target && $after >= $target) {
+            $newlyUnlocked[] = [
+                'id' => (string)($item['id'] ?? ''),
+                'title' => (string)($item['title'] ?? ''),
+                'target' => $target,
+                'image' => (string)($item['image'] ?? '')
+            ];
+        }
+    }
+
+    return $newlyUnlocked;
+}
+
 function sanitizeDifficulty($value) {
     if ($value === null || $value === '') {
         return null;
@@ -343,6 +467,111 @@ function findShopItemById($itemId) {
     return null;
 }
 
+function rewardUnlockConditionType($item) {
+    $raw = isset($item['unlockConditionType']) ? (string)$item['unlockConditionType'] : 'coins_purchase';
+    $allowed = ['coins_purchase', 'quests_completed', 'level_up', 'reach_level'];
+    if (in_array($raw, $allowed, true)) {
+        return $raw;
+    }
+    return 'coins_purchase';
+}
+
+function rewardUnlockConditionValue($item) {
+    $value = isset($item['unlockConditionValue']) ? (int)$item['unlockConditionValue'] : 0;
+    return max(0, $value);
+}
+
+function rewardUnlockStartCompletedQuests($item) {
+    $value = isset($item['unlockStartCompletedQuests']) ? (int)$item['unlockStartCompletedQuests'] : 0;
+    return max(0, $value);
+}
+
+function rewardUnlockStartLevel($item) {
+    $value = isset($item['unlockStartLevel']) ? (int)$item['unlockStartLevel'] : 1;
+    return max(1, $value);
+}
+
+function isRewardConditionMet($item, $completedQuestCount, $level) {
+    $conditionType = rewardUnlockConditionType($item);
+    $conditionValue = rewardUnlockConditionValue($item);
+    $completed = max(0, (int)$completedQuestCount);
+    $lvl = max(1, (int)$level);
+    $startCompleted = rewardUnlockStartCompletedQuests($item);
+    $startLevel = rewardUnlockStartLevel($item);
+    $completedSinceStart = max(0, $completed - $startCompleted);
+    $levelUpsSinceStart = max(0, $lvl - $startLevel);
+
+    if ($conditionType === 'quests_completed') {
+        return $conditionValue > 0 && $completedSinceStart >= $conditionValue;
+    }
+    if ($conditionType === 'level_up') {
+        return $conditionValue > 0 && $levelUpsSinceStart >= $conditionValue;
+    }
+    if ($conditionType === 'reach_level') {
+        return $conditionValue > 0 && $levelUpsSinceStart >= $conditionValue;
+    }
+
+    return false;
+}
+
+function autoUnlockConditionRewards(&$player, $completedQuestCount, $level) {
+    $items = loadShopCatalog();
+    if (!is_array($items)) {
+        return [];
+    }
+
+    $owned = [];
+    foreach ((array)$player['ownedShopItems'] as $ownedId) {
+        $owned[(string)$ownedId] = true;
+    }
+
+    if (!isset($player['unlockedRewardItemIds']) || !is_array($player['unlockedRewardItemIds'])) {
+        $player['unlockedRewardItemIds'] = [];
+    }
+
+    $unlocked = [];
+    foreach ((array)$player['unlockedRewardItemIds'] as $unlockedId) {
+        $unlocked[(string)$unlockedId] = true;
+    }
+
+    $granted = [];
+    foreach ($items as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+
+        $active = !isset($item['active']) || $item['active'] === true;
+        if (!$active) {
+            continue;
+        }
+
+        $type = (string)($item['type'] ?? '');
+        if ($type !== 'reward_item') {
+            continue;
+        }
+
+        $itemId = (string)($item['id'] ?? '');
+        if ($itemId === '' || isset($owned[$itemId]) || isset($unlocked[$itemId])) {
+            continue;
+        }
+
+        $conditionType = rewardUnlockConditionType($item);
+        if ($conditionType === 'coins_purchase') {
+            continue;
+        }
+
+        if (!isRewardConditionMet($item, $completedQuestCount, $level)) {
+            continue;
+        }
+
+        $player['unlockedRewardItemIds'][] = $itemId;
+        $unlocked[$itemId] = true;
+        $granted[] = (string)($item['title'] ?? $itemId);
+    }
+
+    return $granted;
+}
+
 $body = readBody();
 $action = $_GET['action'] ?? ($body['action'] ?? 'get_state');
 $security = loadSecuritySettings();
@@ -378,6 +607,8 @@ if (!isset($db['players'][$playerId])) {
         'name' => 'Spieler',
         'profileImageItemId' => null,
         'ownedShopItems' => [],
+        'unlockedRewardItemIds' => [],
+        'achievementRewardClaimedIds' => [],
         'quests' => [],
         'createdAt' => gmdate('c'),
         'updatedAt' => gmdate('c')
@@ -398,6 +629,12 @@ if (!isset($player['coins'])) {
 if (!isset($player['ownedShopItems']) || !is_array($player['ownedShopItems'])) {
     $player['ownedShopItems'] = [];
 }
+if (!isset($player['unlockedRewardItemIds']) || !is_array($player['unlockedRewardItemIds'])) {
+    $player['unlockedRewardItemIds'] = [];
+}
+if (!isset($player['achievementRewardClaimedIds']) || !is_array($player['achievementRewardClaimedIds'])) {
+    $player['achievementRewardClaimedIds'] = [];
+}
 if (!array_key_exists('profileImageItemId', $player)) {
     $player['profileImageItemId'] = null;
 }
@@ -413,6 +650,11 @@ $achievementUnlockedEntries = getAchievementProfileUnlocks($completedQuestCount,
 $achievementUnlockedItemIds = array_values(array_map(function ($item) {
     return (string)($item['id'] ?? '');
 }, $achievementUnlockedEntries));
+
+if (count($player['achievementRewardClaimedIds']) === 0 && $completedQuestCount > 0) {
+    // Existing profiles keep current state without retroactive payout on migration.
+    $player['achievementRewardClaimedIds'] = $achievementUnlockedItemIds;
+}
 
 if ($action === 'create_quest') {
     $title = sanitizeQuestTitle($body['title'] ?? '');
@@ -484,13 +726,6 @@ if ($action === 'create_quest') {
 
 if ($action === 'complete_quest') {
     $questId = (string)($body['questId'] ?? '');
-    $completePassword = (string)($body['completePassword'] ?? '');
-
-    if ($completePassword !== $childPasswordCurrent) {
-        flock($fp, LOCK_UN);
-        fclose($fp);
-        respond(['ok' => false, 'error' => 'Falsches Passwort fuer das Abschliessen der Quest.'], 403);
-    }
 
     $found = false;
 
@@ -570,12 +805,62 @@ if ($action === 'confirm_quest_completion') {
             $quest['completed'] = true;
             $quest['completedAt'] = gmdate('c');
             $quest['completionRequested'] = false;
+
+            $completedBefore = countCompletedQuests($player['quests']) - 1;
+            if ($completedBefore < 0) {
+                $completedBefore = 0;
+            }
+
             $player['xp'] += $finalXp;
-            $player['coins'] += (int)($quest['rewardCoins'] ?? 0);
+            $questRewardCoins = (int)($quest['rewardCoins'] ?? 0);
+            $player['coins'] += $questRewardCoins;
 
             // Check for level-up
             $levelAfter = calculateLevel((int)$player['xp'])['level'];
             $leveledUp = $levelAfter > $levelBefore;
+
+            $levelUpCoinsTotal = 0;
+            $levelMilestoneHits = [];
+
+            if ($leveledUp) {
+                for ($reachedLevel = $levelBefore + 1; $reachedLevel <= $levelAfter; $reachedLevel++) {
+                    $coinsForThisLevel = levelUpCoins($reachedLevel);
+                    $levelUpCoinsTotal += $coinsForThisLevel;
+
+                    if (levelMilestoneBonusCoins($reachedLevel) > 0) {
+                        $levelMilestoneHits[] = [
+                            'level' => $reachedLevel,
+                            'coins' => $coinsForThisLevel
+                        ];
+                    }
+                }
+
+                $player['coins'] += $levelUpCoinsTotal;
+            }
+
+            $completedAfter = countCompletedQuests($player['quests']);
+            $newlyUnlockedAchievements = findNewlyUnlockedAchievements($completedBefore, $completedAfter, $achievementCatalogItems);
+            $achievementRewardCoins = 0;
+            $achievementRewardParts = [];
+
+            foreach ($newlyUnlockedAchievements as $achievement) {
+                $achievementId = (string)($achievement['id'] ?? '');
+                if ($achievementId === '') {
+                    continue;
+                }
+                if (in_array($achievementId, $player['achievementRewardClaimedIds'], true)) {
+                    continue;
+                }
+
+                $rewardCoins = achievementMilestoneCoins((int)($achievement['target'] ?? 0));
+                $achievementRewardCoins += $rewardCoins;
+                $achievementRewardParts[] = (string)($achievement['title'] ?? ('Meilenstein ' . (int)($achievement['target'] ?? 0))) . ': +' . $rewardCoins;
+                $player['achievementRewardClaimedIds'][] = $achievementId;
+            }
+
+            if ($achievementRewardCoins > 0) {
+                $player['coins'] += $achievementRewardCoins;
+            }
 
             // On level-up: grant a 5 % XP boost for the next quest
             if ($leveledUp) {
@@ -600,8 +885,33 @@ if ($action === 'confirm_quest_completion') {
             } else {
                 $msgText = 'Quest "' . $questTitle . '" abgeschlossen! ' . $finalXp . ' EP erhalten.';
             }
+
+            $coinSources = [];
+            if ($questRewardCoins > 0) {
+                $coinSources[] = $questRewardCoins . ' Quest-Coins';
+            }
+            if ($levelUpCoinsTotal > 0) {
+                $coinSources[] = $levelUpCoinsTotal . ' Level-Up-Coins';
+            }
+            if ($achievementRewardCoins > 0) {
+                $coinSources[] = $achievementRewardCoins . ' Achievement-Coins';
+            }
+            if (count($coinSources) > 0) {
+                $msgText .= ' Coins: +' . ($questRewardCoins + $levelUpCoinsTotal + $achievementRewardCoins) . ' (' . implode(', ', $coinSources) . ').';
+            }
+
             if ($leveledUp) {
                 $msgText .= ' Level-Up auf Level ' . $levelAfter . '! Naechste Quest gibt +5 % EP.';
+
+                if (count($levelMilestoneHits) > 0) {
+                    $milestoneChunks = array_map(function ($hit) {
+                        return 'L' . (int)$hit['level'] . ': +' . (int)$hit['coins'] . ' Coins';
+                    }, $levelMilestoneHits);
+                    $msgText .= ' Meilenstein-Bonus: ' . implode(', ', $milestoneChunks) . '.';
+                }
+            }
+            if (count($achievementRewardParts) > 0) {
+                $msgText .= ' Achievement-Bonus: ' . implode(', ', $achievementRewardParts) . '.';
             }
             $player['systemMessages'][] = ['text' => $msgText, 'timestamp' => gmdate('c')];
             // Keep only the last 5 messages
@@ -633,6 +943,130 @@ if ($action === 'rename_player') {
     $player['name'] = $newName;
 }
 
+if ($action === 'adjust_coins') {
+    $operation = mb_strtolower(trim((string)($body['operation'] ?? '')));
+    $amount = sanitizeCoinAdjustAmount($body['amount'] ?? null);
+
+    if (!in_array($operation, ['add', 'subtract'], true)) {
+        flock($fp, LOCK_UN);
+        fclose($fp);
+        respond(['ok' => false, 'error' => 'Ungueltige operation. Erlaubt: add oder subtract.'], 400);
+    }
+
+    if ($amount === null) {
+        flock($fp, LOCK_UN);
+        fclose($fp);
+        respond(['ok' => false, 'error' => 'Ungueltiger Betrag (1 bis 100000).'], 400);
+    }
+
+    if ($operation === 'add') {
+        $player['coins'] += $amount;
+    } else {
+        $player['coins'] = max(0, (int)$player['coins'] - $amount);
+    }
+
+    if (!isset($player['systemMessages']) || !is_array($player['systemMessages'])) {
+        $player['systemMessages'] = [];
+    }
+    $player['systemMessages'][] = [
+        'text' => ($operation === 'add'
+            ? 'Elternbereich: +' . $amount . ' Coins hinzugefuegt.'
+            : 'Elternbereich: -' . $amount . ' Coins abgezogen.'),
+        'timestamp' => gmdate('c')
+    ];
+    if (count($player['systemMessages']) > 5) {
+        $player['systemMessages'] = array_values(array_slice($player['systemMessages'], -5));
+    }
+}
+
+if ($action === 'unlock_reward') {
+        $rewardItemId = sanitizeShopItemId($body['rewardItemId'] ?? '');
+
+        if ($rewardItemId === null) {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+                respond(['ok' => false, 'error' => 'Ungueltige rewardItemId.'], 400);
+        }
+
+        $item = findShopItemById($rewardItemId);
+        if (!is_array($item) || (string)($item['type'] ?? '') !== 'reward_item') {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+                respond(['ok' => false, 'error' => 'Belohnung nicht gefunden.'], 404);
+        }
+
+        $rewardIdLower = mb_strtolower((string)($item['id'] ?? ''));
+        if (strpos($rewardIdLower, 'belohnung') !== 0) {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+                respond(['ok' => false, 'error' => 'Item ist keine Belohnung.'], 409);
+        }
+
+        foreach ($player['ownedShopItems'] as $ownedId) {
+            if ((string)$ownedId === (string)$rewardItemId) {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+                respond(['ok' => false, 'error' => 'Belohnung wurde bereits eingeloest.'], 409);
+            }
+        }
+
+        $alreadyUnlocked = false;
+        foreach ($player['unlockedRewardItemIds'] as $unlockedId) {
+            if ((string)$unlockedId === (string)$rewardItemId) {
+                $alreadyUnlocked = true;
+                break;
+            }
+        }
+
+        if (!$alreadyUnlocked) {
+            $player['unlockedRewardItemIds'][] = $rewardItemId;
+        }
+}
+
+if ($action === 'redeem_reward') {
+        $rewardItemId = sanitizeShopItemId($body['rewardItemId'] ?? '');
+
+        if ($rewardItemId === null) {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+                respond(['ok' => false, 'error' => 'Ungueltige rewardItemId.'], 400);
+        }
+
+        $item = findShopItemById($rewardItemId);
+        if (!is_array($item) || (string)($item['type'] ?? '') !== 'reward_item') {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+                respond(['ok' => false, 'error' => 'Belohnung nicht gefunden.'], 404);
+        }
+
+        $isUnlocked = false;
+        foreach ($player['unlockedRewardItemIds'] as $unlockedId) {
+            if ((string)$unlockedId === (string)$rewardItemId) {
+                $isUnlocked = true;
+                break;
+            }
+        }
+
+        if (!$isUnlocked) {
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            respond(['ok' => false, 'error' => 'Belohnung ist noch nicht freigeschaltet.'], 409);
+        }
+
+        foreach ($player['ownedShopItems'] as $ownedId) {
+            if ((string)$ownedId === (string)$rewardItemId) {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+                respond(['ok' => false, 'error' => 'Belohnung wurde bereits eingeloest.'], 409);
+            }
+        }
+
+        $player['ownedShopItems'][] = $rewardItemId;
+        $player['unlockedRewardItemIds'] = array_values(array_filter($player['unlockedRewardItemIds'], function ($id) use ($rewardItemId) {
+            return (string)$id !== (string)$rewardItemId;
+        }));
+}
+
 if ($action === 'purchase_item') {
     $itemId = sanitizeShopItemId($body['itemId'] ?? '');
 
@@ -652,6 +1086,15 @@ if ($action === 'purchase_item') {
     $costCoins = (int)($item['costCoins'] ?? 0);
     if ($costCoins < 0) {
         $costCoins = 0;
+    }
+
+    if ((string)($item['type'] ?? '') === 'reward_item') {
+        $conditionType = rewardUnlockConditionType($item);
+        if ($conditionType !== 'coins_purchase') {
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            respond(['ok' => false, 'error' => 'Diese Belohnung ist nicht ueber Coins kaufbar.'], 409);
+        }
     }
 
     foreach ($player['ownedShopItems'] as $ownedId) {
@@ -760,6 +1203,8 @@ if ($action === 'reset_player') {
         'name' => 'Spieler',
         'profileImageItemId' => null,
         'ownedShopItems' => [],
+        'unlockedRewardItemIds' => [],
+        'achievementRewardClaimedIds' => [],
         'quests' => [],
         'createdAt' => gmdate('c'),
         'updatedAt' => gmdate('c')
@@ -769,6 +1214,28 @@ if ($action === 'reset_player') {
 
 $player['updatedAt'] = gmdate('c');
 $levelData = calculateLevel((int)$player['xp']);
+$completedQuestCount = countCompletedQuests($player['quests']);
+$autoUnlockedRewards = autoUnlockConditionRewards($player, $completedQuestCount, $levelData['level']);
+
+if (count($autoUnlockedRewards) > 0) {
+    if (!isset($player['systemMessages']) || !is_array($player['systemMessages'])) {
+        $player['systemMessages'] = [];
+    }
+    foreach ($autoUnlockedRewards as $title) {
+        $player['systemMessages'][] = [
+            'text' => 'Belohnung freigeschaltet: ' . $title,
+            'timestamp' => gmdate('c')
+        ];
+    }
+    if (count($player['systemMessages']) > 5) {
+        $player['systemMessages'] = array_values(array_slice($player['systemMessages'], -5));
+    }
+}
+
+$achievementUnlockedEntries = getAchievementProfileUnlocks($completedQuestCount, $achievementCatalogItems);
+$achievementUnlockedItemIds = array_values(array_map(function ($item) {
+    return (string)($item['id'] ?? '');
+}, $achievementUnlockedEntries));
 
 $profileImage = null;
 $profileImageItemId = $player['profileImageItemId'] ?? null;
@@ -811,6 +1278,8 @@ $response = [
         'maxLevel' => $levelData['maxLevel'],
         'isMaxLevel' => $levelData['isMaxLevel'],
         'ownedShopItems' => array_values($player['ownedShopItems']),
+        'unlockedRewardItemIds' => array_values($player['unlockedRewardItemIds']),
+        'achievementRewardClaimedIds' => array_values($player['achievementRewardClaimedIds']),
         'achievementUnlockedItemIds' => array_values($achievementUnlockedItemIds),
         'achievementUnlockedProfileImages' => array_values($achievementUnlockedEntries),
         'completedQuestCount' => $completedQuestCount,

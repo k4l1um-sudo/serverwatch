@@ -2,7 +2,9 @@
   const API_URL = 'api/quest.php';
   const CATALOG_API_URL = 'api/quest_catalog.php';
   const ACHIEVEMENT_API_URL = 'api/achievement_items.php';
+  const SHOP_API_URL = 'api/shop_items.php';
   const PLAYER_STORAGE_KEY = 'serverwatch_quest_player_id';
+  const SHARED_PLAYER_ID = 'kid_shared_main';
 
   const DEFAULT_ACHIEVEMENTS = [
     { title: 'Beginner', target: 1 },
@@ -17,14 +19,11 @@
     { title: 'Grossmeister', target: 2000 }
   ];
 
+  const LEVEL_MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300, 500, 750, 1000];
+
   function getOrCreatePlayerId() {
-    const existing = localStorage.getItem(PLAYER_STORAGE_KEY);
-    if (existing && /^[a-zA-Z0-9_-]{4,40}$/.test(existing)) {
-      return existing;
-    }
-    const id = 'kid_' + Math.random().toString(36).slice(2, 10);
-    localStorage.setItem(PLAYER_STORAGE_KEY, id);
-    return id;
+    localStorage.setItem(PLAYER_STORAGE_KEY, SHARED_PLAYER_ID);
+    return SHARED_PLAYER_ID;
   }
 
   const playerId = getOrCreatePlayerId();
@@ -35,8 +34,10 @@
   const progressEl = document.getElementById('level-progress');
   const progressTextEl = document.getElementById('level-progress-text');
   const progressAvatarEl = document.getElementById('progress-avatar');
+  const levelMilestonesEl = document.getElementById('level-milestones');
   const acceptedListEl = document.getElementById('accepted-quests');
   const availableListEl = document.getElementById('available-quests');
+  const rewardsListEl = document.getElementById('rewards-list');
   const boostIndicatorEl = document.getElementById('boost-indicator');
   const sysMessagesEl = document.getElementById('system-messages-list');
 
@@ -158,6 +159,15 @@
     return Array.isArray(data.quests) ? data.quests : [];
   }
 
+  async function loadShopItems() {
+    const response = await fetch(SHOP_API_URL, { method: 'GET' });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'Shop-Katalog konnte nicht geladen werden.');
+    }
+    return Array.isArray(data.items) ? data.items : [];
+  }
+
   function renderBoostIndicator(player) {
     if (!boostIndicatorEl) { return; }
     boostIndicatorEl.innerHTML = '';
@@ -262,6 +272,388 @@
       };
     }
     renderBoostIndicator(player);
+  }
+
+  function levelUpBaseCoins(levelReached) {
+    const lvl = Math.max(2, Number(levelReached) || 2);
+
+    if (lvl <= 50) {
+      return 5;
+    }
+    if (lvl <= 100) {
+      return 8;
+    }
+    if (lvl <= 200) {
+      return 12;
+    }
+    if (lvl <= 500) {
+      return 18;
+    }
+    return 25;
+  }
+
+  function levelMilestoneBonusCoins(levelReached) {
+    const bonusByLevel = {
+      10: 20,
+      25: 35,
+      50: 60,
+      75: 90,
+      100: 130,
+      150: 180,
+      200: 230,
+      300: 300,
+      500: 380,
+      750: 450,
+      1000: 475
+    };
+
+    return Number(bonusByLevel[levelReached]) || 0;
+  }
+
+  function levelUpCoins(levelReached) {
+    const base = levelUpBaseCoins(levelReached);
+    const milestoneBonus = levelMilestoneBonusCoins(levelReached);
+    if (milestoneBonus > 0) {
+      return Math.min(500, base + milestoneBonus);
+    }
+    return base;
+  }
+
+  function renderLevelMilestones(player) {
+    if (!levelMilestonesEl) {
+      return;
+    }
+
+    const currentLevel = Math.max(1, Number(player && player.level) || 1);
+    levelMilestonesEl.innerHTML = '';
+
+    LEVEL_MILESTONES.forEach(function (target) {
+      const card = document.createElement('article');
+      card.className = 'quest-item';
+
+      const title = document.createElement('h4');
+      title.className = 'quest-title';
+      title.textContent = 'Meilenstein Level ' + target;
+
+      const state = document.createElement('p');
+      state.className = 'quest-meta';
+      state.textContent = currentLevel >= target
+        ? 'Status: erreicht'
+        : 'Status: offen';
+
+      const coinsLine = document.createElement('p');
+      coinsLine.className = 'quest-meta quest-coins-line';
+
+      const totalCoins = levelUpCoins(target);
+      const coinsText = document.createElement('span');
+      coinsText.textContent = 'Coins beim Erreichen: ' + String(totalCoins);
+      coinsLine.appendChild(coinsText);
+
+      const coinsIcon = document.createElement('img');
+      coinsIcon.className = 'coin-icon';
+      coinsIcon.src = 'assets/coin.png';
+      coinsIcon.alt = 'Coin Symbol';
+      coinsIcon.loading = 'lazy';
+      coinsIcon.addEventListener('error', function () {
+        coinsIcon.style.display = 'none';
+      });
+      coinsLine.appendChild(coinsIcon);
+
+      card.appendChild(title);
+      card.appendChild(state);
+      card.appendChild(coinsLine);
+      levelMilestonesEl.appendChild(card);
+    });
+  }
+
+  function renderRewards(player, shopItems) {
+    if (!rewardsListEl) {
+      return;
+    }
+
+    rewardsListEl.innerHTML = '';
+
+    const completedQuests = Array.isArray(player && player.quests)
+      ? player.quests.filter(function (q) { return q && q.completed; }).length
+      : 0;
+    const currentLevel = Math.max(1, Number(player && player.level) || 1);
+    const currentCoins = Math.max(0, Number(player && player.coins) || 0);
+
+    const ownedIds = new Set(
+      (Array.isArray(player && player.ownedShopItems) ? player.ownedShopItems : []).map(String)
+    );
+    const unlockedIds = new Set(
+      (Array.isArray(player && player.unlockedRewardItemIds) ? player.unlockedRewardItemIds : []).map(String)
+    );
+
+    function getRewardProgressData(item) {
+      const conditionType = String(item && item.unlockConditionType ? item.unlockConditionType : 'coins_purchase');
+      const conditionValue = Math.max(0, Number(item && item.unlockConditionValue) || 0);
+      const startCompletedQuests = Math.max(0, Number(item && item.unlockStartCompletedQuests) || 0);
+      const startLevel = Math.max(1, Number(item && item.unlockStartLevel) || 1);
+      const costCoins = Math.max(0, Number(item && item.costCoins) || 0);
+      const itemId = String(item && item.id ? item.id : '');
+      const unlocked = ownedIds.has(itemId);
+      const completedSinceStart = Math.max(0, completedQuests - startCompletedQuests);
+      const levelUpsSinceStart = Math.max(0, currentLevel - startLevel);
+
+      if (unlocked) {
+        return {
+          conditionType: conditionType,
+          current: 1,
+          target: 1,
+          percent: 100,
+          label: 'Bereits freigeschaltet',
+          conditionLabel: 'Status: eingelost'
+        };
+      }
+
+      if (conditionType === 'quests_completed') {
+        const target = Math.max(1, conditionValue);
+        const current = Math.min(target, completedSinceStart);
+        const missing = Math.max(0, target - completedSinceStart);
+        return {
+          conditionType: conditionType,
+          current: current,
+          target: target,
+          percent: Math.max(0, Math.min(100, (current / target) * 100)),
+          label: String(current) + ' / ' + String(target) + ' Quests seit Anlage',
+          conditionLabel: missing > 0 ? 'Noch ' + missing + ' Quest(s) bis Freischaltung' : 'Freigeschaltet'
+        };
+      }
+
+      if (conditionType === 'level_up') {
+        const target = Math.max(1, conditionValue);
+        const current = Math.min(target, levelUpsSinceStart);
+        const missing = Math.max(0, target - levelUpsSinceStart);
+        return {
+          conditionType: conditionType,
+          current: current,
+          target: target,
+          percent: Math.max(0, Math.min(100, (current / target) * 100)),
+          label: String(current) + ' / ' + String(target) + ' Levelaufstiege seit Anlage',
+          conditionLabel: missing > 0 ? 'Noch ' + missing + ' Levelaufstieg(e)' : 'Freigeschaltet'
+        };
+      }
+
+      if (conditionType === 'reach_level') {
+        const target = Math.max(1, conditionValue);
+        const current = Math.min(target, levelUpsSinceStart);
+        const missing = Math.max(0, target - levelUpsSinceStart);
+        return {
+          conditionType: conditionType,
+          current: current,
+          target: target,
+          percent: Math.max(0, Math.min(100, (current / target) * 100)),
+          label: String(current) + ' / ' + String(target) + ' Level seit Anlage',
+          conditionLabel: missing > 0 ? 'Noch ' + missing + ' Level' : 'Freigeschaltet'
+        };
+      }
+
+      const target = Math.max(1, costCoins);
+      const current = Math.min(target, currentCoins);
+      const missing = Math.max(0, target - currentCoins);
+      return {
+        conditionType: conditionType,
+        current: current,
+        target: target,
+        percent: Math.max(0, Math.min(100, (current / target) * 100)),
+        label: String(currentCoins) + ' / ' + String(target) + ' Coins',
+        conditionLabel: missing > 0 ? 'Noch ' + missing + ' Coins bis Kauf' : 'Kaufbar'
+      };
+    }
+
+    const allRewards = (Array.isArray(shopItems) ? shopItems : []).filter(function (item) {
+      const id = String(item && item.id ? item.id : '').toLowerCase();
+      return id.indexOf('belohnung') === 0 && !ownedIds.has(String(item && item.id ? item.id : ''));
+    });
+
+    if (allRewards.length === 0) {
+      rewardsListEl.innerHTML = '<p class="muted">Noch keine Belohnungen freigeschaltet.</p>';
+      return;
+    }
+
+    allRewards.forEach(function (rewardItem) {
+      const reward = {
+        id: String(rewardItem && rewardItem.id ? rewardItem.id : ''),
+        title: String(rewardItem && rewardItem.title ? rewardItem.title : 'Belohnung'),
+        image: String(rewardItem && rewardItem.image ? rewardItem.image : ''),
+        progress: getRewardProgressData(rewardItem),
+        unlocked: ownedIds.has(String(rewardItem && rewardItem.id ? rewardItem.id : '')),
+        readyToRedeem: unlockedIds.has(String(rewardItem && rewardItem.id ? rewardItem.id : ''))
+      };
+
+      const card = document.createElement('article');
+      card.className = 'quest-accordion';
+
+      const header = document.createElement('div');
+      header.className = 'quest-accordion-header';
+
+      const main = document.createElement('div');
+      main.className = 'quest-accordion-main';
+
+      const textWrap = document.createElement('div');
+      textWrap.className = 'quest-main-text';
+
+      const title = document.createElement('h4');
+      title.className = 'quest-title';
+      title.textContent = reward.title;
+
+      const source = document.createElement('p');
+      source.className = 'quest-meta';
+      source.textContent = reward.progress.conditionLabel;
+
+      textWrap.appendChild(title);
+      textWrap.appendChild(source);
+
+      const status = document.createElement('span');
+      status.className = reward.readyToRedeem ? 'quest-pending-check' : 'quest-ep';
+      status.textContent = reward.readyToRedeem ? 'Freigeschaltet' : 'Aktiv';
+
+      main.appendChild(textWrap);
+      main.appendChild(status);
+
+      const actions = document.createElement('div');
+      actions.className = 'quest-actions';
+
+      const toggleButton = document.createElement('button');
+      toggleButton.type = 'button';
+      toggleButton.className = 'quest-toggle-btn';
+      toggleButton.textContent = 'Details';
+      actions.appendChild(toggleButton);
+
+      if (reward.readyToRedeem) {
+        const redeemButton = document.createElement('button');
+        redeemButton.type = 'button';
+        redeemButton.className = 'chip';
+        redeemButton.textContent = 'Einloesen';
+        redeemButton.addEventListener('click', function () {
+          showRedeemRewardModal(reward);
+        });
+        actions.appendChild(redeemButton);
+      }
+
+      header.appendChild(main);
+      header.appendChild(actions);
+
+      const body = document.createElement('div');
+      body.className = 'quest-accordion-body';
+      body.hidden = true;
+
+      if (!reward.readyToRedeem) {
+        const progressLabel = document.createElement('p');
+        progressLabel.className = 'quest-meta';
+        progressLabel.textContent = reward.progress.label;
+
+        const progressWrap = document.createElement('div');
+        progressWrap.className = 'reward-progress-wrap';
+
+        const progressBar = document.createElement('div');
+        progressBar.className = 'reward-progress-bar reward-progress-' + String(reward.progress.conditionType || 'coins_purchase');
+        progressBar.style.width = String(reward.progress.percent) + '%';
+        progressWrap.appendChild(progressBar);
+
+        body.appendChild(progressLabel);
+        body.appendChild(progressWrap);
+      } else {
+        const readyText = document.createElement('p');
+        readyText.className = 'quest-meta';
+        readyText.textContent = 'Belohnung ist freigeschaltet und kann jetzt eingelost werden.';
+        body.appendChild(readyText);
+      }
+
+      if (reward.image) {
+        const preview = document.createElement('img');
+        preview.className = 'shop-preview';
+        preview.src = reward.image;
+        preview.alt = reward.title;
+        preview.loading = 'lazy';
+        preview.addEventListener('error', function () {
+          preview.style.display = 'none';
+        });
+        body.appendChild(preview);
+      }
+
+      toggleButton.addEventListener('click', function () {
+        body.hidden = !body.hidden;
+        toggleButton.textContent = body.hidden ? 'Details' : 'Weniger';
+      });
+
+      card.appendChild(header);
+      card.appendChild(body);
+
+      rewardsListEl.appendChild(card);
+    });
+  }
+
+  function showRedeemRewardModal(reward) {
+    const existing = document.querySelector('.reward-redeem-modal-backdrop');
+    if (existing) {
+      existing.remove();
+    }
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'reward-redeem-modal-backdrop';
+
+    const modal = document.createElement('div');
+    modal.className = 'reward-redeem-modal';
+
+    const title = document.createElement('h4');
+    title.textContent = reward.title;
+
+    const text = document.createElement('p');
+    text.className = 'quest-meta';
+    text.textContent = 'Jetzt einloesen';
+
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = '0';
+    slider.max = '100';
+    slider.step = '1';
+    slider.value = '0';
+    slider.className = 'reward-redeem-slider';
+
+    const actions = document.createElement('div');
+    actions.className = 'parent-edit-actions';
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'chip';
+    cancelBtn.textContent = 'Abbrechen';
+
+    const redeemBtn = document.createElement('button');
+    redeemBtn.type = 'button';
+    redeemBtn.className = 'status-btn';
+    redeemBtn.textContent = 'Einloesen';
+    redeemBtn.disabled = true;
+
+    slider.addEventListener('input', function () {
+      redeemBtn.disabled = Number(slider.value) < 100;
+    });
+
+    cancelBtn.addEventListener('click', function () {
+      backdrop.remove();
+    });
+
+    redeemBtn.addEventListener('click', async function () {
+      try {
+        await requestQuestApi('redeem_reward', { rewardItemId: reward.id });
+        backdrop.remove();
+        await refresh();
+      } catch (err) {
+        alert('Belohnung konnte nicht eingelost werden: ' + err.message);
+      }
+    });
+
+    actions.appendChild(cancelBtn);
+    actions.appendChild(redeemBtn);
+
+    modal.appendChild(title);
+    modal.appendChild(text);
+    modal.appendChild(slider);
+    modal.appendChild(actions);
+    backdrop.appendChild(modal);
+    document.body.appendChild(backdrop);
   }
 
   function createQuestCard(options) {
@@ -376,9 +768,12 @@
     const stateData = await requestQuestApi('get_state');
     const catalogQuests = await loadCatalog();
     const achievementCatalog = await loadAchievementCatalog();
+    const shopItems = await loadShopItems();
 
     const player = stateData.player;
     renderLevel(player);
+    renderLevelMilestones(player);
+    renderRewards(player, shopItems);
     renderSystemMessages(player);
 
     const quests = Array.isArray(player.quests) ? player.quests : [];
@@ -429,14 +824,8 @@
                   const unlocked = findNewlyUnlockedAchievements(beforeCompleted, afterCompleted, achievementCatalog);
                   showAchievementPopup(unlocked);
                 } else {
-                  const enteredPassword = window.prompt('Passwort fuer Quest-Abgabe eingeben:');
-                  if (enteredPassword === null) {
-                    return;
-                  }
-
                   await requestQuestApi('complete_quest', {
-                    questId: quest.id,
-                    completePassword: enteredPassword
+                    questId: quest.id
                   });
                   await refresh();
                 }
@@ -497,5 +886,22 @@
     if (availableListEl) {
       availableListEl.innerHTML = '<p class="muted">Fehler: ' + escapeHtml(err.message) + '</p>';
     }
+  });
+
+  document.querySelectorAll('.collapsible-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const section = btn.closest('.collapsible-section');
+      if (!section) {
+        return;
+      }
+      const body = section.querySelector('.collapsible-body');
+      if (!body) {
+        return;
+      }
+
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      body.hidden = isOpen;
+    });
   });
 })();

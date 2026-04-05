@@ -20,6 +20,49 @@ Ab diesem Stand wird das lokale Repository mit den Echtdaten des Webservers sync
 
 ---
 
+## 2026-04-04 (9)
+
+### Belohnungen aus Shop ausgeblendet
+- `reward_item`-Eintraege werden im Shop (`shop.html`) nicht mehr angezeigt – unabhaengig davon, ob sie per Coins kaufbar sind.
+- Belohnungen sind ausschliesslich im Belohnungsbereich sichtbar (Fortschrittsseite und Elternbereich).
+
+### Systemnachricht bei neuer Belohnung
+- Wenn eine neue Belohnung im Elternbereich angelegt wird, erhalten alle Spieler automatisch eine Systemnachricht.
+- Die Nachricht nennt den Titel der Belohnung und die freigeschaltete Bedingung (z. B. Coinskosten oder Anzahl erledigter Quests).
+- Die neue Nachricht wird wie alle anderen Systemnachrichten in der `quest_db.json` gespeichert (max. 5 pro Spieler) und auf der Fortschrittsseite angezeigt.
+
+---
+
+## 2026-04-04 (8)
+
+### Belohnungsbereich
+
+#### Elternbereich
+- Neuer eigener Abschnitt **Belohnungen** im Elternbereich (neben Shopbereich und Achievementbereich).
+- Belohnungen koennen angelegt, bearbeitet und geloescht werden (CRUD vollstaendig).
+- Beim Anlegen waehlt man eine Freischalte-Bedingung:
+  - **Coins** (direkt kaufbar)
+  - **Quest-Abschluesse** (N Quests seit Anlage erledigt)
+  - **Levelaufstiege** (N Levelaufstiege seit Anlage erreicht)
+  - **Level erreichen** (Level X seit Anlage ueberschritten)
+- Bedingungsfelder werden per Dropdown dynamisch ein-/ausgeblendet.
+- Jede Belohnung hat optionale Startpunkte (`unlockStartCompletedQuests`, `unlockStartLevel`), sodass der Fortschritt ab dem Zeitpunkt der Anlage gerechnet wird.
+- Elternbereich kann eine Belohnung manuell per **Einloesen**-Button freischalten (ohne das Kind-Passwort).
+- Aktive und eingeloeste Belohnungen werden getrennt in zwei Listen dargestellt.
+- Jede Belohnung zeigt einen Fortschrittsbalken (farbkodiert nach Bedingungstyp) mit aktuellem Stand.
+
+#### Fortschrittsseite (Spieler)
+- Neuer ausklappbarer Abschnitt **Belohnungen** auf der Fortschrittsseite.
+- Alle aktiven Belohnungen werden mit Titel, Bedingung, Fortschrittsbalken und optionalem Bild angezeigt.
+- Bereits eingeloeste Belohnungen erscheinen als abgeschlossen.
+
+#### Backend
+- `api/shop_items.php` erweitert: `reward_item`-Typ mit Feldern `unlockConditionType`, `unlockConditionValue`, `unlockStartCompletedQuests`, `unlockStartLevel`.
+- `api/quest.php`: Neue Hilfsfunktion `autoUnlockConditionRewards()` prueft nach jeder Quest-Bestaetigung, ob Bedingungsbelohnungen automatisch freigeschaltet werden; Ergebnis wird in `player.unlockedRewardItemIds` gespeichert.
+- Neue API-Aktion `unlock_reward_item` in `quest.php`: Manuelles Freischalten einer Belohnung per PIN durch Elternteil.
+
+---
+
 ## 2026-04-04 (6)
 
 ### Shopitem-Typen
@@ -35,6 +78,30 @@ Ab diesem Stand wird das lokale Repository mit den Echtdaten des Webservers sync
 ### Elternbereich UX
 - Bereiche **Einstellungen**, **Shopbereich** und **Achievementbereich** sind jetzt ausklappbar (standardmaessig eingeklappt).
 - Neue-Quest-, Neues-Shopitem- und Neues-Achievement-Formulare werden nach erfolgreichem Speichern automatisch ausgeblendet.
+
+## 2026-04-04 (7)
+
+### Level-Up Coins (neue Staffelung)
+- Bei jedem Levelaufstieg gibt es jetzt Coins (nicht nur ueber Quest-Belohnungen).
+- Level 2 bis 50: immer **5 Coins** pro erreichtem Level.
+- Ab Level 51 steigt die Basisbelohnung stufenweise an (mehr Coins als bis Level 50).
+- Wenn bei einem Quest-Abschluss mehrere Level auf einmal erreicht werden, werden die Coins fuer alle uebersprungenen Level korrekt aufsummiert.
+
+### Meilenstein-Boni fuer grosse Levelschritte
+- Grosse Level-Meilensteine geben einmalige Extra-Boni (z. B. bei runden Schritten wie 100).
+- Jeder Meilenstein gibt einen besonders hohen Coin-Bonus.
+- Meilenstein-Belohnungen sind gedeckelt: **nie mehr als 500 Coins** pro Meilenstein.
+- Die hoechsten Belohnungen werden erst sehr spaet erreicht.
+
+### Fortschrittsbereich
+- Auf der Fortschrittsseite wurde ein neuer Abschnitt **Level-Meilensteine** ergaenzt.
+- Unter jedem Meilenstein wird die konkrete Coin-Belohnung angezeigt.
+- Der Status je Meilenstein (erreicht/offen) wird direkt in der Liste dargestellt.
+
+### Backend und Meldungen
+- API-Logik in `api/quest.php` erweitert: Level-Up-Coins und Meilenstein-Boni werden serverseitig vergeben.
+- Systemnachrichten zeigen jetzt Coins aus Quest-Belohnung und Level-Up getrennt an.
+- Bei erreichten Level-Meilensteinen werden die Bonus-Coins in den Systemnachrichten explizit ausgewiesen.
 
 ## 2026-04-04 (5)
 

@@ -1,16 +1,13 @@
 (function () {
   const PLAYER_STORAGE_KEY = 'serverwatch_quest_player_id';
+  const SHARED_PLAYER_ID = 'kid_shared_main';
   const API = 'api/quest.php';
   const SHOP_API = 'api/shop_items.php';
   const PLACEHOLDER_IMAGE = 'assets/avatar-placeholder.svg';
 
   function getPlayerId() {
-    let id = localStorage.getItem(PLAYER_STORAGE_KEY);
-    if (!id) {
-      id = 'player_' + Math.random().toString(36).slice(2, 10);
-      localStorage.setItem(PLAYER_STORAGE_KEY, id);
-    }
-    return id;
+    localStorage.setItem(PLAYER_STORAGE_KEY, SHARED_PLAYER_ID);
+    return SHARED_PLAYER_ID;
   }
 
   async function api(params) {

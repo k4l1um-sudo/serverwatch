@@ -1,5 +1,7 @@
 (function () {
+  const DEFAULT_SHOP_IMAGE_PATH = 'assets/deinbild.png';
   const PLAYER_STORAGE_KEY = 'serverwatch_quest_player_id';
+  const SHARED_PLAYER_ID = 'kid_shared_main';
   const graphCanvas = document.getElementById('progress-curve');
   const graphStats = document.getElementById('graph-stats');
   const achievementsTotalEl = document.getElementById('stats-achievements-total');
@@ -29,6 +31,17 @@
   const editShopItemForm = document.getElementById('edit-shop-item-form');
   const editShopItemMsg = document.getElementById('edit-shop-item-msg');
   const deleteShopItemBtn = document.getElementById('delete-shop-item-btn');
+  const parentRewardsActiveEl = document.getElementById('parent-rewards-active');
+  const parentRewardsRedeemedEl = document.getElementById('parent-rewards-redeemed');
+  const toggleNewRewardItemBtn = document.getElementById('toggle-new-reward-item');
+  const newRewardItemPanel = document.getElementById('new-reward-item-panel');
+  const newRewardItemForm = document.getElementById('new-reward-item-form');
+  const newRewardItemMsg = document.getElementById('new-reward-item-msg');
+  const editRewardItemPanel = document.getElementById('edit-reward-item-panel');
+  const editRewardItemForm = document.getElementById('edit-reward-item-form');
+  const editRewardItemMsg = document.getElementById('edit-reward-item-msg');
+  const deleteRewardItemBtn = document.getElementById('delete-reward-item-btn');
+  const unlockRewardItemBtn = document.getElementById('unlock-reward-item-btn');
   const parentAchievementItemsEl = document.getElementById('parent-achievement-items');
   const toggleNewAchievementItemBtn = document.getElementById('toggle-new-achievement-item');
   const newAchievementItemPanel = document.getElementById('new-achievement-item-panel');
@@ -42,19 +55,19 @@
   const parentForm = document.getElementById('parent-pin-form');
   const childMsg = document.getElementById('child-security-msg');
   const parentMsg = document.getElementById('parent-security-msg');
+  const parentCoinsCurrentEl = document.getElementById('parent-coins-current');
+  const parentCoinsAmountEl = document.getElementById('parent-coins-amount');
+  const parentCoinsAddBtn = document.getElementById('parent-coins-add-btn');
+  const parentCoinsSubtractBtn = document.getElementById('parent-coins-subtract-btn');
+  const parentCoinsMsg = document.getElementById('parent-coins-msg');
   let currentPlayer = null;
   let currentCatalogQuests = [];
   let currentShopItems = [];
   let currentAchievementItems = [];
 
   function getOrCreatePlayerId() {
-    const existing = localStorage.getItem(PLAYER_STORAGE_KEY);
-    if (existing && /^[a-zA-Z0-9_-]{4,40}$/.test(existing)) {
-      return existing;
-    }
-    const id = 'kid_' + Math.random().toString(36).slice(2, 10);
-    localStorage.setItem(PLAYER_STORAGE_KEY, id);
-    return id;
+    localStorage.setItem(PLAYER_STORAGE_KEY, SHARED_PLAYER_ID);
+    return SHARED_PLAYER_ID;
   }
 
   async function loadPlayerState() {
@@ -243,6 +256,7 @@
       currentPlayer = data.player;
       drawCurve(currentPlayer);
       renderParentStats(currentPlayer, currentShopItems, currentAchievementItems);
+      renderParentRewards(currentPlayer, currentShopItems);
       await refreshParentQuestLists();
     } catch (e) {
       window.alert('Verbindungsfehler bei der Bestaetigung.');
@@ -261,10 +275,269 @@
       'profile_image': 'Profilbild',
       'xp_boost_perk': 'EP-Boost Perk',
       'reallife_item': 'Reallife Gegenstand',
+      'reward_item': 'Belohnung',
       'shop_item': 'Shopitem'
     };
     const typeLabel = typeLabels[item && item.type] || (item && item.type) || 'Shopitem';
     return String(cost) + ' Coins · ' + typeLabel;
+  }
+
+  function isRewardItem(item) {
+    const id = String(item && item.id ? item.id : '').toLowerCase();
+    return id.indexOf('belohnung') === 0;
+  }
+
+  function renderRewardList(container, items, emptyText, mode) {
+    if (!container) {
+      return;
+    }
+
+    container.innerHTML = '';
+    if (!Array.isArray(items) || items.length === 0) {
+      container.innerHTML = '<p class="muted">' + emptyText + '</p>';
+      return;
+    }
+
+    items.forEach(function (item) {
+      const progress = getRewardProgressData(item, currentPlayer || { level: 1, coins: 0, quests: [] });
+      const unlocked = progress.percent >= 100;
+
+      const entry = document.createElement('article');
+      entry.className = 'quest-accordion';
+
+      const header = document.createElement('div');
+      header.className = 'quest-accordion-header';
+
+      const main = document.createElement('div');
+      main.className = 'quest-accordion-main';
+
+      const textWrap = document.createElement('div');
+      textWrap.className = 'quest-main-text';
+
+      const title = document.createElement('h5');
+      title.className = 'quest-title';
+      title.textContent = item.title || 'Ohne Titel';
+
+      const meta = document.createElement('p');
+      meta.className = 'quest-meta';
+      meta.textContent = createShopMetaLine(item);
+
+      const condition = document.createElement('p');
+      condition.className = 'quest-meta';
+      condition.textContent = progress.conditionLabel;
+
+      textWrap.appendChild(title);
+      textWrap.appendChild(meta);
+      textWrap.appendChild(condition);
+
+      const status = document.createElement('span');
+      status.className = unlocked ? 'quest-pending-check' : 'quest-ep';
+      status.textContent = unlocked ? 'Eingeloest' : (mode === 'active' ? 'Aktiv' : 'Nicht aktiv');
+
+      main.appendChild(textWrap);
+      main.appendChild(status);
+
+      const actions = document.createElement('div');
+      actions.className = 'quest-actions';
+
+      const toggleButton = document.createElement('button');
+      toggleButton.type = 'button';
+      toggleButton.className = 'quest-toggle-btn';
+      toggleButton.textContent = 'Details';
+      actions.appendChild(toggleButton);
+
+      if (mode === 'active') {
+        const editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.className = 'quest-edit-btn';
+        editBtn.textContent = 'Bearbeiten';
+        editBtn.addEventListener('click', function () {
+          openRewardEditor(item);
+        });
+        actions.appendChild(editBtn);
+      }
+
+      header.appendChild(main);
+      header.appendChild(actions);
+
+      const body = document.createElement('div');
+      body.className = 'quest-accordion-body';
+      body.hidden = true;
+
+      const progressLabel = document.createElement('p');
+      progressLabel.className = 'quest-meta';
+      progressLabel.textContent = progress.label;
+
+      const progressWrap = document.createElement('div');
+      progressWrap.className = 'reward-progress-wrap';
+
+      const progressBar = document.createElement('div');
+      progressBar.className = 'reward-progress-bar reward-progress-' + String(progress.conditionType || 'coins_purchase');
+      progressBar.style.width = String(progress.percent) + '%';
+      progressWrap.appendChild(progressBar);
+
+      body.appendChild(progressLabel);
+      body.appendChild(progressWrap);
+
+      if (item.image) {
+        const img = document.createElement('img');
+        img.className = 'shop-preview';
+        img.src = item.image;
+        img.alt = item.title || 'Belohnung';
+        img.loading = 'lazy';
+        img.addEventListener('error', function () {
+          img.style.display = 'none';
+        });
+        body.appendChild(img);
+      }
+
+      toggleButton.addEventListener('click', function () {
+        body.hidden = !body.hidden;
+        toggleButton.textContent = body.hidden ? 'Details' : 'Weniger';
+      });
+
+      entry.appendChild(header);
+      entry.appendChild(body);
+
+      container.appendChild(entry);
+    });
+  }
+
+  function renderParentRewards(player, shopItems) {
+    const rewardItems = (Array.isArray(shopItems) ? shopItems : []).filter(isRewardItem);
+    const ownedIds = new Set(
+      (Array.isArray(player && player.ownedShopItems) ? player.ownedShopItems : []).map(String)
+    );
+
+    const activeRewards = rewardItems.filter(function (item) {
+      return !ownedIds.has(String(item && item.id ? item.id : ''));
+    });
+    const redeemedRewards = rewardItems.filter(function (item) {
+      return ownedIds.has(String(item && item.id ? item.id : ''));
+    });
+
+    renderRewardList(parentRewardsActiveEl, activeRewards, 'Keine aktiven Belohnungen vorhanden.', 'active');
+    renderRewardList(parentRewardsRedeemedEl, redeemedRewards, 'Noch keine Belohnung wurde eingeloest.', 'inactive');
+  }
+
+  function openRewardEditor(item) {
+    if (!editRewardItemPanel || !item) {
+      return;
+    }
+
+    document.getElementById('edit-reward-item-id').value = String(item.id || '').trim();
+    document.getElementById('edit-reward-item-title').value = item.title || '';
+    document.getElementById('edit-reward-item-description').value = item.description || '';
+    document.getElementById('edit-reward-item-coins').value = String(Number(item.costCoins) || 0);
+    document.getElementById('edit-reward-item-image').value = item.image || '';
+
+    const conditionType = String(item.unlockConditionType || 'coins_purchase');
+    const conditionValue = Number(item.unlockConditionValue) || 0;
+
+    document.getElementById('edit-reward-condition').value = conditionType;
+    document.getElementById('edit-reward-condition-quests').value = String(conditionValue || 1);
+    document.getElementById('edit-reward-condition-levelup').value = String(conditionValue || 1);
+    document.getElementById('edit-reward-condition-level').value = String(conditionValue || 2);
+
+    updateRewardConditionFields(conditionType, 'edit');
+
+    editRewardItemPanel.hidden = false;
+    setMsg(editRewardItemMsg, '', '');
+    editRewardItemPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function getRewardProgressData(item, player) {
+    const conditionType = String(item && item.unlockConditionType ? item.unlockConditionType : 'coins_purchase');
+    const value = Number(item && item.unlockConditionValue) || 0;
+    const startCompletedQuests = Math.max(0, Number(item && item.unlockStartCompletedQuests) || 0);
+    const startLevel = Math.max(1, Number(item && item.unlockStartLevel) || 1);
+    const cost = Math.max(0, Number(item && item.costCoins) || 0);
+    const completedQuests = Array.isArray(player && player.quests)
+      ? player.quests.filter(function (q) { return q && q.completed; }).length
+      : 0;
+    const level = Math.max(1, Number(player && player.level) || 1);
+    const coins = Math.max(0, Number(player && player.coins) || 0);
+    const completedSinceStart = Math.max(0, completedQuests - startCompletedQuests);
+    const levelUpsSinceStart = Math.max(0, level - startLevel);
+    const ownedIds = new Set(
+      (Array.isArray(player && player.ownedShopItems) ? player.ownedShopItems : []).map(String)
+    );
+    const unlocked = ownedIds.has(String(item && item.id ? item.id : ''));
+
+    if (unlocked) {
+      return {
+        conditionType: conditionType,
+        percent: 100,
+        label: '100% abgeschlossen',
+        conditionLabel: 'Bedingung erreicht und eingelost'
+      };
+    }
+
+    if (conditionType === 'quests_completed') {
+      const target = Math.max(1, value);
+      const current = Math.min(target, completedSinceStart);
+      return {
+        conditionType: conditionType,
+        percent: Math.max(0, Math.min(100, (current / target) * 100)),
+        label: String(current) + ' / ' + String(target) + ' erledigte Quests seit Anlage',
+        conditionLabel: 'Bedingung: Quest-Abschluesse'
+      };
+    }
+    if (conditionType === 'level_up') {
+      const target = Math.max(1, value);
+      const current = Math.min(target, levelUpsSinceStart);
+      return {
+        conditionType: conditionType,
+        percent: Math.max(0, Math.min(100, (current / target) * 100)),
+        label: String(current) + ' / ' + String(target) + ' Levelaufstiege seit Anlage',
+        conditionLabel: 'Bedingung: Levelaufstiege'
+      };
+    }
+    if (conditionType === 'reach_level') {
+      const target = Math.max(1, value);
+      const current = Math.min(target, levelUpsSinceStart);
+      return {
+        conditionType: conditionType,
+        percent: Math.max(0, Math.min(100, (current / target) * 100)),
+        label: String(current) + ' / ' + String(target) + ' Level seit Anlage',
+        conditionLabel: 'Bedingung: Level erreichen'
+      };
+    }
+
+    const target = Math.max(1, cost);
+    const current = Math.min(target, coins);
+    const missing = Math.max(0, target - coins);
+    return {
+      conditionType: conditionType,
+      percent: Math.max(0, Math.min(100, (current / target) * 100)),
+      label: String(coins) + ' / ' + String(target) + ' Coins',
+      conditionLabel: missing > 0 ? 'Noch ' + missing + ' Coins bis Kauf' : 'Kaufbar'
+    };
+  }
+
+  function updateRewardConditionFields(conditionType, prefix) {
+    const p = prefix || 'new';
+    const coinsRow = document.getElementById(p + '-reward-coins-row');
+    const levelRow = document.getElementById(p + '-reward-condition-level-row');
+    const coinsInput = document.getElementById(p + '-reward-item-coins');
+
+    function toggleRow(row, show) {
+      if (!row) {
+        return;
+      }
+      row.hidden = !show;
+      row.style.display = show ? '' : 'none';
+    }
+
+    toggleRow(coinsRow, conditionType === 'coins_purchase');
+    toggleRow(levelRow, conditionType === 'reach_level');
+
+    if (coinsInput) {
+      coinsInput.disabled = conditionType !== 'coins_purchase';
+      if (conditionType !== 'coins_purchase') {
+        coinsInput.value = '0';
+      }
+    }
   }
 
   function renderParentShopItems(items) {
@@ -351,6 +624,179 @@
     const items = await loadShopItems();
     currentShopItems = items;
     renderParentShopItems(items);
+    renderParentRewards(currentPlayer || { ownedShopItems: [] }, items);
+  }
+
+  async function createNewRewardItem(event) {
+    event.preventDefault();
+
+    const title = (document.getElementById('new-reward-item-title').value || '').trim();
+    const description = (document.getElementById('new-reward-item-description').value || '').trim();
+    const costCoins = Number(document.getElementById('new-reward-item-coins').value || 0);
+    const image = (document.getElementById('new-reward-item-image').value || '').trim();
+    const conditionType = (document.getElementById('new-reward-condition').value || 'coins_purchase').trim();
+    const levelValue = Number(document.getElementById('new-reward-condition-level').value || 0);
+    const startLevel = Math.max(1, Number(currentPlayer && currentPlayer.level) || 1);
+
+    const conditionValue = conditionType === 'reach_level' ? levelValue : null;
+
+    if (!title) {
+      setMsg(newRewardItemMsg, 'Bitte einen Titel eingeben.', 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch('api/shop_items.php?action=create_item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          costCoins: costCoins,
+          type: 'reward_item',
+          image: image,
+          unlockConditionType: conditionType,
+          unlockConditionValue: conditionValue,
+          unlockStartCompletedQuests: startCompletedQuests,
+          unlockStartLevel: startLevel
+        })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        setMsg(newRewardItemMsg, data.error || 'Belohnung konnte nicht erstellt werden.', 'error');
+        return;
+      }
+
+      setMsg(newRewardItemMsg, 'Belohnung wurde erstellt.', 'success');
+      if (newRewardItemForm) {
+        newRewardItemForm.reset();
+      }
+      updateRewardConditionFields('coins_purchase', 'new');
+      if (newRewardItemPanel) {
+        newRewardItemPanel.hidden = true;
+      }
+      if (toggleNewRewardItemBtn) {
+        toggleNewRewardItemBtn.textContent = 'Belohnung anlegen';
+      }
+
+      await refreshParentShopItems();
+    } catch (e) {
+      setMsg(newRewardItemMsg, 'Verbindungsfehler beim Erstellen.', 'error');
+    }
+  }
+
+  async function saveEditedRewardItem(event) {
+    event.preventDefault();
+
+    const itemId = (document.getElementById('edit-reward-item-id').value || '').trim();
+    const title = (document.getElementById('edit-reward-item-title').value || '').trim();
+    const description = (document.getElementById('edit-reward-item-description').value || '').trim();
+    const costCoins = Number(document.getElementById('edit-reward-item-coins').value || 0);
+    const image = (document.getElementById('edit-reward-item-image').value || '').trim();
+    const conditionType = (document.getElementById('edit-reward-condition').value || 'coins_purchase').trim();
+    const levelValue = Number(document.getElementById('edit-reward-condition-level').value || 0);
+
+    const conditionValue = conditionType === 'reach_level' ? levelValue : null;
+
+    if (!itemId || !title) {
+      setMsg(editRewardItemMsg, 'Bitte Titel ausfuellen.', 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch('api/shop_items.php?action=update_item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          itemId: itemId,
+          title: title,
+          description: description,
+          costCoins: costCoins,
+          type: 'reward_item',
+          image: image,
+          unlockConditionType: conditionType,
+          unlockConditionValue: conditionValue
+        })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        setMsg(editRewardItemMsg, data.error || 'Belohnung konnte nicht gespeichert werden.', 'error');
+        return;
+      }
+
+      setMsg(editRewardItemMsg, 'Belohnung gespeichert.', 'success');
+      await refreshParentShopItems();
+      if (editRewardItemPanel) {
+        editRewardItemPanel.hidden = true;
+      }
+    } catch (e) {
+      setMsg(editRewardItemMsg, 'Verbindungsfehler beim Speichern.', 'error');
+    }
+  }
+
+  async function deleteEditedRewardItem() {
+    const itemId = (document.getElementById('edit-reward-item-id').value || '').trim();
+    if (!itemId) {
+      setMsg(editRewardItemMsg, 'Keine Belohnung ausgewaehlt.', 'error');
+      return;
+    }
+
+    const sure = window.confirm('Soll diese Belohnung wirklich geloescht werden?');
+    if (!sure) {
+      return;
+    }
+
+    try {
+      const response = await fetch('api/shop_items.php?action=delete_item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemId: itemId })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        setMsg(editRewardItemMsg, data.error || 'Belohnung konnte nicht geloescht werden.', 'error');
+        return;
+      }
+
+      setMsg(editRewardItemMsg, 'Belohnung geloescht.', 'success');
+      if (editRewardItemPanel) {
+        editRewardItemPanel.hidden = true;
+      }
+      await refreshParentShopItems();
+    } catch (e) {
+      setMsg(editRewardItemMsg, 'Verbindungsfehler beim Loeschen.', 'error');
+    }
+  }
+
+  async function unlockEditedRewardItem() {
+    const itemId = (document.getElementById('edit-reward-item-id').value || '').trim();
+    if (!itemId) {
+      setMsg(editRewardItemMsg, 'Keine Belohnung ausgewaehlt.', 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch('api/quest.php?action=unlock_reward', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          player_id: getOrCreatePlayerId(),
+          rewardItemId: itemId
+        })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        setMsg(editRewardItemMsg, data.error || 'Belohnung konnte nicht freigeschaltet werden.', 'error');
+        return;
+      }
+
+      currentPlayer = data.player;
+      setMsg(editRewardItemMsg, 'Belohnung wurde freigeschaltet.', 'success');
+      await refreshParentShopItems();
+      renderParentRewards(currentPlayer, currentShopItems);
+    } catch (e) {
+      setMsg(editRewardItemMsg, 'Verbindungsfehler beim Freischalten.', 'error');
+    }
   }
 
   function createAchievementMetaLine(item) {
@@ -597,9 +1043,9 @@
     descEl.value = item.description || '';
     coinsEl.value = String(Number(item.costCoins) || 0);
 
-    const type = item.type || 'reallife_item';
+    const type = item.type || 'profile_image';
     typeEl.value = type;
-    if (imageEl) { imageEl.value = item.image || ''; }
+    if (imageEl) { imageEl.value = item.image || DEFAULT_SHOP_IMAGE_PATH; }
     if (boostPctEl) { boostPctEl.value = String(Number(item.boostPercent) || 5); }
     if (boostQEl) { boostQEl.value = String(Number(item.boostQuests) || 5); }
     updateShopTypeFields('edit', type);
@@ -615,7 +1061,7 @@
     const title = (document.getElementById('new-shop-item-title').value || '').trim();
     const description = (document.getElementById('new-shop-item-description').value || '').trim();
     const costCoins = Number(document.getElementById('new-shop-item-coins').value || 0);
-    const type = (document.getElementById('new-shop-item-type') || {}).value || 'reallife_item';
+    const type = (document.getElementById('new-shop-item-type') || {}).value || 'profile_image';
     const image = ((document.getElementById('new-shop-item-image') || {}).value || '').trim();
     const boostPercent = Number((document.getElementById('new-shop-item-boost-percent') || {}).value || 5);
     const boostQuests = Number((document.getElementById('new-shop-item-boost-quests') || {}).value || 5);
@@ -647,7 +1093,15 @@
 
       setMsg(newShopItemMsg, 'Shopitem wurde erstellt.', 'success');
       newShopItemForm.reset();
-      updateShopTypeFields('new', 'reallife_item');
+      const newTypeEl = document.getElementById('new-shop-item-type');
+      if (newTypeEl) {
+        newTypeEl.value = 'profile_image';
+      }
+      const newImageEl = document.getElementById('new-shop-item-image');
+      if (newImageEl) {
+        newImageEl.value = DEFAULT_SHOP_IMAGE_PATH;
+      }
+      updateShopTypeFields('new', 'profile_image');
       if (newShopItemPanel) {
         newShopItemPanel.hidden = true;
       }
@@ -667,7 +1121,7 @@
     const title = (document.getElementById('edit-shop-item-title').value || '').trim();
     const description = (document.getElementById('edit-shop-item-description').value || '').trim();
     const costCoins = Number(document.getElementById('edit-shop-item-coins').value || 0);
-    const type = (document.getElementById('edit-shop-item-type') || {}).value || 'reallife_item';
+    const type = (document.getElementById('edit-shop-item-type') || {}).value || 'profile_image';
     const image = ((document.getElementById('edit-shop-item-image') || {}).value || '').trim();
     const boostPercent = Number((document.getElementById('edit-shop-item-boost-percent') || {}).value || 5);
     const boostQuests = Number((document.getElementById('edit-shop-item-boost-quests') || {}).value || 5);
@@ -944,7 +1398,7 @@
   function updateShopTypeFields(prefix, type) {
     const imageRow = document.getElementById(prefix + '-shop-item-image-row');
     const boostRow = document.getElementById(prefix + '-shop-item-boost-row');
-    if (imageRow) { imageRow.hidden = (type !== 'profile_image'); }
+    if (imageRow) { imageRow.hidden = (type === 'xp_boost_perk'); }
     if (boostRow) { boostRow.hidden = (type !== 'xp_boost_perk'); }
   }
 
@@ -979,6 +1433,43 @@
       });
     }
 
+    if (toggleNewRewardItemBtn && newRewardItemPanel) {
+      toggleNewRewardItemBtn.addEventListener('click', function () {
+        newRewardItemPanel.hidden = !newRewardItemPanel.hidden;
+        toggleNewRewardItemBtn.textContent = newRewardItemPanel.hidden ? 'Belohnung anlegen' : 'Formular schliessen';
+      });
+    }
+
+    const rewardConditionSelect = document.getElementById('new-reward-condition');
+    if (rewardConditionSelect) {
+      rewardConditionSelect.addEventListener('change', function () {
+        updateRewardConditionFields(rewardConditionSelect.value, 'new');
+      });
+      updateRewardConditionFields(rewardConditionSelect.value, 'new');
+    }
+
+    const editRewardConditionSelect = document.getElementById('edit-reward-condition');
+    if (editRewardConditionSelect) {
+      editRewardConditionSelect.addEventListener('change', function () {
+        updateRewardConditionFields(editRewardConditionSelect.value, 'edit');
+      });
+      updateRewardConditionFields(editRewardConditionSelect.value, 'edit');
+    }
+
+    if (editRewardItemForm) {
+      editRewardItemForm.addEventListener('submit', saveEditedRewardItem);
+    }
+    if (deleteRewardItemBtn) {
+      deleteRewardItemBtn.addEventListener('click', deleteEditedRewardItem);
+    }
+    if (unlockRewardItemBtn) {
+      unlockRewardItemBtn.addEventListener('click', unlockEditedRewardItem);
+    }
+
+    if (newRewardItemForm) {
+      newRewardItemForm.addEventListener('submit', createNewRewardItem);
+    }
+
     if (newShopItemForm) {
       newShopItemForm.addEventListener('submit', createNewShopItem);
     }
@@ -988,6 +1479,20 @@
       newTypeSelect.addEventListener('change', function () {
         updateShopTypeFields('new', newTypeSelect.value);
       });
+      if (!newTypeSelect.value) {
+        newTypeSelect.value = 'profile_image';
+      }
+      updateShopTypeFields('new', newTypeSelect.value);
+    }
+
+    const newImageInput = document.getElementById('new-shop-item-image');
+    if (newImageInput && !newImageInput.value.trim()) {
+      newImageInput.value = DEFAULT_SHOP_IMAGE_PATH;
+    }
+
+    const editImageInput = document.getElementById('edit-shop-item-image');
+    if (editImageInput && !editImageInput.value.trim()) {
+      editImageInput.value = DEFAULT_SHOP_IMAGE_PATH;
     }
 
     const editTypeSelect = document.getElementById('edit-shop-item-type');
@@ -995,6 +1500,7 @@
       editTypeSelect.addEventListener('change', function () {
         updateShopTypeFields('edit', editTypeSelect.value);
       });
+      updateShopTypeFields('edit', editTypeSelect.value || 'profile_image');
     }
 
     if (editShopItemForm) {
@@ -1043,6 +1549,10 @@
 
         if (panelId === 'new-shop-item-panel' && toggleNewShopItemBtn) {
           toggleNewShopItemBtn.textContent = 'Shopitem anlegen';
+        }
+
+        if (panelId === 'new-reward-item-panel' && toggleNewRewardItemBtn) {
+          toggleNewRewardItemBtn.textContent = 'Belohnung anlegen';
         }
 
         if (panelId === 'new-achievement-item-panel' && toggleNewAchievementItemBtn) {
@@ -1315,6 +1825,52 @@
     target.className = 'rename-msg ' + (type || '');
   }
 
+  function renderParentCoinsSection(player) {
+    if (!parentCoinsCurrentEl) {
+      return;
+    }
+    const coins = Number(player && player.coins) || 0;
+    parentCoinsCurrentEl.textContent = String(coins);
+  }
+
+  async function adjustParentCoins(operation) {
+    if (!parentCoinsAmountEl) {
+      return;
+    }
+
+    const amount = Number(parentCoinsAmountEl.value || 0);
+    if (!Number.isFinite(amount) || amount < 1) {
+      setMsg(parentCoinsMsg, 'Bitte eine gueltige Coin-Anzahl eingeben.', 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch('api/quest.php?action=adjust_coins', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          player_id: getOrCreatePlayerId(),
+          operation: operation,
+          amount: Math.floor(amount)
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        setMsg(parentCoinsMsg, data.error || 'Coins konnten nicht angepasst werden.', 'error');
+        return;
+      }
+
+      currentPlayer = data.player;
+      renderParentCoinsSection(currentPlayer);
+      renderParentStats(currentPlayer, currentShopItems, currentAchievementItems);
+      renderParentRewards(currentPlayer, currentShopItems);
+      setMsg(parentCoinsMsg, operation === 'add' ? 'Coins wurden hinzugefuegt.' : 'Coins wurden abgezogen.', 'success');
+    } catch (e) {
+      setMsg(parentCoinsMsg, 'Verbindungsfehler bei Coins-Anpassung.', 'error');
+    }
+  }
+
   async function submitChildPasswordUpdate(event) {
     event.preventDefault();
 
@@ -1391,6 +1947,18 @@
     parentForm.addEventListener('submit', submitParentPinUpdate);
   }
 
+  if (parentCoinsAddBtn) {
+    parentCoinsAddBtn.addEventListener('click', function () {
+      adjustParentCoins('add');
+    });
+  }
+
+  if (parentCoinsSubtractBtn) {
+    parentCoinsSubtractBtn.addEventListener('click', function () {
+      adjustParentCoins('subtract');
+    });
+  }
+
   setupNewQuestPanel();
 
   Promise.all([loadPlayerState(), loadShopItems(), loadQuestCatalog(), loadAchievementItems()])
@@ -1405,8 +1973,10 @@
       currentAchievementItems = achievementItems;
       drawCurve(player);
       renderParentStats(player, shopItems, achievementItems);
+      renderParentCoinsSection(player);
       renderParentQuestStatus(player, catalogQuests);
       renderParentShopItems(shopItems);
+      renderParentRewards(player, shopItems);
       renderParentAchievementItems(achievementItems);
       refreshSuggestedQuestXp();
     })

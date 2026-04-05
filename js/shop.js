@@ -1,5 +1,6 @@
 (function () {
   const PLAYER_STORAGE_KEY = 'serverwatch_quest_player_id';
+  const SHARED_PLAYER_ID = 'kid_shared_main';
   const QUEST_API = 'api/quest.php';
   const SHOP_API = 'api/shop_items.php';
 
@@ -9,13 +10,8 @@
   const headingEl = document.getElementById('shop-items-heading');
 
   function getOrCreatePlayerId() {
-    const existing = localStorage.getItem(PLAYER_STORAGE_KEY);
-    if (existing && /^[a-zA-Z0-9_-]{4,40}$/.test(existing)) {
-      return existing;
-    }
-    const id = 'kid_' + Math.random().toString(36).slice(2, 10);
-    localStorage.setItem(PLAYER_STORAGE_KEY, id);
-    return id;
+    localStorage.setItem(PLAYER_STORAGE_KEY, SHARED_PLAYER_ID);
+    return SHARED_PLAYER_ID;
   }
 
   const playerId = getOrCreatePlayerId();
@@ -77,7 +73,7 @@
     description.textContent = item.description || 'Keine Beschreibung';
 
     let preview = null;
-    if (itemType === 'profile_image') {
+    if (item.image) {
       preview = document.createElement('img');
       preview.className = 'shop-preview';
       preview.src = item.image || '';
@@ -92,7 +88,13 @@
 
     const type = document.createElement('p');
     type.className = 'quest-meta';
-    type.textContent = itemType === 'profile_image' ? 'Typ: Profilbild' : 'Typ: Shopitem';
+    if (itemType === 'profile_image') {
+      type.textContent = 'Typ: Profilbild';
+    } else if (itemType === 'reward_item') {
+      type.textContent = 'Typ: Belohnung (Coins)';
+    } else {
+      type.textContent = 'Typ: Shopitem';
+    }
 
     const costLine = document.createElement('p');
     costLine.className = 'quest-meta quest-coins-line';
@@ -111,7 +113,7 @@
     costLine.appendChild(coin);
 
     let imageHint = null;
-    if (itemType === 'profile_image') {
+    if (item.image) {
       imageHint = document.createElement('p');
       imageHint.className = 'quest-meta';
       imageHint.textContent = item.image ? 'Datei: ' + item.image : 'Datei: nicht gesetzt';
@@ -158,7 +160,15 @@
     const ownedIds = new Set((Array.isArray(player.ownedShopItems) ? player.ownedShopItems : []).map(String));
     const availableItems = items.filter(function (item) {
       const id = String((item && item.id) || '');
-      return !ownedIds.has(id);
+      if (ownedIds.has(id)) {
+        return false;
+      }
+
+      if (String((item && item.type) || '') === 'reward_item') {
+        return false;
+      }
+
+      return true;
     }).sort(function (a, b) {
       return (Number(a && a.costCoins) || 0) - (Number(b && b.costCoins) || 0);
     });

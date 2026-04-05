@@ -1,15 +1,11 @@
 (function () {
   const API_URL = 'api/quest.php';
   const PLAYER_STORAGE_KEY = 'serverwatch_quest_player_id';
+  const SHARED_PLAYER_ID = 'kid_shared_main';
 
   function getOrCreatePlayerId() {
-    const existing = localStorage.getItem(PLAYER_STORAGE_KEY);
-    if (existing && /^[a-zA-Z0-9_-]{4,40}$/.test(existing)) {
-      return existing;
-    }
-    const id = 'kid_' + Math.random().toString(36).slice(2, 10);
-    localStorage.setItem(PLAYER_STORAGE_KEY, id);
-    return id;
+    localStorage.setItem(PLAYER_STORAGE_KEY, SHARED_PLAYER_ID);
+    return SHARED_PLAYER_ID;
   }
 
   function formatDate(value) {
