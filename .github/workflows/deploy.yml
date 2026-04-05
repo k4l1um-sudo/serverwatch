@@ -1,4 +1,4 @@
-name: Deploy to FTP
+name: Deploy to FTPS
 
 on:
   push:
@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Repo laden
+      - name: Repository laden
         uses: actions/checkout@v4
 
-      - name: Upload zu FTP
+      - name: Upload zu FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -21,3 +21,6 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
           server-dir: /httpdocs/
+          protocol: ftps
+          secure: true
+          port: 21
