@@ -224,6 +224,19 @@ function sanitizeRewardCoins($value) {
     return $coins;
 }
 
+function sanitizeRewardXpAmount($value) {
+    if ($value === null || $value === '') {
+        return 0;
+    }
+
+    $xp = (int)$value;
+    if ($xp < 0 || $xp > 1000000) {
+        return null;
+    }
+
+    return $xp;
+}
+
 function sanitizeCoinAdjustAmount($value) {
     if ($value === null || $value === '') {
         return null;
@@ -240,6 +253,14 @@ function sanitizeCoinAdjustAmount($value) {
 function sanitizeShopItemId($value) {
     $value = trim((string)$value);
     if ($value === '' || !preg_match('/^[a-zA-Z0-9_-]{2,80}$/', $value)) {
+        return null;
+    }
+    return $value;
+}
+
+function sanitizeAchievementItemId($value) {
+    $value = trim((string)$value);
+    if ($value === '' || !preg_match('/^[a-zA-Z0-9_-]{2,120}$/', $value)) {
         return null;
     }
     return $value;
@@ -271,6 +292,16 @@ function defaultAchievementCatalog() {
     ];
 }
 
+function isSystemAchievementItem($item) {
+    if (!is_array($item)) {
+        return false;
+    }
+    if (array_key_exists('systemManaged', $item)) {
+        return $item['systemManaged'] === true;
+    }
+    return isset($item['target']) && !isset($item['unlockConditionType']);
+}
+
 function loadAchievementCatalog() {
     $path = __DIR__ . '/../data/achievement_items.json';
     if (!file_exists($path)) {
@@ -286,6 +317,9 @@ function loadAchievementCatalog() {
     $items = [];
     foreach ($db['items'] as $item) {
         if (!is_array($item)) {
+            continue;
+        }
+        if (!isSystemAchievementItem($item)) {
             continue;
         }
         $id = (string)($item['id'] ?? '');
@@ -369,6 +403,208 @@ function findNewlyUnlockedAchievements($beforeCompleted, $afterCompleted, $catal
     }
 
     return $newlyUnlocked;
+}
+
+function sanitizeRewardTitle($value) {
+    $value = trim((string)$value);
+    if ($value === '') {
+        return '';
+    }
+    if (mb_strlen($value) > 40) {
+        return '';
+    }
+    if (!preg_match('/^[\p{L}0-9 _\-]+$/u', $value)) {
+        return '';
+    }
+    return $value;
+}
+
+function loadAllAchievementItemsForPlayer() {
+    $path = __DIR__ . '/../data/achievement_items.json';
+    if (!file_exists($path)) {
+        $defaults = defaultAchievementCatalog();
+        return array_map(function ($item) {
+            return [
+                'id' => (string)($item['id'] ?? ''),
+                'title' => (string)($item['title'] ?? ''),
+                'image' => (string)($item['image'] ?? ''),
+                'systemManaged' => true,
+                'target' => (int)($item['target'] ?? 0),
+                'unlockConditionType' => null,
+                'unlockConditionValue' => null,
+                'unlockConditionQuestIds' => [],
+                'unlockConditionRewardIds' => [],
+                'titleReward' => ''
+            ];
+        }, $defaults);
+    }
+
+    $raw = file_get_contents($path);
+    $db = json_decode($raw, true);
+    if (!is_array($db) || !isset($db['items']) || !is_array($db['items'])) {
+        return [];
+    }
+
+    $items = [];
+    foreach ($db['items'] as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $id = (string)($item['id'] ?? '');
+        $title = (string)($item['title'] ?? '');
+        $active = !isset($item['active']) || $item['active'] === true;
+        if (!$active || $id === '' || $title === '') {
+            continue;
+        }
+
+        $systemManaged = isSystemAchievementItem($item);
+        $target = isset($item['target']) ? (int)$item['target'] : 0;
+        $unlockConditionType = isset($item['unlockConditionType']) ? (string)$item['unlockConditionType'] : null;
+        $unlockConditionValue = isset($item['unlockConditionValue']) ? (int)$item['unlockConditionValue'] : null;
+        $unlockConditionQuestIds = isset($item['unlockConditionQuestIds']) && is_array($item['unlockConditionQuestIds'])
+            ? array_values(array_filter(array_map('strval', $item['unlockConditionQuestIds']), function ($idVal) {
+                return trim((string)$idVal) !== '';
+            }))
+            : [];
+        $unlockConditionRewardIds = isset($item['unlockConditionRewardIds']) && is_array($item['unlockConditionRewardIds'])
+            ? array_values(array_filter(array_map('strval', $item['unlockConditionRewardIds']), function ($idVal) {
+                return trim((string)$idVal) !== '';
+            }))
+            : [];
+
+        $items[] = [
+            'id' => $id,
+            'title' => $title,
+            'image' => (string)($item['image'] ?? ''),
+            'systemManaged' => $systemManaged,
+            'target' => $target,
+            'unlockConditionType' => $unlockConditionType,
+            'unlockConditionValue' => $unlockConditionValue,
+            'unlockConditionQuestIds' => $unlockConditionQuestIds,
+            'unlockConditionRewardIds' => $unlockConditionRewardIds,
+            'titleReward' => sanitizeRewardTitle($item['titleReward'] ?? '')
+        ];
+    }
+
+    return $items;
+}
+
+function isAchievementConditionMetForPlayer($item, $completedQuestCount, $level, $playerQuests, $playerOwnedItems) {
+    if (!is_array($item)) {
+        return false;
+    }
+
+    $systemManaged = !empty($item['systemManaged']);
+    if ($systemManaged) {
+        $target = (int)($item['target'] ?? 0);
+        return $target > 0 && (int)$completedQuestCount >= $target;
+    }
+
+    $conditionType = isset($item['unlockConditionType']) ? (string)$item['unlockConditionType'] : 'quest_ids';
+    $conditionValue = max(0, (int)($item['unlockConditionValue'] ?? 0));
+    if ($conditionType === 'reach_level') {
+        return $conditionValue > 0 && (int)$level >= $conditionValue;
+    }
+
+    if ($conditionType === 'reward_ids') {
+        $requiredIds = isset($item['unlockConditionRewardIds']) && is_array($item['unlockConditionRewardIds'])
+            ? $item['unlockConditionRewardIds']
+            : [];
+        if (count($requiredIds) === 0) {
+            return false;
+        }
+        $owned = [];
+        foreach ((array)$playerOwnedItems as $ownedId) {
+            $owned[(string)$ownedId] = true;
+        }
+        foreach ($requiredIds as $requiredId) {
+            if (!isset($owned[(string)$requiredId])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    $requiredQuestIds = isset($item['unlockConditionQuestIds']) && is_array($item['unlockConditionQuestIds'])
+        ? $item['unlockConditionQuestIds']
+        : [];
+    if (count($requiredQuestIds) === 0) {
+        return false;
+    }
+    $completedCatalogIds = [];
+    foreach ((array)$playerQuests as $quest) {
+        if (!is_array($quest) || empty($quest['completed'])) {
+            continue;
+        }
+        $catalogId = $quest['catalogId'] ?? null;
+        if ($catalogId !== null && $catalogId !== '') {
+            $completedCatalogIds[(string)$catalogId] = true;
+        }
+    }
+    foreach ($requiredQuestIds as $requiredId) {
+        if (!isset($completedCatalogIds[(string)$requiredId])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function getUnlockedAchievementTitles($player, $allAchievementItems, $completedQuestCount, $level) {
+    $out = [];
+    foreach ((array)$allAchievementItems as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $titleReward = sanitizeRewardTitle($item['titleReward'] ?? '');
+        if ($titleReward === '') {
+            continue;
+        }
+        if (!isAchievementConditionMetForPlayer($item, $completedQuestCount, $level, $player['quests'] ?? [], $player['ownedShopItems'] ?? [])) {
+            continue;
+        }
+        $achievementId = (string)($item['id'] ?? '');
+        if ($achievementId === '') {
+            continue;
+        }
+        $out[$achievementId] = [
+            'achievementId' => $achievementId,
+            'achievementTitle' => (string)($item['title'] ?? ''),
+            'title' => $titleReward
+        ];
+    }
+    return array_values($out);
+}
+
+function rewardTitleIdFromRewardItemId($rewardItemId) {
+    return 'reward_title_' . trim((string)$rewardItemId);
+}
+
+function getUnlockedRewardTitles($player) {
+    $out = [];
+    $entries = isset($player['rewardUnlockedTitles']) && is_array($player['rewardUnlockedTitles'])
+        ? $player['rewardUnlockedTitles']
+        : [];
+
+    foreach ($entries as $entry) {
+        if (!is_array($entry)) {
+            continue;
+        }
+
+        $rewardItemId = sanitizeShopItemId($entry['rewardItemId'] ?? '');
+        $title = sanitizeRewardTitle($entry['title'] ?? '');
+        if ($rewardItemId === null || $title === '') {
+            continue;
+        }
+
+        $titleId = rewardTitleIdFromRewardItemId($rewardItemId);
+        $out[$titleId] = [
+            'achievementId' => $titleId,
+            'achievementTitle' => (string)($entry['rewardTitle'] ?? 'Belohnung'),
+            'title' => $title
+        ];
+    }
+
+    return array_values($out);
 }
 
 function sanitizeDifficulty($value) {
@@ -469,11 +705,45 @@ function findShopItemById($itemId) {
 
 function rewardUnlockConditionType($item) {
     $raw = isset($item['unlockConditionType']) ? (string)$item['unlockConditionType'] : 'coins_purchase';
-    $allowed = ['coins_purchase', 'quests_completed', 'level_up', 'reach_level'];
+    $allowed = ['coins_purchase', 'quests_completed', 'level_up', 'reach_level', 'quest_ids', 'reward_ids'];
     if (in_array($raw, $allowed, true)) {
         return $raw;
     }
     return 'coins_purchase';
+}
+
+function rewardUnlockConditionQuestIds($item) {
+    if (!isset($item['unlockConditionQuestIds']) || !is_array($item['unlockConditionQuestIds'])) {
+        return [];
+    }
+
+    $out = [];
+    foreach ($item['unlockConditionQuestIds'] as $questId) {
+        $qid = trim((string)$questId);
+        if ($qid === '') {
+            continue;
+        }
+        $out[$qid] = true;
+    }
+
+    return array_values(array_keys($out));
+}
+
+function rewardUnlockConditionRewardIds($item) {
+    if (!isset($item['unlockConditionRewardIds']) || !is_array($item['unlockConditionRewardIds'])) {
+        return [];
+    }
+
+    $out = [];
+    foreach ($item['unlockConditionRewardIds'] as $rewardId) {
+        $rid = trim((string)$rewardId);
+        if ($rid === '') {
+            continue;
+        }
+        $out[$rid] = true;
+    }
+
+    return array_values(array_keys($out));
 }
 
 function rewardUnlockConditionValue($item) {
@@ -491,7 +761,7 @@ function rewardUnlockStartLevel($item) {
     return max(1, $value);
 }
 
-function isRewardConditionMet($item, $completedQuestCount, $level) {
+function isRewardConditionMet($item, $completedQuestCount, $level, $playerQuests, $playerOwnedItems) {
     $conditionType = rewardUnlockConditionType($item);
     $conditionValue = rewardUnlockConditionValue($item);
     $completed = max(0, (int)$completedQuestCount);
@@ -508,7 +778,49 @@ function isRewardConditionMet($item, $completedQuestCount, $level) {
         return $conditionValue > 0 && $levelUpsSinceStart >= $conditionValue;
     }
     if ($conditionType === 'reach_level') {
-        return $conditionValue > 0 && $levelUpsSinceStart >= $conditionValue;
+        return $conditionValue > 0 && $lvl >= $conditionValue;
+    }
+    if ($conditionType === 'quest_ids') {
+        $requiredQuestIds = rewardUnlockConditionQuestIds($item);
+        if (count($requiredQuestIds) === 0) {
+            return false;
+        }
+
+        $completedCatalogIds = [];
+        foreach ((array)$playerQuests as $quest) {
+            if (!is_array($quest) || empty($quest['completed'])) {
+                continue;
+            }
+            $catalogId = $quest['catalogId'] ?? null;
+            if ($catalogId !== null && $catalogId !== '') {
+                $completedCatalogIds[(string)$catalogId] = true;
+            }
+        }
+
+        foreach ($requiredQuestIds as $requiredId) {
+            if (!isset($completedCatalogIds[(string)$requiredId])) {
+                return false;
+            }
+        }
+        return true;
+    }
+    if ($conditionType === 'reward_ids') {
+        $requiredRewardIds = rewardUnlockConditionRewardIds($item);
+        if (count($requiredRewardIds) === 0) {
+            return false;
+        }
+
+        $owned = [];
+        foreach ((array)$playerOwnedItems as $ownedId) {
+            $owned[(string)$ownedId] = true;
+        }
+
+        foreach ($requiredRewardIds as $requiredId) {
+            if (!isset($owned[(string)$requiredId])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     return false;
@@ -560,7 +872,7 @@ function autoUnlockConditionRewards(&$player, $completedQuestCount, $level) {
             continue;
         }
 
-        if (!isRewardConditionMet($item, $completedQuestCount, $level)) {
+        if (!isRewardConditionMet($item, $completedQuestCount, $level, $player['quests'], $player['ownedShopItems'])) {
             continue;
         }
 
@@ -606,6 +918,8 @@ if (!isset($db['players'][$playerId])) {
         'coins' => 0,
         'name' => 'Spieler',
         'profileImageItemId' => null,
+        'selectedTitleAchievementId' => null,
+        'rewardUnlockedTitles' => [],
         'ownedShopItems' => [],
         'unlockedRewardItemIds' => [],
         'achievementRewardClaimedIds' => [],
@@ -637,6 +951,12 @@ if (!isset($player['achievementRewardClaimedIds']) || !is_array($player['achieve
 }
 if (!array_key_exists('profileImageItemId', $player)) {
     $player['profileImageItemId'] = null;
+}
+if (!array_key_exists('selectedTitleAchievementId', $player)) {
+    $player['selectedTitleAchievementId'] = null;
+}
+if (!isset($player['rewardUnlockedTitles']) || !is_array($player['rewardUnlockedTitles'])) {
+    $player['rewardUnlockedTitles'] = [];
 }
 
 $completedQuestCount = 0;
@@ -1051,6 +1371,72 @@ if ($action === 'redeem_reward') {
         $player['unlockedRewardItemIds'] = array_values(array_filter($player['unlockedRewardItemIds'], function ($id) use ($rewardItemId) {
             return (string)$id !== (string)$rewardItemId;
         }));
+
+        $claimXp = sanitizeRewardXpAmount($item['claimRewardXp'] ?? 0);
+        if ($claimXp === null) {
+            $claimXp = 0;
+        }
+        $claimCoins = sanitizeRewardCoins($item['claimRewardCoins'] ?? 0);
+        if ($claimCoins === null) {
+            $claimCoins = 0;
+        }
+        $claimTitle = sanitizeRewardTitle($item['claimRewardTitle'] ?? '');
+
+        if ($claimXp > 0) {
+            $player['xp'] = (int)$player['xp'] + $claimXp;
+        }
+        if ($claimCoins > 0) {
+            $player['coins'] = (int)$player['coins'] + $claimCoins;
+        }
+        if ($claimTitle !== '') {
+            $rewardTitleId = rewardTitleIdFromRewardItemId($rewardItemId);
+            $exists = false;
+            foreach ($player['rewardUnlockedTitles'] as $entry) {
+                if (!is_array($entry)) {
+                    continue;
+                }
+                $entryRewardItemId = sanitizeShopItemId($entry['rewardItemId'] ?? '');
+                if ($entryRewardItemId !== null && $entryRewardItemId === $rewardItemId) {
+                    $exists = true;
+                    break;
+                }
+            }
+            if (!$exists) {
+                $player['rewardUnlockedTitles'][] = [
+                    'rewardItemId' => $rewardItemId,
+                    'rewardTitle' => (string)($item['title'] ?? 'Belohnung'),
+                    'title' => $claimTitle,
+                    'titleId' => $rewardTitleId,
+                    'claimedAt' => gmdate('c')
+                ];
+            }
+        }
+
+        if ($claimXp > 0 || $claimCoins > 0 || $claimTitle !== '') {
+            if (!isset($player['systemMessages']) || !is_array($player['systemMessages'])) {
+                $player['systemMessages'] = [];
+            }
+
+            $parts = [];
+            if ($claimXp > 0) {
+                $parts[] = '+' . $claimXp . ' EP';
+            }
+            if ($claimCoins > 0) {
+                $parts[] = '+' . $claimCoins . ' Coins';
+            }
+            if ($claimTitle !== '') {
+                $parts[] = 'Titel "' . $claimTitle . '"';
+            }
+
+            $player['systemMessages'][] = [
+                'text' => 'Belohnung eingelost: ' . (string)($item['title'] ?? $rewardItemId) . ' (' . implode(', ', $parts) . ')',
+                'timestamp' => gmdate('c')
+            ];
+
+            if (count($player['systemMessages']) > 5) {
+                $player['systemMessages'] = array_values(array_slice($player['systemMessages'], -5));
+            }
+        }
 }
 
 if ($action === 'purchase_item') {
@@ -1182,12 +1568,54 @@ if ($action === 'set_profile_image') {
     }
 }
 
+if ($action === 'set_player_title') {
+    $achievementIdRaw = $body['achievementId'] ?? '';
+    $achievementIdRaw = is_string($achievementIdRaw) ? trim($achievementIdRaw) : '';
+
+    if ($achievementIdRaw === '') {
+        $player['selectedTitleAchievementId'] = null;
+    } else {
+        $achievementId = sanitizeAchievementItemId($achievementIdRaw);
+        if ($achievementId === null) {
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            respond(['ok' => false, 'error' => 'Ungueltige achievementId.'], 400);
+        }
+
+        $currentLevelData = calculateLevel((int)$player['xp']);
+        $currentCompletedQuestCount = countCompletedQuests($player['quests']);
+        $allAchievementItems = loadAllAchievementItemsForPlayer();
+        $unlockedTitles = array_merge(
+            getUnlockedAchievementTitles($player, $allAchievementItems, $currentCompletedQuestCount, (int)$currentLevelData['level']),
+            getUnlockedRewardTitles($player)
+        );
+
+        $allowed = false;
+        foreach ($unlockedTitles as $entry) {
+            if ((string)($entry['achievementId'] ?? '') === (string)$achievementId) {
+                $allowed = true;
+                break;
+            }
+        }
+
+        if (!$allowed) {
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            respond(['ok' => false, 'error' => 'Titel ist nicht freigeschaltet.'], 409);
+        }
+
+        $player['selectedTitleAchievementId'] = $achievementId;
+    }
+}
+
 if ($action === 'reset_player') {
     $db['players'][$playerId] = [
         'xp' => 0,
         'coins' => 0,
         'name' => 'Spieler',
         'profileImageItemId' => null,
+        'selectedTitleAchievementId' => null,
+        'rewardUnlockedTitles' => [],
         'ownedShopItems' => [],
         'unlockedRewardItemIds' => [],
         'achievementRewardClaimedIds' => [],
@@ -1249,11 +1677,36 @@ if ($profileImageItemId !== null && $profileImageItemId !== '') {
     }
 }
 
+$allAchievementItems = loadAllAchievementItemsForPlayer();
+$achievementUnlockedTitles = array_merge(
+    getUnlockedAchievementTitles($player, $allAchievementItems, $completedQuestCount, (int)$levelData['level']),
+    getUnlockedRewardTitles($player)
+);
+
+$selectedTitle = null;
+$selectedTitleAchievementId = $player['selectedTitleAchievementId'] ?? null;
+if ($selectedTitleAchievementId !== null && $selectedTitleAchievementId !== '') {
+    $selectedFound = false;
+    foreach ($achievementUnlockedTitles as $entry) {
+        if ((string)($entry['achievementId'] ?? '') === (string)$selectedTitleAchievementId) {
+            $selectedTitle = $entry;
+            $selectedFound = true;
+            break;
+        }
+    }
+    if (!$selectedFound) {
+        $player['selectedTitleAchievementId'] = null;
+        $selectedTitleAchievementId = null;
+    }
+}
+
 $response = [
     'ok' => true,
     'player' => [
         'id' => $playerId,
         'name' => $player['name'] ?? 'Spieler',
+        'selectedTitleAchievementId' => $player['selectedTitleAchievementId'] ?? null,
+        'selectedTitle' => $selectedTitle,
         'xp' => (int)$player['xp'],
         'coins' => (int)$player['coins'],
         'profileImageItemId' => $player['profileImageItemId'] ?? null,
@@ -1268,6 +1721,8 @@ $response = [
         'achievementRewardClaimedIds' => array_values($player['achievementRewardClaimedIds']),
         'achievementUnlockedItemIds' => array_values($achievementUnlockedItemIds),
         'achievementUnlockedProfileImages' => array_values($achievementUnlockedEntries),
+        'achievementUnlockedTitles' => array_values($achievementUnlockedTitles),
+        'rewardUnlockedTitles' => array_values(getUnlockedRewardTitles($player)),
         'completedQuestCount' => $completedQuestCount,
         'quests' => $player['quests'],
         'systemMessages' => array_values(isset($player['systemMessages']) && is_array($player['systemMessages']) ? $player['systemMessages'] : []),

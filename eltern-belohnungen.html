@@ -33,6 +33,7 @@
         <a href="progress.html">Fortschritt</a>
         <a href="news.html">News</a>
         <a href="spieler.html">Spieler</a>
+        <a href="spieler-achievements.html">Achievements</a>
         <a href="elternbereich.html">Elternbereich</a>
       </nav>
     </div>
@@ -106,15 +107,50 @@
                 <input id="new-reward-item-coins" type="number" min="0" max="100000" step="1" value="0" required>
               </div>
 
-              <label for="new-reward-condition" class="field-label">Bedingung</label>
+              <label for="new-reward-condition" class="field-label">Abhaengigkeit zur Erfuellung</label>
               <select id="new-reward-condition" required>
-                <option value="coins_purchase" selected>Mit Coins kaufbar</option>
-                <option value="reach_level">Beim Erreichen von Level</option>
+                <option value="quest_ids" selected>Bestimmte Quest(s) erledigen</option>
+                <option value="reach_level">Bestimmtes Level erreichen</option>
+                <option value="reward_ids">Bestimmte Belohnung(en) besitzen</option>
               </select>
 
               <div id="new-reward-condition-level-row" class="shop-type-fields" hidden>
                 <label for="new-reward-condition-level" class="field-label">Level-Ziel</label>
                 <input id="new-reward-condition-level" type="number" min="1" max="1000" step="1" value="2">
+              </div>
+
+              <div id="new-reward-condition-quests-row" class="shop-type-fields" hidden>
+                <label class="field-label">Voraussetzungs-Quests</label>
+                <div class="reward-quest-select-row">
+                  <select id="new-reward-quest-select">
+                    <option value="">Quest auswaehlen...</option>
+                  </select>
+                </div>
+                <button id="new-reward-add-quest-btn" type="button" class="chip" aria-label="Voraussetzung hinzufuegen">Voraussetzung hinzufuegen</button>
+                <div id="new-reward-quest-summary" class="reward-quest-summary"></div>
+              </div>
+
+              <div id="new-reward-condition-rewards-row" class="shop-type-fields" hidden>
+                <label class="field-label">Voraussetzungs-Belohnungen</label>
+                <div class="reward-quest-select-row">
+                  <select id="new-reward-reward-select">
+                    <option value="">Belohnung auswaehlen...</option>
+                  </select>
+                </div>
+                <button id="new-reward-add-reward-btn" type="button" class="chip" aria-label="Belohnungsvoraussetzung hinzufuegen">Voraussetzung hinzufuegen</button>
+                <div id="new-reward-reward-summary" class="reward-quest-summary"></div>
+              </div>
+
+              <div class="shop-type-fields">
+                <label class="field-label">Preis beim Einloesen (optional)</label>
+                <label for="new-reward-claim-xp" class="field-label">EP-Bonus</label>
+                <input id="new-reward-claim-xp" type="number" min="0" max="1000000" step="1" value="0">
+
+                <label for="new-reward-claim-coins" class="field-label">Coin-Bonus</label>
+                <input id="new-reward-claim-coins" type="number" min="0" max="100000" step="1" value="0">
+
+                <label for="new-reward-claim-title" class="field-label">Spielertitel</label>
+                <input id="new-reward-claim-title" type="text" maxlength="40" autocomplete="off" placeholder="z. B. Champion">
               </div>
 
               <label for="new-reward-item-image" class="field-label">Bildpfad (optional)</label>
@@ -142,15 +178,51 @@
                 <input id="edit-reward-item-coins" type="number" min="0" max="100000" step="1" value="0" required>
               </div>
 
-              <label for="edit-reward-condition" class="field-label">Bedingung</label>
+              <label for="edit-reward-condition" class="field-label">Abhaengigkeit zur Erfuellung</label>
               <select id="edit-reward-condition" required>
-                <option value="coins_purchase">Mit Coins kaufbar</option>
-                <option value="reach_level">Beim Erreichen von Level</option>
+                <option value="quest_ids">Bestimmte Quest(s) erledigen</option>
+                <option value="reach_level">Bestimmtes Level erreichen</option>
+                <option value="reward_ids">Bestimmte Belohnung(en) besitzen</option>
+                <option value="coins_purchase">Mit Coins kaufbar (Bestandsmodus)</option>
               </select>
 
               <div id="edit-reward-condition-level-row" class="shop-type-fields" hidden>
                 <label for="edit-reward-condition-level" class="field-label">Level-Ziel</label>
                 <input id="edit-reward-condition-level" type="number" min="1" max="1000" step="1" value="2">
+              </div>
+
+              <div id="edit-reward-condition-quests-row" class="shop-type-fields" hidden>
+                <label class="field-label">Voraussetzungs-Quests</label>
+                <div class="reward-quest-select-row">
+                  <select id="edit-reward-quest-select">
+                    <option value="">Quest auswaehlen...</option>
+                  </select>
+                </div>
+                <button id="edit-reward-add-quest-btn" type="button" class="chip" aria-label="Voraussetzung hinzufuegen">Voraussetzung hinzufuegen</button>
+                <div id="edit-reward-quest-summary" class="reward-quest-summary"></div>
+              </div>
+
+              <div id="edit-reward-condition-rewards-row" class="shop-type-fields" hidden>
+                <label class="field-label">Voraussetzungs-Belohnungen</label>
+                <div class="reward-quest-select-row">
+                  <select id="edit-reward-reward-select">
+                    <option value="">Belohnung auswaehlen...</option>
+                  </select>
+                </div>
+                <button id="edit-reward-add-reward-btn" type="button" class="chip" aria-label="Belohnungsvoraussetzung hinzufuegen">Voraussetzung hinzufuegen</button>
+                <div id="edit-reward-reward-summary" class="reward-quest-summary"></div>
+              </div>
+
+              <div class="shop-type-fields">
+                <label class="field-label">Preis beim Einloesen (optional)</label>
+                <label for="edit-reward-claim-xp" class="field-label">EP-Bonus</label>
+                <input id="edit-reward-claim-xp" type="number" min="0" max="1000000" step="1" value="0">
+
+                <label for="edit-reward-claim-coins" class="field-label">Coin-Bonus</label>
+                <input id="edit-reward-claim-coins" type="number" min="0" max="100000" step="1" value="0">
+
+                <label for="edit-reward-claim-title" class="field-label">Spielertitel</label>
+                <input id="edit-reward-claim-title" type="text" maxlength="40" autocomplete="off" placeholder="z. B. Champion">
               </div>
 
               <label for="edit-reward-item-image" class="field-label">Bildpfad (optional)</label>

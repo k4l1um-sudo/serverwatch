@@ -366,7 +366,7 @@
     });
   }
 
-  function renderRewards(player, shopItems) {
+  function renderRewards(player, shopItems, catalogQuests) {
     if (!rewardsListEl) {
       return;
     }
@@ -378,6 +378,33 @@
       : 0;
     const currentLevel = Math.max(1, Number(player && player.level) || 1);
     const currentCoins = Math.max(0, Number(player && player.coins) || 0);
+    const completedCatalogQuestIds = new Set(
+      (Array.isArray(player && player.quests) ? player.quests : [])
+        .filter(function (q) { return q && q.completed; })
+        .map(function (q) {
+          return q.catalogId !== null && q.catalogId !== undefined && q.catalogId !== ''
+            ? String(q.catalogId)
+            : String(q.id || '');
+        })
+        .filter(Boolean)
+    );
+    const catalogById = new Map(
+      (Array.isArray(catalogQuests) ? catalogQuests : [])
+        .map(function (q) {
+          return [String(q && q.id !== undefined ? q.id : ''), q];
+        })
+        .filter(function (entry) { return entry[0] !== ''; })
+    );
+    const rewardById = new Map(
+      (Array.isArray(shopItems) ? shopItems : [])
+        .filter(function (item) {
+          return String(item && item.type ? item.type : '') === 'reward_item';
+        })
+        .map(function (item) {
+          return [String(item && item.id ? item.id : ''), item];
+        })
+        .filter(function (entry) { return entry[0] !== ''; })
+    );
 
     const ownedIds = new Set(
       (Array.isArray(player && player.ownedShopItems) ? player.ownedShopItems : []).map(String)
@@ -396,6 +423,12 @@
       const unlocked = ownedIds.has(itemId);
       const completedSinceStart = Math.max(0, completedQuests - startCompletedQuests);
       const levelUpsSinceStart = Math.max(0, currentLevel - startLevel);
+      const conditionQuestIds = Array.isArray(item && item.unlockConditionQuestIds)
+        ? item.unlockConditionQuestIds.map(function (id) { return String(id); }).filter(Boolean)
+        : [];
+      const conditionRewardIds = Array.isArray(item && item.unlockConditionRewardIds)
+        ? item.unlockConditionRewardIds.map(function (id) { return String(id); }).filter(Boolean)
+        : [];
 
       if (unlocked) {
         return {
@@ -418,7 +451,7 @@
           target: target,
           percent: Math.max(0, Math.min(100, (current / target) * 100)),
           label: String(current) + ' / ' + String(target) + ' Quests seit Anlage',
-          conditionLabel: missing > 0 ? 'Noch ' + missing + ' Quest(s) bis Freischaltung' : 'Freigeschaltet'
+          conditionLabel: missing > 0 ? 'Voraussetzung offen: noch ' + missing + ' Quest(s)' : 'Voraussetzung erfuellt'
         };
       }
 
@@ -432,21 +465,73 @@
           target: target,
           percent: Math.max(0, Math.min(100, (current / target) * 100)),
           label: String(current) + ' / ' + String(target) + ' Levelaufstiege seit Anlage',
-          conditionLabel: missing > 0 ? 'Noch ' + missing + ' Levelaufstieg(e)' : 'Freigeschaltet'
+          conditionLabel: missing > 0 ? 'Voraussetzung offen: noch ' + missing + ' Levelaufstieg(e)' : 'Voraussetzung erfuellt'
         };
       }
 
       if (conditionType === 'reach_level') {
         const target = Math.max(1, conditionValue);
-        const current = Math.min(target, levelUpsSinceStart);
-        const missing = Math.max(0, target - levelUpsSinceStart);
+        const current = Math.min(target, currentLevel);
+        const missing = Math.max(0, target - currentLevel);
         return {
           conditionType: conditionType,
           current: current,
           target: target,
           percent: Math.max(0, Math.min(100, (current / target) * 100)),
-          label: String(current) + ' / ' + String(target) + ' Level seit Anlage',
-          conditionLabel: missing > 0 ? 'Noch ' + missing + ' Level' : 'Freigeschaltet'
+          label: 'Level ' + String(currentLevel) + ' / ' + String(target),
+          conditionLabel: missing > 0 ? 'Voraussetzung offen: noch ' + missing + ' Level' : 'Voraussetzung erfuellt'
+        };
+      }
+
+      if (conditionType === 'quest_ids') {
+        const target = Math.max(1, conditionQuestIds.length);
+        const completed = conditionQuestIds.filter(function (questId) {
+          return completedCatalogQuestIds.has(String(questId));
+        }).length;
+        const current = Math.min(target, completed);
+        const missing = Math.max(0, target - completed);
+        const questStates = conditionQuestIds.map(function (questId) {
+          const quest = catalogById.get(String(questId));
+          return {
+            id: String(questId),
+            title: quest && quest.title ? String(quest.title) : 'Quest ' + String(questId),
+            completed: completedCatalogQuestIds.has(String(questId))
+          };
+        });
+        return {
+          conditionType: conditionType,
+          current: current,
+          target: target,
+          percent: Math.max(0, Math.min(100, (current / target) * 100)),
+          label: String(current) + ' / ' + String(target) + ' Ziel-Quests erledigt',
+          conditionLabel: missing > 0 ? 'Voraussetzung offen: noch ' + missing + ' Quest(s)' : 'Voraussetzung erfuellt',
+          questStates: questStates
+        };
+      }
+
+      if (conditionType === 'reward_ids') {
+        const target = Math.max(1, conditionRewardIds.length);
+        const completed = conditionRewardIds.filter(function (rewardId) {
+          return ownedIds.has(String(rewardId));
+        }).length;
+        const current = Math.min(target, completed);
+        const missing = Math.max(0, target - completed);
+        const rewardStates = conditionRewardIds.map(function (rewardId) {
+          const rewardItem = rewardById.get(String(rewardId));
+          return {
+            id: String(rewardId),
+            title: rewardItem && rewardItem.title ? String(rewardItem.title) : 'Belohnung ' + String(rewardId),
+            completed: ownedIds.has(String(rewardId))
+          };
+        });
+        return {
+          conditionType: conditionType,
+          current: current,
+          target: target,
+          percent: Math.max(0, Math.min(100, (current / target) * 100)),
+          label: String(current) + ' / ' + String(target) + ' Ziel-Belohnungen vorhanden',
+          conditionLabel: missing > 0 ? 'Voraussetzung offen: noch ' + missing + ' Belohnung(en)' : 'Voraussetzung erfuellt',
+          rewardStates: rewardStates
         };
       }
 
@@ -474,11 +559,17 @@
     }
 
     allRewards.forEach(function (rewardItem) {
+      const claimRewardXp = Math.max(0, Number(rewardItem && rewardItem.claimRewardXp) || 0);
+      const claimRewardCoins = Math.max(0, Number(rewardItem && rewardItem.claimRewardCoins) || 0);
+      const claimRewardTitle = String(rewardItem && rewardItem.claimRewardTitle ? rewardItem.claimRewardTitle : '').trim();
       const reward = {
         id: String(rewardItem && rewardItem.id ? rewardItem.id : ''),
         title: String(rewardItem && rewardItem.title ? rewardItem.title : 'Belohnung'),
         image: String(rewardItem && rewardItem.image ? rewardItem.image : ''),
         progress: getRewardProgressData(rewardItem),
+        claimRewardXp: claimRewardXp,
+        claimRewardCoins: claimRewardCoins,
+        claimRewardTitle: claimRewardTitle,
         unlocked: ownedIds.has(String(rewardItem && rewardItem.id ? rewardItem.id : '')),
         readyToRedeem: unlockedIds.has(String(rewardItem && rewardItem.id ? rewardItem.id : ''))
       };
@@ -540,6 +631,24 @@
       body.className = 'quest-accordion-body';
       body.hidden = true;
 
+      const rewardBonusParts = [];
+      if (reward.claimRewardXp > 0) {
+        rewardBonusParts.push('+' + String(reward.claimRewardXp) + ' EP');
+      }
+      if (reward.claimRewardCoins > 0) {
+        rewardBonusParts.push('+' + String(reward.claimRewardCoins) + ' Coins');
+      }
+      if (reward.claimRewardTitle) {
+        rewardBonusParts.push('Titel: ' + reward.claimRewardTitle);
+      }
+
+      if (rewardBonusParts.length > 0) {
+        const rewardBonusLine = document.createElement('p');
+        rewardBonusLine.className = 'quest-meta';
+        rewardBonusLine.textContent = 'Beim Einloesen: ' + rewardBonusParts.join(', ');
+        body.appendChild(rewardBonusLine);
+      }
+
       if (!reward.readyToRedeem) {
         const progressLabel = document.createElement('p');
         progressLabel.className = 'quest-meta';
@@ -555,6 +664,53 @@
 
         body.appendChild(progressLabel);
         body.appendChild(progressWrap);
+
+        if ((reward.progress.conditionType === 'quest_ids' && Array.isArray(reward.progress.questStates)) ||
+            (reward.progress.conditionType === 'reward_ids' && Array.isArray(reward.progress.rewardStates))) {
+          const requirementWrap = document.createElement('div');
+          requirementWrap.className = 'reward-requirements';
+
+          const rows = reward.progress.conditionType === 'reward_ids'
+            ? reward.progress.rewardStates
+            : reward.progress.questStates;
+
+          const completedCount = rows.filter(function (qs) {
+            return Boolean(qs && qs.completed);
+          }).length;
+          const totalCount = Math.max(1, rows.length);
+          const percent = Math.round((completedCount / totalCount) * 100);
+
+          const requirementProgress = document.createElement('p');
+          requirementProgress.className = 'quest-meta';
+          requirementProgress.textContent = 'Fortschritt: ' + completedCount + ' / ' + totalCount + ' Voraussetzungen (' + percent + ' %)';
+          requirementWrap.appendChild(requirementProgress);
+
+          const requirementTitle = document.createElement('p');
+          requirementTitle.className = 'quest-meta';
+          requirementTitle.textContent = reward.progress.conditionType === 'reward_ids'
+            ? 'Erforderliche Belohnungen:'
+            : 'Erforderliche Quests:';
+          requirementWrap.appendChild(requirementTitle);
+
+          rows.forEach(function (questState) {
+            const row = document.createElement('label');
+            row.className = 'reward-requirement-item';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = Boolean(questState.completed);
+            checkbox.disabled = true;
+
+            const text = document.createElement('span');
+            text.textContent = '[' + questState.id + '] ' + questState.title;
+
+            row.appendChild(checkbox);
+            row.appendChild(text);
+            requirementWrap.appendChild(row);
+          });
+
+          body.appendChild(requirementWrap);
+        }
       } else {
         const readyText = document.createElement('p');
         readyText.className = 'quest-meta';
@@ -605,6 +761,23 @@
     text.className = 'quest-meta';
     text.textContent = 'Jetzt einloesen';
 
+    const modalBonusParts = [];
+    if (Math.max(0, Number(reward && reward.claimRewardXp) || 0) > 0) {
+      modalBonusParts.push('+' + String(Math.max(0, Number(reward.claimRewardXp) || 0)) + ' EP');
+    }
+    if (Math.max(0, Number(reward && reward.claimRewardCoins) || 0) > 0) {
+      modalBonusParts.push('+' + String(Math.max(0, Number(reward.claimRewardCoins) || 0)) + ' Coins');
+    }
+    if (String(reward && reward.claimRewardTitle ? reward.claimRewardTitle : '').trim()) {
+      modalBonusParts.push('Titel: ' + String(reward.claimRewardTitle).trim());
+    }
+
+    const bonus = document.createElement('p');
+    bonus.className = 'quest-meta';
+    bonus.textContent = modalBonusParts.length > 0
+      ? 'Du erhaeltst: ' + modalBonusParts.join(', ')
+      : 'Kein zusaetzlicher Preis konfiguriert.';
+
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = '0';
@@ -650,6 +823,7 @@
 
     modal.appendChild(title);
     modal.appendChild(text);
+    modal.appendChild(bonus);
     modal.appendChild(slider);
     modal.appendChild(actions);
     backdrop.appendChild(modal);
@@ -773,7 +947,7 @@
     const player = stateData.player;
     renderLevel(player);
     renderLevelMilestones(player);
-    renderRewards(player, shopItems);
+    renderRewards(player, shopItems, catalogQuests);
     renderSystemMessages(player);
 
     const quests = Array.isArray(player.quests) ? player.quests : [];

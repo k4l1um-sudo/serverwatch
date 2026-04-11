@@ -4,6 +4,72 @@ Dieses Protokoll dokumentiert fortlaufend alle funktionalen und visuellen Aender
 
 ---
 
+## 2026-04-11
+
+### Belohnungen: Voraussetzungen erweitert und Workflow verbessert
+- Belohnungen unterstuetzen jetzt erweiterte Bedingungen:
+  - `quest_ids` (mehrere konkrete Quests)
+  - `reach_level` (konkretes Ziellevel)
+  - `reward_ids` (mehrere konkrete Belohnungen)
+- Elternformular fuer Belohnungen auf **Auswaehlen + Voraussetzung hinzufuegen** umgestellt (inkl. Loeschen einzelner Voraussetzungen).
+- In den Voraussetzungs-Dropdowns werden nur sinnvolle Eintraege gezeigt:
+  - Quests: aktiv und noch nicht abgeschlossen
+  - Belohnungen: aktiv und noch nicht im Besitz
+- Spieleransicht der Belohnungen erweitert:
+  - Fortschrittsbalken fuer alle Bedingungstypen
+  - Checklisten fuer Quest-/Belohnungs-Voraussetzungen
+  - Fortschrittstext (`x / y`, Prozent)
+- Legacy-Unterstuetzung verbessert:
+  - `api/shop_items.php`: neue Aktion `migrate_legacy_rewards` fuer Alt-Belohnungen
+  - robuste Auswertung, sodass vorhandene ID-Listen Vorrang vor alten `coins_purchase`-Werten haben.
+
+### Achievements: System-Achievements und Custom-Achievements getrennt
+- Bestehende System-Achievements bleiben unveraendert und werden weiterhin fuer den klassischen Meilensteinpfad verwendet.
+- Neue benutzerdefinierte Achievements koennen im Elternbereich mit Bedingungen erstellt/bearbeitet/geloescht werden:
+  - `quest_ids`, `reach_level`, `reward_ids`
+- `api/achievement_items.php` erweitert:
+  - Validierung und Persistenz fuer Bedingungsfelder
+  - Schutz: System-Achievements sind nicht bearbeitbar/loeschbar
+  - Antwortpayload trennt `systemItems` und `customItems`.
+- `api/quest.php` angepasst:
+  - System-Achievement-Logik laedt nur systemverwaltete Eintraege
+  - bestehende Meilensteinmechanik bleibt kompatibel.
+
+### Titel-Belohnungen aus Achievements
+- Custom-Achievements koennen jetzt optional einen freischaltbaren Spielertitel vergeben (`titleReward`).
+- Elternbereich erweitert um Titel-Feld beim Erstellen/Bearbeiten von Achievements.
+- Profilseite erweitert:
+  - Titel-Auswahl direkt im Bereich der Namensaenderung
+  - gewaehlter Titel wird neben dem Spielernamen als Badge angezeigt.
+- `api/quest.php` erweitert um:
+  - `set_player_title`
+  - Rueckgabe von `achievementUnlockedTitles`, `selectedTitleAchievementId`, `selectedTitle` im Spielerstatus.
+
+### Achievement-Spieleransicht ausgebaut
+- Neue dedizierte Seite `spieler-achievements.html` erstellt.
+- Spieler-Menueleiste erweitert um Punkt **Achievements** auf allen relevanten Spielerseiten.
+- Hamburger-Menue (Side-Menu) ebenfalls um Link zur Achievement-Seite erweitert.
+- Achievement-Darstellung verbessert:
+  - System-Pfad bleibt erhalten
+  - individuelle Achievements separat als Accordion-Karten mit Details und Fortschritt.
+
+### Achievement-Uebersicht (Statusgruppen)
+- Auf `spieler-achievements.html` neue Uebersicht nach Status:
+  - Noch nicht begonnen
+  - Begonnen
+  - Abgeschlossen
+- Jede Gruppe ist ausklappbar.
+- Eintraege sind aufklappbar und zeigen Beschreibung im Detailbereich.
+- Bilddarstellung optimiert (falls vorhanden):
+  - kleines Bild links im Uebersichtseintrag
+  - groesseres Bild im aufgeklappten Detailbereich.
+
+### Achievement-Bild optional
+- Achievement-Bildpfad im Elternformular ist jetzt optional.
+- Frontend-Validierung entsprechend angepasst (Titel bleibt Pflichtfeld).
+
+---
+
 ## 2026-04-05 14:52:55
 
 ### Elternbereich: News-Bearbeitung erweitert

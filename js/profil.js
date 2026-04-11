@@ -146,6 +146,55 @@
     select.value = selectedId;
   }
 
+  function renderPlayerTitle(player) {
+    const badge = document.getElementById('current-title');
+    if (!badge) {
+      return;
+    }
+
+    const selectedTitle = player && player.selectedTitle && player.selectedTitle.title
+      ? String(player.selectedTitle.title).trim()
+      : '';
+
+    if (!selectedTitle) {
+      badge.hidden = true;
+      badge.textContent = '';
+      return;
+    }
+
+    badge.hidden = false;
+    badge.textContent = selectedTitle;
+  }
+
+  function renderTitleSelection(player) {
+    const select = document.getElementById('player-title-select');
+    if (!select) {
+      return;
+    }
+
+    const unlockedTitles = Array.isArray(player && player.achievementUnlockedTitles)
+      ? player.achievementUnlockedTitles
+      : [];
+
+    select.innerHTML = '<option value="">Kein Titel</option>';
+    unlockedTitles.forEach(function (entry) {
+      const achievementId = String(entry && entry.achievementId ? entry.achievementId : '');
+      const title = String(entry && entry.title ? entry.title : '').trim();
+      if (!achievementId || !title) {
+        return;
+      }
+      const option = document.createElement('option');
+      option.value = achievementId;
+      option.textContent = title;
+      select.appendChild(option);
+    });
+
+    const selectedId = player && player.selectedTitleAchievementId
+      ? String(player.selectedTitleAchievementId)
+      : '';
+    select.value = selectedId;
+  }
+
   async function load() {
     try {
       const data = await api({ action: 'get_state' });
@@ -154,6 +203,8 @@
       const name = data.player.name || 'Spieler';
       document.getElementById('current-name').textContent = name;
       document.getElementById('name-input').value = name;
+      renderPlayerTitle(data.player);
+      renderTitleSelection(data.player);
 
       const ownedItems = getOwnedItems(data.player, shopItems);
       const achievementUnlockedItems = getAchievementUnlockedItems(data.player);
@@ -200,9 +251,28 @@
     }
   }
 
+  async function setPlayerTitle(e) {
+    e.preventDefault();
+    const select = document.getElementById('player-title-select');
+    const achievementId = (select && typeof select.value === 'string') ? select.value : '';
+
+    try {
+      const data = await api({ action: 'set_player_title', achievementId: achievementId });
+      if (data.ok) {
+        setMsg('Titel aktualisiert.', 'success');
+        await load();
+      } else {
+        setMsg(data.error || 'Titel konnte nicht gesetzt werden.', 'error');
+      }
+    } catch (e) {
+      setMsg('Verbindungsfehler.', 'error');
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     load();
     document.getElementById('rename-form').addEventListener('submit', rename);
+    document.getElementById('player-title-form').addEventListener('submit', setPlayerTitle);
     document.getElementById('profile-image-form').addEventListener('submit', setProfileImage);
   });
 })();

@@ -1,76 +1,91 @@
 {
-  "version": 1,
-  "updatedAt": "2026-04-04T20:00:00Z",
-  "items": [
-    {
-      "id": "ach_beginner_1",
-      "title": "Beginner",
-      "target": 1,
-      "image": "assets/avatars/beginner.png",
-      "active": true
-    },
-    {
-      "id": "ach_holz_10",
-      "title": "Holz",
-      "target": 10,
-      "image": "assets/avatars/holz.png",
-      "active": true
-    },
-    {
-      "id": "ach_silber_50",
-      "title": "Silber",
-      "target": 50,
-      "image": "assets/avatars/silber.png",
-      "active": true
-    },
-    {
-      "id": "ach_gold_200",
-      "title": "Gold",
-      "target": 200,
-      "image": "assets/avatars/gold.png",
-      "active": true
-    },
-    {
-      "id": "ach_elite_400",
-      "title": "Elite",
-      "target": 400,
-      "image": "assets/avatars/elite.png",
-      "active": true
-    },
-    {
-      "id": "ach_smaragd_600",
-      "title": "Smaragd",
-      "target": 600,
-      "image": "assets/avatars/smaragd.png",
-      "active": true
-    },
-    {
-      "id": "ach_rubin_800",
-      "title": "Rubin",
-      "target": 800,
-      "image": "assets/avatars/rubin.png",
-      "active": true
-    },
-    {
-      "id": "ach_diamant_1000",
-      "title": "Diamant",
-      "target": 1000,
-      "image": "assets/avatars/diamant.png",
-      "active": true
-    },
-    {
-      "id": "ach_meister_1500",
-      "title": "Meister",
-      "target": 1500,
-      "image": "assets/avatars/meister.png",
-      "active": true
-    },
-    {
-      "id": "ach_grossmeister_2000",
-      "title": "Grossmeister",
-      "target": 2000,
-      "image": "assets/avatars/grossmeister.png",
-      "active": true
-    }
-  ]
+    "version": 1,
+    "updatedAt": "2026-04-11T13:37:10+00:00",
+    "items": [
+        {
+            "id": "ach_beginner_1",
+            "title": "Beginner",
+            "target": 1,
+            "image": "assets\/avatars\/beginner.png",
+            "active": true
+        },
+        {
+            "id": "ach_holz_10",
+            "title": "Holz",
+            "target": 10,
+            "image": "assets\/avatars\/holz.png",
+            "active": true
+        },
+        {
+            "id": "ach_silber_50",
+            "title": "Silber",
+            "target": 50,
+            "image": "assets\/avatars\/silber.png",
+            "active": true
+        },
+        {
+            "id": "ach_gold_200",
+            "title": "Gold",
+            "target": 200,
+            "image": "assets\/avatars\/gold.png",
+            "active": true
+        },
+        {
+            "id": "ach_elite_400",
+            "title": "Elite",
+            "target": 400,
+            "image": "assets\/avatars\/elite.png",
+            "active": true
+        },
+        {
+            "id": "ach_smaragd_600",
+            "title": "Smaragd",
+            "target": 600,
+            "image": "assets\/avatars\/smaragd.png",
+            "active": true
+        },
+        {
+            "id": "ach_rubin_800",
+            "title": "Rubin",
+            "target": 800,
+            "image": "assets\/avatars\/rubin.png",
+            "active": true
+        },
+        {
+            "id": "ach_diamant_1000",
+            "title": "Diamant",
+            "target": 1000,
+            "image": "assets\/avatars\/diamant.png",
+            "active": true
+        },
+        {
+            "id": "ach_meister_1500",
+            "title": "Meister",
+            "target": 1500,
+            "image": "assets\/avatars\/meister.png",
+            "active": true
+        },
+        {
+            "id": "ach_grossmeister_2000",
+            "title": "Grossmeister",
+            "target": 2000,
+            "image": "assets\/avatars\/grossmeister.png",
+            "active": true
+        },
+        {
+            "id": "ach_wohl_gekleidet_custom",
+            "title": "Wohl gekleidet",
+            "image": "assets\\deinbild.png",
+            "systemManaged": false,
+            "unlockConditionType": "quest_ids",
+            "unlockConditionValue": null,
+            "unlockConditionQuestIds": [
+                39,
+                40
+            ],
+            "unlockConditionRewardIds": [],
+            "titleReward": "Derwohl gekleidete",
+            "active": true
+        }
+    ]
 }

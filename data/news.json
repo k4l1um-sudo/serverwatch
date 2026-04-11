@@ -8,6 +8,15 @@
             "image": "assets\/News.png",
             "createdAt": "2026-04-05T12:48:55+00:00",
             "updatedAt": "2026-04-05T12:49:00+00:00"
+        },
+        {
+            "id": "news_7e71472a8e",
+            "title": "Frohe Ostern",
+            "teaser": "Feiert ale schön",
+            "contentHtml": "Hallo Welt,<br>Gönnt euch und allen Anderen was schönes und feiert zusammen.&nbsp;<br>Alles Liebe und frohe Ostern!<br>LGMegatron",
+            "image": "assets\/News.png",
+            "createdAt": "2026-04-05T13:32:36+00:00",
+            "updatedAt": "2026-04-05T13:32:36+00:00"
         }
     ]
 }

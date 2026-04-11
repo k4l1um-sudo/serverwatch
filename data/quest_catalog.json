@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updatedAt": "2026-04-05T12:49:28+00:00",
+    "updatedAt": "2026-04-11T14:46:17+00:00",
     "quests": [
         {
             "id": 1,
@@ -135,28 +135,6 @@
             "active": true
         },
         {
-            "id": 13,
-            "title": "Spühlen (prä neue Küche)",
-            "description": "Spühlen im Waschbecken bis Küche steht",
-            "rewardXp": 68,
-            "rewardCoins": 0,
-            "rewardText": "68 EP",
-            "difficulty": "leicht",
-            "category": "Elternbereich",
-            "active": true
-        },
-        {
-            "id": 14,
-            "title": "Spühlen (prä neue Küche)",
-            "description": "Spühlen im Waschbecken bis Küche steht",
-            "rewardXp": 68,
-            "rewardCoins": 0,
-            "rewardText": "68 EP",
-            "difficulty": "leicht",
-            "category": "Elternbereich",
-            "active": true
-        },
-        {
             "id": 15,
             "title": "Kleidung einräumen",
             "description": "NAch dem Waschen eigene Kleidung in den Schrank einräumen",
@@ -207,6 +185,248 @@
             "rewardXp": 131,
             "rewardCoins": 0,
             "rewardText": "131 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 20,
+            "title": "Brawl Stars - 1000 Pokis",
+            "description": "Erreiche mit einem neuen Brawler 1000 Pokis",
+            "rewardXp": 131,
+            "rewardCoins": 1,
+            "rewardText": "131 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 21,
+            "title": "Huldigt dem Herrn",
+            "description": "Verneige dich vor der glorreichen Erscheinung des Osterhasen und claim deine Eier.",
+            "rewardXp": 203,
+            "rewardCoins": 20,
+            "rewardText": "203 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 22,
+            "title": "Tisch decken (Ostern)",
+            "description": "Decke den Tisch an Ostern oder helfe dabei",
+            "rewardXp": 213,
+            "rewardCoins": 2,
+            "rewardText": "213 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 23,
+            "title": "Tisch aufräumen (Ostern)",
+            "description": "Helfe beim aufräumen an Ostern",
+            "rewardXp": 213,
+            "rewardCoins": 2,
+            "rewardText": "213 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 24,
+            "title": "Hilfsbereiter Recke",
+            "description": "Sei zuvorkommend und vorausschauend an Ostern. HElfe wo du kannst und es darfst. \nSei einfach der perfekte Enkel!\n\nBEACHTE:\nOMA und OPA müssen über die QUEST bescheid wissen!!!\n\n(Oma und Opa bewerten)",
+            "rewardXp": 300,
+            "rewardCoins": 10,
+            "rewardText": "300 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 25,
+            "title": "Nachtisch aufdecken und abräumen",
+            "description": "Decke den Tisch und räume ihn danach wieder ab. Als Belohnung bekommst du Coins UND wo",
+            "rewardXp": 213,
+            "rewardCoins": 3,
+            "rewardText": "213 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 26,
+            "title": "Nährt die Hungrigen",
+            "description": "Besorgt zwei Sahneschnitze für die erlauchte Gesellschaft.\n(Zwei Sahneschnitze bei Kavalle für je 9€uronen)",
+            "rewardXp": 151,
+            "rewardCoins": 2,
+            "rewardText": "151 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 27,
+            "title": "Wäsche einsortieren",
+            "description": "Wäsche einsortieren",
+            "rewardXp": 151,
+            "rewardCoins": 0,
+            "rewardText": "151 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 28,
+            "title": "Wäsche abhängen",
+            "description": "Wäsche abhängen",
+            "rewardXp": 94,
+            "rewardCoins": 0,
+            "rewardText": "94 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 29,
+            "title": "Wäsche waschen",
+            "description": "Wäsche waschen",
+            "rewardXp": 151,
+            "rewardCoins": 0,
+            "rewardText": "151 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 30,
+            "title": "Wäsche sortieren",
+            "description": "Wäsche sortieren",
+            "rewardXp": 232,
+            "rewardCoins": 0,
+            "rewardText": "232 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 31,
+            "title": "Kopie - Hausmüll rausstellen",
+            "description": "09.04.2026\nMüllsack Küche Hausmüll in graue Tonne (Nr.7 und Nr.2)\nAbends graue Mülltonne rausstellen",
+            "rewardXp": 68,
+            "rewardCoins": 0,
+            "rewardText": "68 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 32,
+            "title": "Wäsche sortieren",
+            "description": "Wäsche sortieren",
+            "rewardXp": 242,
+            "rewardCoins": 0,
+            "rewardText": "242 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 33,
+            "title": "Wäsche waschen",
+            "description": "Wasche auf Pflegegrad stellen",
+            "rewardXp": 98,
+            "rewardCoins": 0,
+            "rewardText": "98 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 34,
+            "title": "Lernen englisch",
+            "description": "Wiederholung",
+            "rewardXp": 98,
+            "rewardCoins": 0,
+            "rewardText": "98 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 35,
+            "title": "Wäsche abhängen",
+            "description": "vom Ständer Badezimmer",
+            "rewardXp": 98,
+            "rewardCoins": 1,
+            "rewardText": "98 EP",
+            "difficulty": "leicht",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 36,
+            "title": "Snacks für Dortmund Spiel holen + Almigurt",
+            "description": "Bei Rewe",
+            "rewardXp": 158,
+            "rewardCoins": 5,
+            "rewardText": "158 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 37,
+            "title": "Wäsche EINsortieren",
+            "description": "sortieren",
+            "rewardXp": 158,
+            "rewardCoins": 1,
+            "rewardText": "158 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 38,
+            "title": "Schlaftet süß",
+            "description": "Betten - ALLE Betten",
+            "rewardXp": 158,
+            "rewardCoins": 1,
+            "rewardText": "158 EP",
+            "difficulty": "mittel",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 39,
+            "title": "Reitet sorgsam und Sauber",
+            "description": "Wascht die Karrosse von Tante Bine im Mai",
+            "rewardXp": 242,
+            "rewardCoins": 1,
+            "rewardText": "242 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 40,
+            "title": "Zaumzeug und Sattel",
+            "description": "Sattelt das Ross der Großeltern Speiß und macht es Landfein. Auf gehts zum Putzen des Autos",
+            "rewardXp": 242,
+            "rewardCoins": 1,
+            "rewardText": "242 EP",
+            "difficulty": "schwer",
+            "category": "Elternbereich",
+            "active": true
+        },
+        {
+            "id": 41,
+            "title": "Kopie - Snacks für Dortmund Spiel holen + Almigurt",
+            "description": "Bei Rewe",
+            "rewardXp": 158,
+            "rewardCoins": 5,
+            "rewardText": "158 EP",
             "difficulty": "mittel",
             "category": "Elternbereich",
             "active": true

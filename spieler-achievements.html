@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Questio - Spieler Belohnungen</title>
+  <title>Questio - Spieler Achievements</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/quest.css">
   <link rel="icon" type="image/png" href="assets/questio-logo.png">
   <link rel="apple-touch-icon" href="assets/questio-logo.png">
   <meta name="theme-color" content="#0b1320">
-  <meta name="description" content="Belohnungen aus der Spieleransicht.">
+  <meta name="description" content="Achievement-Uebersicht aus der Spieleransicht.">
 </head>
 <body>
   <canvas id="bg"></canvas>
@@ -47,8 +47,8 @@
 
     <main class="panel quest-panel">
       <section class="hero">
-        <h2>Belohnungen</h2>
-        <p id="player-id" class="muted">Spieler-ID: wird geladen...</p>
+        <h2>Achievements</h2>
+        <p class="muted">Uebersicht aller freischaltbaren und erreichten Achievements.</p>
       </section>
 
       <section class="status-panel">
@@ -57,8 +57,8 @@
           <a href="spieler.html" class="spieler-top-nav-link">Spieler</a>
           <a href="spieler-quests.html" class="spieler-top-nav-link">Quest</a>
           <a href="spieler-level-meilensteine.html" class="spieler-top-nav-link">Level-Meilensteine</a>
-          <a href="spieler-achievements.html" class="spieler-top-nav-link">Achievements</a>
-          <a href="spieler-belohnungen.html" class="spieler-top-nav-link active" aria-current="page">Belohnungen</a>
+          <a href="spieler-achievements.html" class="spieler-top-nav-link active" aria-current="page">Achievements</a>
+          <a href="spieler-belohnungen.html" class="spieler-top-nav-link">Belohnungen</a>
           <a href="spieler-historie.html" class="spieler-top-nav-link">Historie</a>
           <a href="shop.html" class="spieler-top-nav-link">Shop</a>
           <a href="profil.html" class="spieler-top-nav-link">Mein Profil</a>
@@ -66,8 +66,17 @@
       </section>
 
       <section class="status-panel">
-        <div id="rewards-list" class="status-list">
-          <p class="muted">Lade Belohnungen...</p>
+        <h3>Achievement-Pfad</h3>
+        <p id="achievement-summary" class="muted">Lade Achievements...</p>
+        <div id="achievement-path" class="achievement-path-wrap">
+          <p class="muted">Lade Achievement-Pfad...</p>
+        </div>
+      </section>
+
+      <section class="status-panel">
+        <h3>Achievement-Uebersicht</h3>
+        <div id="achievement-overview" class="status-list">
+          <p class="muted">Lade Uebersicht...</p>
         </div>
       </section>
     </main>
@@ -79,6 +88,6 @@
 
   <script src="js/main.js"></script>
   <script src="js/menu.js"></script>
-  <script src="js/progress.js"></script>
+  <script src="js/achievements.js"></script>
 </body>
 </html>

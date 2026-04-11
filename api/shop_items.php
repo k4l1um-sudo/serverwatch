@@ -66,12 +66,60 @@ function sanitizeItemType($value) {
 }
 
 function sanitizeRewardUnlockConditionType($value) {
-    $allowed = ['coins_purchase', 'quests_completed', 'level_up', 'reach_level'];
+    $allowed = ['coins_purchase', 'quests_completed', 'level_up', 'reach_level', 'quest_ids', 'reward_ids'];
     $value = trim((string)$value);
     if (in_array($value, $allowed, true)) {
         return $value;
     }
     return 'coins_purchase';
+}
+
+function sanitizeRewardUnlockConditionQuestIds($value) {
+    if ($value === null || $value === '') {
+        return [];
+    }
+
+    if (!is_array($value)) {
+        return null;
+    }
+
+    $ids = [];
+    foreach ($value as $entry) {
+        $id = trim((string)$entry);
+        if ($id === '') {
+            continue;
+        }
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,120}$/', $id)) {
+            return null;
+        }
+        $ids[$id] = true;
+    }
+
+    return array_values(array_keys($ids));
+}
+
+function sanitizeRewardUnlockConditionRewardIds($value) {
+    if ($value === null || $value === '') {
+        return [];
+    }
+
+    if (!is_array($value)) {
+        return null;
+    }
+
+    $ids = [];
+    foreach ($value as $entry) {
+        $id = trim((string)$entry);
+        if ($id === '') {
+            continue;
+        }
+        if (!preg_match('/^[a-zA-Z0-9_-]{2,120}$/', $id)) {
+            return null;
+        }
+        $ids[$id] = true;
+    }
+
+    return array_values(array_keys($ids));
 }
 
 function sanitizeRewardUnlockConditionValue($value) {
@@ -112,6 +160,31 @@ function sanitizeLevelInt($value) {
 function sanitizeImagePath($value) {
     $value = trim((string)$value);
     if (mb_strlen($value) > 300) {
+        return null;
+    }
+    return $value;
+}
+
+function sanitizeClaimRewardXp($value) {
+    if ($value === null || $value === '') {
+        return 0;
+    }
+    $xp = (int)$value;
+    if ($xp < 0 || $xp > 1000000) {
+        return null;
+    }
+    return $xp;
+}
+
+function sanitizeClaimRewardTitle($value) {
+    $value = trim((string)$value);
+    if ($value === '') {
+        return '';
+    }
+    if (mb_strlen($value) > 40) {
+        return null;
+    }
+    if (!preg_match('/^[\p{L}0-9 _\-]+$/u', $value)) {
         return null;
     }
     return $value;
@@ -169,6 +242,53 @@ function findItemIndexById($items, $itemId) {
     return -1;
 }
 
+function migrateLegacyRewardItems(&$db) {
+    if (!is_array($db) || !isset($db['items']) || !is_array($db['items'])) {
+        return ['migrated' => 0, 'items' => []];
+    }
+
+    $migratedCount = 0;
+    $migratedItems = [];
+
+    foreach ($db['items'] as &$item) {
+        if (!is_array($item)) {
+            continue;
+        }
+
+        $type = (string)($item['type'] ?? '');
+        $conditionType = sanitizeRewardUnlockConditionType($item['unlockConditionType'] ?? 'coins_purchase');
+
+        if ($type !== 'reward_item' || $conditionType !== 'coins_purchase') {
+            continue;
+        }
+
+        $startLevel = max(1, (int)($item['unlockStartLevel'] ?? 1));
+        $existingValue = (int)($item['unlockConditionValue'] ?? 0);
+        $legacyCost = max(0, (int)($item['costCoins'] ?? 0));
+
+        // Legacy Coins-Belohnungen werden auf absolute Level-Ziele umgestellt.
+        $derivedFromCost = max(2, (int)ceil($legacyCost / 200));
+        $targetLevel = max($startLevel + 1, $existingValue, $derivedFromCost);
+
+        $item['unlockConditionType'] = 'reach_level';
+        $item['unlockConditionValue'] = $targetLevel;
+        $item['unlockConditionQuestIds'] = [];
+        $item['unlockConditionRewardIds'] = [];
+        $item['costCoins'] = 0;
+
+        $migratedCount++;
+        $migratedItems[] = [
+            'id' => (string)($item['id'] ?? ''),
+            'title' => (string)($item['title'] ?? ''),
+            'newConditionType' => 'reach_level',
+            'newConditionValue' => $targetLevel
+        ];
+    }
+    unset($item);
+
+    return ['migrated' => $migratedCount, 'items' => $migratedItems];
+}
+
 if (!file_exists($catalogFile)) {
     respond([
         'ok' => false,
@@ -201,8 +321,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'create_item') {
     $boostQuests  = max(1, min(100, (int)($body['boostQuests'] ?? 5)));
     $unlockConditionType = sanitizeRewardUnlockConditionType($body['unlockConditionType'] ?? 'coins_purchase');
     $unlockConditionValue = sanitizeRewardUnlockConditionValue($body['unlockConditionValue'] ?? null);
+    $unlockConditionQuestIds = sanitizeRewardUnlockConditionQuestIds($body['unlockConditionQuestIds'] ?? []);
+    $unlockConditionRewardIds = sanitizeRewardUnlockConditionRewardIds($body['unlockConditionRewardIds'] ?? []);
     $unlockStartCompletedQuests = sanitizeNonNegativeInt($body['unlockStartCompletedQuests'] ?? 0);
     $unlockStartLevel = sanitizeLevelInt($body['unlockStartLevel'] ?? 1);
+    $claimRewardXp = sanitizeClaimRewardXp($body['claimRewardXp'] ?? 0);
+    $claimRewardCoins = sanitizeCoins($body['claimRewardCoins'] ?? 0);
+    $claimRewardTitle = sanitizeClaimRewardTitle($body['claimRewardTitle'] ?? '');
 
     if ($title === null) {
         respond(['ok' => false, 'error' => 'Ungueltiger Titel.'], 400);
@@ -213,8 +338,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'create_item') {
     if ($image === null) {
         respond(['ok' => false, 'error' => 'Ungueltiger Bildpfad.'], 400);
     }
+    if ($unlockConditionQuestIds === null) {
+        respond(['ok' => false, 'error' => 'Ungueltige Quest-Liste fuer Belohnungs-Bedingung.'], 400);
+    }
+    if ($unlockConditionRewardIds === null) {
+        respond(['ok' => false, 'error' => 'Ungueltige Belohnungs-Liste fuer Belohnungs-Bedingung.'], 400);
+    }
+    if ($claimRewardXp === null) {
+        respond(['ok' => false, 'error' => 'Ungueltiger EP-Preis beim Einloesen (0 bis 1000000).'], 400);
+    }
+    if ($claimRewardCoins === null) {
+        respond(['ok' => false, 'error' => 'Ungueltiger Coin-Preis beim Einloesen (0 bis 100000).'], 400);
+    }
+    if ($claimRewardTitle === null) {
+        respond(['ok' => false, 'error' => 'Ungueltiger Spielertitel beim Einloesen.'], 400);
+    }
     if ($type === 'reward_item' && $unlockConditionType !== 'coins_purchase' && $unlockConditionValue === null) {
-        respond(['ok' => false, 'error' => 'Bitte einen gueltigen Wert fuer die Belohnungs-Bedingung eingeben.'], 400);
+        if ($unlockConditionType !== 'quest_ids' && $unlockConditionType !== 'reward_ids') {
+            respond(['ok' => false, 'error' => 'Bitte einen gueltigen Wert fuer die Belohnungs-Bedingung eingeben.'], 400);
+        }
+    }
+    if ($type === 'reward_item' && $unlockConditionType === 'quest_ids' && count($unlockConditionQuestIds) === 0) {
+        respond(['ok' => false, 'error' => 'Bitte mindestens eine Quest-Bedingung angeben.'], 400);
+    }
+    if ($type === 'reward_item' && $unlockConditionType === 'reward_ids' && count($unlockConditionRewardIds) === 0) {
+        respond(['ok' => false, 'error' => 'Bitte mindestens eine Belohnungs-Bedingung angeben.'], 400);
     }
     if ($type === 'reward_item' && $unlockStartCompletedQuests === null) {
         respond(['ok' => false, 'error' => 'Ungueltiger Startwert fuer erledigte Quests.'], 400);
@@ -237,8 +385,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'create_item') {
         'boostQuests'  => ($type === 'xp_boost_perk') ? $boostQuests  : null,
         'unlockConditionType' => ($type === 'reward_item') ? $unlockConditionType : 'coins_purchase',
         'unlockConditionValue' => ($type === 'reward_item' && $unlockConditionType !== 'coins_purchase') ? $unlockConditionValue : null,
+        'unlockConditionQuestIds' => ($type === 'reward_item' && $unlockConditionType === 'quest_ids') ? $unlockConditionQuestIds : [],
+        'unlockConditionRewardIds' => ($type === 'reward_item' && $unlockConditionType === 'reward_ids') ? $unlockConditionRewardIds : [],
         'unlockStartCompletedQuests' => ($type === 'reward_item') ? $unlockStartCompletedQuests : 0,
         'unlockStartLevel' => ($type === 'reward_item') ? $unlockStartLevel : 1,
+        'claimRewardXp' => ($type === 'reward_item') ? $claimRewardXp : 0,
+        'claimRewardCoins' => ($type === 'reward_item') ? $claimRewardCoins : 0,
+        'claimRewardTitle' => ($type === 'reward_item') ? $claimRewardTitle : '',
         'active'      => true
     ];
 
@@ -257,6 +410,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'create_item') {
                 if (is_array($qdb) && isset($qdb['players']) && is_array($qdb['players'])) {
                     if ($unlockConditionType === 'quests_completed') {
                         $conditionLabel = 'Bedingung: ' . (int)$unlockConditionValue . ' abgeschlossene Quests.';
+                    } elseif ($unlockConditionType === 'quest_ids') {
+                        $conditionLabel = 'Bedingung: ' . count($unlockConditionQuestIds) . ' bestimmte Quest(s) erledigen.';
+                    } elseif ($unlockConditionType === 'reward_ids') {
+                        $conditionLabel = 'Bedingung: ' . count($unlockConditionRewardIds) . ' bestimmte Belohnung(en) besitzen.';
                     } elseif ($unlockConditionType === 'level_up') {
                         $conditionLabel = 'Bedingung: ' . (int)$unlockConditionValue . ' Levelaufstiege.';
                     } elseif ($unlockConditionType === 'reach_level') {
@@ -302,8 +459,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'update_item') {
     $boostQuests  = max(1, min(100, (int)($body['boostQuests'] ?? 5)));
     $unlockConditionType = sanitizeRewardUnlockConditionType($body['unlockConditionType'] ?? 'coins_purchase');
     $unlockConditionValue = sanitizeRewardUnlockConditionValue($body['unlockConditionValue'] ?? null);
+    $unlockConditionQuestIds = sanitizeRewardUnlockConditionQuestIds($body['unlockConditionQuestIds'] ?? []);
+    $unlockConditionRewardIds = sanitizeRewardUnlockConditionRewardIds($body['unlockConditionRewardIds'] ?? []);
     $unlockStartCompletedQuests = sanitizeNonNegativeInt($body['unlockStartCompletedQuests'] ?? null);
     $unlockStartLevel = sanitizeLevelInt($body['unlockStartLevel'] ?? null);
+    $claimRewardXp = sanitizeClaimRewardXp($body['claimRewardXp'] ?? null);
+    $claimRewardCoins = sanitizeCoins($body['claimRewardCoins'] ?? null);
+    $claimRewardTitle = sanitizeClaimRewardTitle($body['claimRewardTitle'] ?? null);
 
     if ($itemId === null) {
         respond(['ok' => false, 'error' => 'Ungueltige itemId.'], 400);
@@ -317,6 +479,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'update_item') {
     if ($image === null) {
         respond(['ok' => false, 'error' => 'Ungueltiger Bildpfad.'], 400);
     }
+    if ($unlockConditionQuestIds === null) {
+        respond(['ok' => false, 'error' => 'Ungueltige Quest-Liste fuer Belohnungs-Bedingung.'], 400);
+    }
+    if ($unlockConditionRewardIds === null) {
+        respond(['ok' => false, 'error' => 'Ungueltige Belohnungs-Liste fuer Belohnungs-Bedingung.'], 400);
+    }
+    if ($claimRewardXp === null) {
+        respond(['ok' => false, 'error' => 'Ungueltiger EP-Preis beim Einloesen (0 bis 1000000).'], 400);
+    }
+    if ($claimRewardCoins === null) {
+        respond(['ok' => false, 'error' => 'Ungueltiger Coin-Preis beim Einloesen (0 bis 100000).'], 400);
+    }
+    if ($claimRewardTitle === null) {
+        respond(['ok' => false, 'error' => 'Ungueltiger Spielertitel beim Einloesen.'], 400);
+    }
 
     $idx = findItemIndexById($db['items'], $itemId);
     if ($idx < 0) {
@@ -327,12 +504,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'update_item') {
 
     $finalUnlockType = $unlockConditionType;
     $finalUnlockValue = $unlockConditionValue;
+    $finalUnlockQuestIds = sanitizeRewardUnlockConditionQuestIds($existing['unlockConditionQuestIds'] ?? []);
+    $finalUnlockRewardIds = sanitizeRewardUnlockConditionRewardIds($existing['unlockConditionRewardIds'] ?? []);
 
     if ($type === 'reward_item' && !array_key_exists('unlockConditionType', $body)) {
         $finalUnlockType = sanitizeRewardUnlockConditionType($existing['unlockConditionType'] ?? 'coins_purchase');
     }
     if ($type === 'reward_item' && !array_key_exists('unlockConditionValue', $body)) {
         $finalUnlockValue = sanitizeRewardUnlockConditionValue($existing['unlockConditionValue'] ?? null);
+    }
+    if ($type === 'reward_item' && array_key_exists('unlockConditionQuestIds', $body)) {
+        $finalUnlockQuestIds = $unlockConditionQuestIds;
+    }
+    if ($type === 'reward_item' && array_key_exists('unlockConditionRewardIds', $body)) {
+        $finalUnlockRewardIds = $unlockConditionRewardIds;
     }
 
     $finalUnlockStartCompletedQuests = sanitizeNonNegativeInt($existing['unlockStartCompletedQuests'] ?? 0);
@@ -345,8 +530,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'update_item') {
         $finalUnlockStartLevel = $unlockStartLevel;
     }
 
+    $finalClaimRewardXp = sanitizeClaimRewardXp($existing['claimRewardXp'] ?? 0);
+    $finalClaimRewardCoins = sanitizeCoins($existing['claimRewardCoins'] ?? 0);
+    $finalClaimRewardTitle = sanitizeClaimRewardTitle($existing['claimRewardTitle'] ?? '');
+    if ($finalClaimRewardXp === null) {
+        $finalClaimRewardXp = 0;
+    }
+    if ($finalClaimRewardCoins === null) {
+        $finalClaimRewardCoins = 0;
+    }
+    if ($finalClaimRewardTitle === null) {
+        $finalClaimRewardTitle = '';
+    }
+    if ($type === 'reward_item' && array_key_exists('claimRewardXp', $body)) {
+        $finalClaimRewardXp = $claimRewardXp;
+    }
+    if ($type === 'reward_item' && array_key_exists('claimRewardCoins', $body)) {
+        $finalClaimRewardCoins = $claimRewardCoins;
+    }
+    if ($type === 'reward_item' && array_key_exists('claimRewardTitle', $body)) {
+        $finalClaimRewardTitle = $claimRewardTitle;
+    }
+
     if ($type === 'reward_item' && $finalUnlockType !== 'coins_purchase' && $finalUnlockValue === null) {
-        respond(['ok' => false, 'error' => 'Bitte einen gueltigen Wert fuer die Belohnungs-Bedingung eingeben.'], 400);
+        if ($finalUnlockType !== 'quest_ids' && $finalUnlockType !== 'reward_ids') {
+            respond(['ok' => false, 'error' => 'Bitte einen gueltigen Wert fuer die Belohnungs-Bedingung eingeben.'], 400);
+        }
+    }
+    if ($type === 'reward_item' && $finalUnlockType === 'quest_ids' && (!is_array($finalUnlockQuestIds) || count($finalUnlockQuestIds) === 0)) {
+        respond(['ok' => false, 'error' => 'Bitte mindestens eine Quest-Bedingung angeben.'], 400);
+    }
+    if ($type === 'reward_item' && $finalUnlockType === 'reward_ids' && (!is_array($finalUnlockRewardIds) || count($finalUnlockRewardIds) === 0)) {
+        respond(['ok' => false, 'error' => 'Bitte mindestens eine Belohnungs-Bedingung angeben.'], 400);
     }
     if ($type === 'reward_item' && $finalUnlockStartCompletedQuests === null) {
         respond(['ok' => false, 'error' => 'Ungueltiger Startwert fuer erledigte Quests.'], 400);
@@ -369,8 +584,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'update_item') {
         'boostQuests'  => ($type === 'xp_boost_perk') ? $boostQuests  : null,
         'unlockConditionType' => ($type === 'reward_item') ? $finalUnlockType : 'coins_purchase',
         'unlockConditionValue' => ($type === 'reward_item' && $finalUnlockType !== 'coins_purchase') ? $finalUnlockValue : null,
+        'unlockConditionQuestIds' => ($type === 'reward_item' && $finalUnlockType === 'quest_ids') ? $finalUnlockQuestIds : [],
+        'unlockConditionRewardIds' => ($type === 'reward_item' && $finalUnlockType === 'reward_ids') ? $finalUnlockRewardIds : [],
         'unlockStartCompletedQuests' => ($type === 'reward_item') ? $finalUnlockStartCompletedQuests : 0,
         'unlockStartLevel' => ($type === 'reward_item') ? $finalUnlockStartLevel : 1,
+        'claimRewardXp' => ($type === 'reward_item') ? $finalClaimRewardXp : 0,
+        'claimRewardCoins' => ($type === 'reward_item') ? $finalClaimRewardCoins : 0,
+        'claimRewardTitle' => ($type === 'reward_item') ? $finalClaimRewardTitle : '',
         'active'      => true
     ]);
 
@@ -396,6 +616,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'delete_item') {
     file_put_contents($catalogFile, json_encode($db, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
     respond(['ok' => true, 'updatedAt' => $db['updatedAt']]);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'migrate_legacy_rewards') {
+    $result = migrateLegacyRewardItems($db);
+
+    if ((int)($result['migrated'] ?? 0) > 0) {
+        $db['updatedAt'] = gmdate('c');
+        file_put_contents($catalogFile, json_encode($db, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    }
+
+    respond([
+        'ok' => true,
+        'migrated' => (int)($result['migrated'] ?? 0),
+        'items' => array_values((array)($result['items'] ?? [])),
+        'updatedAt' => $db['updatedAt'] ?? null
+    ]);
 }
 
 $items = array_values(array_filter($db['items'], function ($item) {

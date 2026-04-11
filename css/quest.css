@@ -402,6 +402,72 @@
   background: linear-gradient(90deg, #ff7b95, #ffc2cf);
 }
 
+.reward-progress-quest_ids {
+  background: linear-gradient(90deg, #3dd1ff, #8de7ff);
+}
+
+.reward-progress-reward_ids {
+  background: linear-gradient(90deg, #63e27d, #b6f5c3);
+}
+
+.reward-quest-list {
+  display: grid;
+  gap: 8px;
+  margin: 6px 0 10px;
+}
+
+.reward-quest-select-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.reward-quest-select-row select {
+  width: 100%;
+}
+
+.reward-requirements {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.reward-requirement-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  color: #dff3ff;
+}
+
+.reward-requirement-item input[type="checkbox"] {
+  accent-color: #3dd1ff;
+}
+
+.reward-quest-summary {
+  margin-top: 10px;
+}
+
+.reward-quest-summary .quest-meta {
+  margin: 0 0 6px;
+}
+
+.reward-quest-summary-list {
+  margin: 0;
+  padding-left: 18px;
+  color: #dff3ff;
+  font-size: 0.92rem;
+}
+
+.reward-quest-summary-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
 .reward-redeem-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -818,6 +884,33 @@
   padding: 8px 2px 14px;
 }
 
+.achievement-custom-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.achievement-overview-thumb {
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  flex: 0 0 auto;
+}
+
+.achievement-overview-preview {
+  width: 100%;
+  max-width: 190px;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  margin-bottom: 10px;
+}
+
 .achievement-path-wrap::-webkit-scrollbar {
   height: 10px;
 }
@@ -1060,6 +1153,20 @@
 }
 .rename-msg.success { color: #19c37d; }
 .rename-msg.error   { color: #ff5b6a; }
+
+.player-title-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 211, 122, 0.55);
+  background: rgba(255, 211, 122, 0.16);
+  color: #ffd37a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
 
 @media (max-width: 720px) {
   .quest-form {

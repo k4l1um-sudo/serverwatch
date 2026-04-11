@@ -33,6 +33,7 @@
         <a href="progress.html">Fortschritt</a>
         <a href="news.html">News</a>
         <a href="spieler.html">Spieler</a>
+        <a href="spieler-achievements.html">Achievements</a>
         <a href="elternbereich.html">Elternbereich</a>
       </nav>
     </div>
@@ -47,7 +48,7 @@
     <main class="panel quest-panel">
       <section class="hero">
         <h2>Achievementbereich</h2>
-        <p class="muted">Achievements mit Meilenstein, Titel und Bildpfad verwalten.</p>
+        <p class="muted">Benutzerdefinierte Achievements mit Quests, Leveln oder Belohnungen als Voraussetzung verwalten. System-Achievements bleiben unveraendert.</p>
       </section>
 
       <section class="status-panel">
@@ -78,11 +79,45 @@
               <label for="new-achievement-item-title" class="field-label">Titel</label>
               <input id="new-achievement-item-title" type="text" maxlength="120" autocomplete="off" required>
 
-              <label for="new-achievement-item-target" class="field-label">Meilenstein (Quests)</label>
-              <input id="new-achievement-item-target" type="number" min="1" max="100000" step="1" required>
+              <label for="new-achievement-reward-title" class="field-label">Freischaltbarer Spielertitel (optional)</label>
+              <input id="new-achievement-reward-title" type="text" maxlength="40" placeholder="z. B. Der Entdecker" autocomplete="off">
 
-              <label for="new-achievement-item-image" class="field-label">Bildpfad</label>
-              <input id="new-achievement-item-image" type="text" maxlength="300" placeholder="assets/avatars/deinbild.png" autocomplete="off" required>
+              <label for="new-achievement-condition" class="field-label">Abhaengigkeit zur Erfuellung</label>
+              <select id="new-achievement-condition" required>
+                <option value="quest_ids" selected>Bestimmte Quest(s) erledigen</option>
+                <option value="reach_level">Bestimmtes Level erreichen</option>
+                <option value="reward_ids">Bestimmte Belohnung(en) besitzen</option>
+              </select>
+
+              <div id="new-achievement-condition-level-row" class="shop-type-fields" hidden>
+                <label for="new-achievement-condition-level" class="field-label">Level-Ziel</label>
+                <input id="new-achievement-condition-level" type="number" min="1" max="1000" step="1" value="2">
+              </div>
+
+              <div id="new-achievement-condition-quests-row" class="shop-type-fields" hidden>
+                <label class="field-label">Voraussetzungs-Quests</label>
+                <div class="reward-quest-select-row">
+                  <select id="new-achievement-quest-select">
+                    <option value="">Quest auswaehlen...</option>
+                  </select>
+                </div>
+                <button id="new-achievement-add-quest-btn" type="button" class="chip">Voraussetzung hinzufuegen</button>
+                <div id="new-achievement-quest-summary" class="reward-quest-summary"></div>
+              </div>
+
+              <div id="new-achievement-condition-rewards-row" class="shop-type-fields" hidden>
+                <label class="field-label">Voraussetzungs-Belohnungen</label>
+                <div class="reward-quest-select-row">
+                  <select id="new-achievement-reward-select">
+                    <option value="">Belohnung auswaehlen...</option>
+                  </select>
+                </div>
+                <button id="new-achievement-add-reward-btn" type="button" class="chip">Voraussetzung hinzufuegen</button>
+                <div id="new-achievement-reward-summary" class="reward-quest-summary"></div>
+              </div>
+
+              <label for="new-achievement-item-image" class="field-label">Bildpfad (optional)</label>
+              <input id="new-achievement-item-image" type="text" maxlength="300" placeholder="assets/avatars/deinbild.png" autocomplete="off">
 
               <button type="submit" class="status-btn">Achievement speichern</button>
             </form>
@@ -98,11 +133,45 @@
               <label for="edit-achievement-item-title" class="field-label">Titel</label>
               <input id="edit-achievement-item-title" type="text" maxlength="120" autocomplete="off" required>
 
-              <label for="edit-achievement-item-target" class="field-label">Meilenstein (Quests)</label>
-              <input id="edit-achievement-item-target" type="number" min="1" max="100000" step="1" required>
+              <label for="edit-achievement-reward-title" class="field-label">Freischaltbarer Spielertitel (optional)</label>
+              <input id="edit-achievement-reward-title" type="text" maxlength="40" autocomplete="off">
 
-              <label for="edit-achievement-item-image" class="field-label">Bildpfad</label>
-              <input id="edit-achievement-item-image" type="text" maxlength="300" autocomplete="off" required>
+              <label for="edit-achievement-condition" class="field-label">Abhaengigkeit zur Erfuellung</label>
+              <select id="edit-achievement-condition" required>
+                <option value="quest_ids">Bestimmte Quest(s) erledigen</option>
+                <option value="reach_level">Bestimmtes Level erreichen</option>
+                <option value="reward_ids">Bestimmte Belohnung(en) besitzen</option>
+              </select>
+
+              <div id="edit-achievement-condition-level-row" class="shop-type-fields" hidden>
+                <label for="edit-achievement-condition-level" class="field-label">Level-Ziel</label>
+                <input id="edit-achievement-condition-level" type="number" min="1" max="1000" step="1" value="2">
+              </div>
+
+              <div id="edit-achievement-condition-quests-row" class="shop-type-fields" hidden>
+                <label class="field-label">Voraussetzungs-Quests</label>
+                <div class="reward-quest-select-row">
+                  <select id="edit-achievement-quest-select">
+                    <option value="">Quest auswaehlen...</option>
+                  </select>
+                </div>
+                <button id="edit-achievement-add-quest-btn" type="button" class="chip">Voraussetzung hinzufuegen</button>
+                <div id="edit-achievement-quest-summary" class="reward-quest-summary"></div>
+              </div>
+
+              <div id="edit-achievement-condition-rewards-row" class="shop-type-fields" hidden>
+                <label class="field-label">Voraussetzungs-Belohnungen</label>
+                <div class="reward-quest-select-row">
+                  <select id="edit-achievement-reward-select">
+                    <option value="">Belohnung auswaehlen...</option>
+                  </select>
+                </div>
+                <button id="edit-achievement-add-reward-btn" type="button" class="chip">Voraussetzung hinzufuegen</button>
+                <div id="edit-achievement-reward-summary" class="reward-quest-summary"></div>
+              </div>
+
+              <label for="edit-achievement-item-image" class="field-label">Bildpfad (optional)</label>
+              <input id="edit-achievement-item-image" type="text" maxlength="300" autocomplete="off">
 
               <div class="parent-edit-actions">
                 <button type="submit" class="status-btn">Speichern</button>
