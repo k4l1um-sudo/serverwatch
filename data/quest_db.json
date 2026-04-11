@@ -1,595 +1,661 @@
 {
-    "players": {
-        "kid_7s9apz6h": {
-            "xp": 0,
-            "coins": 0,
-            "name": "Spieler",
-            "profileImageItemId": null,
-            "ownedShopItems": [],
-            "quests": [],
-            "createdAt": "2026-04-04T15:59:24+00:00",
-            "updatedAt": "2026-04-04T16:46:15+00:00",
-            "systemMessages": [
-                {
-                    "text": "Neue Belohnung verfuegbar: \"Unternehmung\". Bedingung: Level 15 erreichen.",
-                    "timestamp": "2026-04-04T18:08:44+00:00"
-                },
-                {
-                    "text": "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
-                    "timestamp": "2026-04-11T12:46:47+00:00"
+    "players":  {
+                    "kid_7s9apz6h":  {
+                                         "xp":  0,
+                                         "coins":  0,
+                                         "name":  "Spieler",
+                                         "profileImageItemId":  null,
+                                         "ownedShopItems":  [
+
+                                                            ],
+                                         "quests":  [
+
+                                                    ],
+                                         "createdAt":  "2026-04-04T15:59:24+00:00",
+                                         "updatedAt":  "2026-04-04T16:46:15+00:00",
+                                         "systemMessages":  [
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Unternehmung\". Bedingung: Level 15 erreichen.",
+                                                                    "timestamp":  "2026-04-04T18:08:44+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
+                                                                    "timestamp":  "2026-04-11T12:46:47+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Beginner\". Bedingung: Level 1 erreichen.",
+                                                                    "timestamp":  "2026-04-11T16:50:41+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Update: Neue Belohnungslogik aktiv (Quest/Level/Belohnung), Einloesepreise (EP/Coins/Titel), Achievement- und Trophy-Titel erweitert und im Profil waehlbar.",
+                                                                    "timestamp":  "2026-04-11T17:04:09+00:00"
+                                                                }
+                                                            ]
+                                     },
+                    "kid_5fpuldwu":  {
+                                         "xp":  0,
+                                         "coins":  0,
+                                         "name":  "Spieler",
+                                         "profileImageItemId":  null,
+                                         "ownedShopItems":  [
+
+                                                            ],
+                                         "quests":  [
+
+                                                    ],
+                                         "createdAt":  "2026-04-04T16:46:32+00:00",
+                                         "updatedAt":  "2026-04-04T16:46:32+00:00",
+                                         "systemMessages":  [
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Unternehmung\". Bedingung: Level 15 erreichen.",
+                                                                    "timestamp":  "2026-04-04T18:08:44+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
+                                                                    "timestamp":  "2026-04-11T12:46:47+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Beginner\". Bedingung: Level 1 erreichen.",
+                                                                    "timestamp":  "2026-04-11T16:50:41+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Update: Neue Belohnungslogik aktiv (Quest/Level/Belohnung), Einloesepreise (EP/Coins/Titel), Achievement- und Trophy-Titel erweitert und im Profil waehlbar.",
+                                                                    "timestamp":  "2026-04-11T17:04:09+00:00"
+                                                                }
+                                                            ]
+                                     },
+                    "kid_shared_main":  {
+                                            "xp":  4749,
+                                            "coins":  298,
+                                            "name":  "Alex",
+                                            "profileImageItemId":  "ach_holz_10",
+                                            "ownedShopItems":  [
+                                                                   "belohnung_d_ner_4_free",
+                                                                   "belohnung_beginner"
+                                                               ],
+                                            "achievementRewardClaimedIds":  [
+                                                                                "ach_beginner_1",
+                                                                                "ach_holz_10"
+                                                                            ],
+                                            "quests":  [
+                                                           {
+                                                               "id":  "q_b52820b75b",
+                                                               "title":  "Glas rausbringen",
+                                                               "description":  "Zum Container",
+                                                               "rewardXp":  177,
+                                                               "rewardCoins":  5,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "16",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-04T17:13:52+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-04T17:13:50+00:00",
+                                                               "completedAt":  "2026-04-04T17:14:15+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_f2ca3b6054",
+                                                               "title":  "Kleidung einräumen",
+                                                               "description":  "NAch dem Waschen eigene Kleidung in den Schrank einräumen",
+                                                               "rewardXp":  68,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "15",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-04T18:32:29+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-04T18:18:56+00:00",
+                                                               "completedAt":  "2026-04-04T18:33:36+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_6bf0d07790",
+                                                               "title":  "Wäsche sortieren",
+                                                               "description":  "Nach Rücksprache (+Einweisung) mit Mama",
+                                                               "rewardXp":  68,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "10",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-04T19:09:15+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-04T18:55:16+00:00",
+                                                               "completedAt":  "2026-04-04T19:11:41+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_40713dfc92",
+                                                               "title":  "Wäsche abnehmen",
+                                                               "description":  "vom Ständer nehmen",
+                                                               "rewardXp":  75,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "17",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-04T19:07:33+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-04T19:02:07+00:00",
+                                                               "completedAt":  "2026-04-04T19:11:44+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_89182ca3df",
+                                                               "title":  "Kleidung einräumen",
+                                                               "description":  "eingene Kleidung in eigenen Schrank",
+                                                               "rewardXp":  75,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "18",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-04T19:11:04+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-04T19:11:02+00:00",
+                                                               "completedAt":  "2026-04-04T19:11:47+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_aaf453e21d",
+                                                               "title":  "Wäsche sortieren - zum Waschen",
+                                                               "description":  "nach Rücksprache Mama",
+                                                               "rewardXp":  131,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "19",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-04T19:35:44+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-04T19:17:38+00:00",
+                                                               "completedAt":  "2026-04-04T19:37:55+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_b0d5681a85",
+                                                               "title":  "Brawl Stars - 1000 Pokis",
+                                                               "description":  "Erreiche mit einem neuen Brawler 1000 Pokis",
+                                                               "rewardXp":  131,
+                                                               "rewardCoins":  1,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "20",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-05T16:31:02+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-05T13:35:23+00:00",
+                                                               "completedAt":  "2026-04-06T19:52:28+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_52101d2235",
+                                                               "title":  "Huldigt dem Herrn",
+                                                               "description":  "Verneige dich vor der glorreichen Erscheinung des Osterhasen und claim deine Eier.",
+                                                               "rewardXp":  203,
+                                                               "rewardCoins":  20,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "21",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-05T13:40:44+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-05T13:40:40+00:00",
+                                                               "completedAt":  "2026-04-05T13:59:31+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_e5e335c557",
+                                                               "title":  "Hilfsbereiter Recke",
+                                                               "description":  "Sei zuvorkommend und vorausschauend an Ostern. HElfe wo du kannst und es darfst. \nSei einfach der perfekte Enkel!\n\nBEACHTE:\nOMA und OPA müssen über die QUEST bescheid wissen!!!\n\n(Oma und Opa bewerten)",
+                                                               "rewardXp":  300,
+                                                               "rewardCoins":  10,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "24",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-06T12:33:35+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-06T09:13:41+00:00",
+                                                               "completedAt":  "2026-04-06T14:39:24+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_9598c660b4",
+                                                               "title":  "Tisch aufräumen (Ostern)",
+                                                               "description":  "Helfe beim aufräumen an Ostern",
+                                                               "rewardXp":  213,
+                                                               "rewardCoins":  2,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "23",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-06T12:13:26+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-06T09:13:45+00:00",
+                                                               "completedAt":  "2026-04-06T12:15:06+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_013c0ed2f6",
+                                                               "title":  "Tisch decken (Ostern)",
+                                                               "description":  "Decke den Tisch an Ostern oder helfe dabei",
+                                                               "rewardXp":  213,
+                                                               "rewardCoins":  2,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "22",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-06T12:13:28+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-06T09:13:47+00:00",
+                                                               "completedAt":  "2026-04-06T12:15:11+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_0ee1ece53a",
+                                                               "title":  "Wäsche Waschen",
+                                                               "description":  "Nach Rücksprache (+Einweisung) mit Mama",
+                                                               "rewardXp":  112,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "11",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-06T09:21:23+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-06T09:16:41+00:00",
+                                                               "completedAt":  "2026-04-06T09:28:42+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_0d6a219d55",
+                                                               "title":  "Nachtisch aufdecken und abräumen",
+                                                               "description":  "Decke den Tisch und räume ihn danach wieder ab. Als Belohnung bekommst du Coins UND wo",
+                                                               "rewardXp":  213,
+                                                               "rewardCoins":  3,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "25",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-06T12:33:43+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-06T12:33:40+00:00",
+                                                               "completedAt":  "2026-04-06T14:37:56+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_6b576697e8",
+                                                               "title":  "Gelber Sack rausstellen",
+                                                               "description":  "06.04.2026\nGelber Sack Küche in vorhandenen Sack\nGelben SAck komplett dann rausstellen",
+                                                               "rewardXp":  68,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "8",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-06T19:51:49+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-06T19:51:46+00:00",
+                                                               "completedAt":  "2026-04-06T19:52:30+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_827ba23a84",
+                                                               "title":  "Lernen - Englisch",
+                                                               "description":  "Bei Mama melden\n(voraussichtlich eine Seite Arbeitsblatt)",
+                                                               "rewardXp":  112,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "2",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-07T07:46:48+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-07T07:46:46+00:00",
+                                                               "completedAt":  "2026-04-07T07:47:09+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_7968db969f",
+                                                               "title":  "Nährt die Hungrigen",
+                                                               "description":  "Besorgt zwei Sahneschnitze für die erlauchte Gesellschaft.\n(Zwei Sahneschnitze bei Kavalle für je 9€uronen)",
+                                                               "rewardXp":  151,
+                                                               "rewardCoins":  2,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "26",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T09:31:23+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-07T16:59:51+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:48+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_2c9ddaebda",
+                                                               "title":  "Einkaufen - Ergänzung Wocheneinkauf",
+                                                               "description":  "Nach Rücksprache mit Mama\n(einfach fragen ob was besorgt werden muss)",
+                                                               "rewardXp":  177,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "9",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T09:31:30+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T09:31:28+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:36+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_93283d5ba5",
+                                                               "title":  "Wäsche sortieren",
+                                                               "description":  "Wäsche sortieren",
+                                                               "rewardXp":  232,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "30",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T10:52:17+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T10:52:16+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:38+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_96ffe1a859",
+                                                               "title":  "Wäsche waschen",
+                                                               "description":  "Wäsche waschen",
+                                                               "rewardXp":  151,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "29",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T10:52:26+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T10:52:20+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:40+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_0e671f99ad",
+                                                               "title":  "Wäsche abhängen",
+                                                               "description":  "Wäsche abhängen",
+                                                               "rewardXp":  94,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "28",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T10:52:30+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T10:52:22+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:41+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_686ebd8241",
+                                                               "title":  "Wäsche einsortieren",
+                                                               "description":  "Wäsche einsortieren",
+                                                               "rewardXp":  151,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "27",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T10:52:28+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T10:52:25+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:42+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_75f5411a9e",
+                                                               "title":  "Lernen - Deutscharbeit",
+                                                               "description":  "Auf Mama zukommen für spezifische Aufgabe\n(voraussichtlich eine Seite...)",
+                                                               "rewardXp":  112,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "1",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T17:17:44+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T11:06:58+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:46+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_5c25efd915",
+                                                               "title":  "Lernen - Englisch",
+                                                               "description":  "Melden bei Mama\n(voraussichtlich eine Seite...)",
+                                                               "rewardXp":  112,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "4",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T11:07:05+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T11:07:02+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:48+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_08d1377036",
+                                                               "title":  "Kopie - Hausmüll rausstellen",
+                                                               "description":  "09.04.2026\nMüllsack Küche Hausmüll in graue Tonne (Nr.7 und Nr.2)\nAbends graue Mülltonne rausstellen",
+                                                               "rewardXp":  68,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "31",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T17:20:05+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T17:18:59+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:51+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_76a80d9503",
+                                                               "title":  "Hausmüll rausstellen",
+                                                               "description":  "09.04.2026\nMüllsack Küche Hausmüll in graue Tonne (Nr.7 und Nr.2)\nAbends graue Mülltonne rausstellen",
+                                                               "rewardXp":  68,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "7",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-09T17:20:07+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-09T17:19:04+00:00",
+                                                               "completedAt":  "2026-04-09T17:38:57+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_17f5c263c2",
+                                                               "title":  "Lernen - Englisch",
+                                                               "description":  "Melden bei Mama\n(voraussichtlich eine Seite...)",
+                                                               "rewardXp":  112,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "5",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-11T08:23:32+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-11T08:22:31+00:00",
+                                                               "completedAt":  "2026-04-11T08:24:51+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_60cf735824",
+                                                               "title":  "Spühlmaschine",
+                                                               "description":  "Geschirr der Maschine entnehmen und dann in die Schränke räumen.",
+                                                               "rewardXp":  68,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "12",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-11T08:23:31+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-11T08:22:53+00:00",
+                                                               "completedAt":  "2026-04-11T08:24:53+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_34ba083bae",
+                                                               "title":  "Wäsche abhängen",
+                                                               "description":  "vom Ständer Badezimmer",
+                                                               "rewardXp":  98,
+                                                               "rewardCoins":  1,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "35",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-11T11:13:31+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-11T10:52:48+00:00",
+                                                               "completedAt":  "2026-04-11T11:30:19+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_90e9d1afb4",
+                                                               "title":  "Wäsche waschen",
+                                                               "description":  "Wasche auf Pflegegrad stellen",
+                                                               "rewardXp":  98,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "33",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-11T10:56:53+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-11T10:52:52+00:00",
+                                                               "completedAt":  "2026-04-11T11:30:31+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_37679529e2",
+                                                               "title":  "Wäsche sortieren",
+                                                               "description":  "Wäsche sortieren",
+                                                               "rewardXp":  242,
+                                                               "rewardCoins":  0,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "32",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-11T10:56:48+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-11T10:52:55+00:00",
+                                                               "completedAt":  "2026-04-11T11:30:34+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_d6c7144ad0",
+                                                               "title":  "Snacks für Dortmund Spiel holen + Almigurt",
+                                                               "description":  "Bei Rewe",
+                                                               "rewardXp":  158,
+                                                               "rewardCoins":  5,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "36",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  null,
+                                                               "completed":  false,
+                                                               "createdAt":  "2026-04-11T10:53:34+00:00",
+                                                               "completedAt":  null
+                                                           },
+                                                           {
+                                                               "id":  "q_765157580a",
+                                                               "title":  "Wäsche EINsortieren",
+                                                               "description":  "sortieren",
+                                                               "rewardXp":  158,
+                                                               "rewardCoins":  1,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "37",
+                                                               "completionRequested":  false,
+                                                               "completionRequestedAt":  "2026-04-11T11:13:37+00:00",
+                                                               "completed":  true,
+                                                               "createdAt":  "2026-04-11T11:00:39+00:00",
+                                                               "completedAt":  "2026-04-11T11:30:36+00:00"
+                                                           },
+                                                           {
+                                                               "id":  "q_6b747455d2",
+                                                               "title":  "Schlaftet süß",
+                                                               "description":  "Betten - ALLE Betten",
+                                                               "rewardXp":  158,
+                                                               "rewardCoins":  1,
+                                                               "difficulty":  null,
+                                                               "catalogId":  "38",
+                                                               "completionRequested":  true,
+                                                               "completionRequestedAt":  "2026-04-11T11:13:29+00:00",
+                                                               "completed":  false,
+                                                               "createdAt":  "2026-04-11T11:02:06+00:00",
+                                                               "completedAt":  null
+                                                           }
+                                                       ],
+                                            "createdAt":  "2026-04-04T17:13:09+00:00",
+                                            "updatedAt":  "2026-04-11T16:52:43+00:00",
+                                            "activeBoosts":  [
+                                                                 {
+                                                                     "id":  "boost_lu_16_1cdd0182",
+                                                                     "label":  "Level-Up Boost (Level 16)",
+                                                                     "multiplier":  1.05,
+                                                                     "source":  "level_up",
+                                                                     "sourceLevel":  16,
+                                                                     "remainingQuests":  5
+                                                                 }
+                                                             ],
+                                            "systemMessages":  [
+                                                                   {
+                                                                       "text":  "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
+                                                                       "timestamp":  "2026-04-11T12:46:47+00:00"
+                                                                   },
+                                                                   {
+                                                                       "text":  "Neue Belohnung verfuegbar: \"Beginner\". Bedingung: Level 1 erreichen.",
+                                                                       "timestamp":  "2026-04-11T16:50:41+00:00"
+                                                                   },
+                                                                   {
+                                                                       "text":  "Belohnung freigeschaltet: Beginner",
+                                                                       "timestamp":  "2026-04-11T16:50:49+00:00"
+                                                                   },
+                                                                   {
+                                                                       "text":  "Belohnung eingelost: Beginner (Titel \"Blutiger Anfänger\")",
+                                                                       "timestamp":  "2026-04-11T16:51:11+00:00"
+                                                                   },
+                                                                   {
+                                                                       "text":  "Update: Neue Belohnungslogik aktiv (Quest/Level/Belohnung), Einloesepreise (EP/Coins/Titel), Achievement- und Trophy-Titel erweitert und im Profil waehlbar.",
+                                                                       "timestamp":  "2026-04-11T17:04:09+00:00"
+                                                                   }
+                                                               ],
+                                            "unlockedRewardItemIds":  [
+                                                                          "belohnung_unternehmung"
+                                                                      ],
+                                            "selectedTitleAchievementId":  "reward_title_belohnung_beginner",
+                                            "rewardUnlockedTitles":  [
+                                                                         {
+                                                                             "rewardItemId":  "belohnung_beginner",
+                                                                             "rewardTitle":  "Beginner",
+                                                                             "title":  "Blutiger Anfänger",
+                                                                             "titleId":  "reward_title_belohnung_beginner",
+                                                                             "claimedAt":  "2026-04-11T16:51:11+00:00"
+                                                                         }
+                                                                     ]
+                                        },
+                    "kid_ezpv9518":  {
+                                         "xp":  0,
+                                         "coins":  0,
+                                         "name":  "Spieler",
+                                         "profileImageItemId":  null,
+                                         "ownedShopItems":  [
+
+                                                            ],
+                                         "unlockedRewardItemIds":  [
+
+                                                                   ],
+                                         "achievementRewardClaimedIds":  [
+
+                                                                         ],
+                                         "quests":  [
+
+                                                    ],
+                                         "createdAt":  "2026-04-06T09:12:11+00:00",
+                                         "updatedAt":  "2026-04-06T09:47:29+00:00",
+                                         "systemMessages":  [
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
+                                                                    "timestamp":  "2026-04-11T12:46:47+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Beginner\". Bedingung: Level 1 erreichen.",
+                                                                    "timestamp":  "2026-04-11T16:50:41+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Update: Neue Belohnungslogik aktiv (Quest/Level/Belohnung), Einloesepreise (EP/Coins/Titel), Achievement- und Trophy-Titel erweitert und im Profil waehlbar.",
+                                                                    "timestamp":  "2026-04-11T17:04:09+00:00"
+                                                                }
+                                                            ]
+                                     },
+                    "kid_8r4sd4ib":  {
+                                         "xp":  0,
+                                         "coins":  0,
+                                         "name":  "Spieler",
+                                         "profileImageItemId":  null,
+                                         "ownedShopItems":  [
+
+                                                            ],
+                                         "unlockedRewardItemIds":  [
+
+                                                                   ],
+                                         "achievementRewardClaimedIds":  [
+
+                                                                         ],
+                                         "quests":  [
+
+                                                    ],
+                                         "createdAt":  "2026-04-06T11:14:52+00:00",
+                                         "updatedAt":  "2026-04-06T11:14:52+00:00",
+                                         "systemMessages":  [
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
+                                                                    "timestamp":  "2026-04-11T12:46:47+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Neue Belohnung verfuegbar: \"Beginner\". Bedingung: Level 1 erreichen.",
+                                                                    "timestamp":  "2026-04-11T16:50:41+00:00"
+                                                                },
+                                                                {
+                                                                    "text":  "Update: Neue Belohnungslogik aktiv (Quest/Level/Belohnung), Einloesepreise (EP/Coins/Titel), Achievement- und Trophy-Titel erweitert und im Profil waehlbar.",
+                                                                    "timestamp":  "2026-04-11T17:04:09+00:00"
+                                                                }
+                                                            ]
+                                     }
                 }
-            ]
-        },
-        "kid_5fpuldwu": {
-            "xp": 0,
-            "coins": 0,
-            "name": "Spieler",
-            "profileImageItemId": null,
-            "ownedShopItems": [],
-            "quests": [],
-            "createdAt": "2026-04-04T16:46:32+00:00",
-            "updatedAt": "2026-04-04T16:46:32+00:00",
-            "systemMessages": [
-                {
-                    "text": "Neue Belohnung verfuegbar: \"Unternehmung\". Bedingung: Level 15 erreichen.",
-                    "timestamp": "2026-04-04T18:08:44+00:00"
-                },
-                {
-                    "text": "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
-                    "timestamp": "2026-04-11T12:46:47+00:00"
-                }
-            ]
-        },
-        "kid_shared_main": {
-            "xp": 4749,
-            "coins": 298,
-            "name": "Alex",
-            "profileImageItemId": "ach_holz_10",
-            "ownedShopItems": [
-                "belohnung_d_ner_4_free"
-            ],
-            "achievementRewardClaimedIds": [
-                "ach_beginner_1",
-                "ach_holz_10"
-            ],
-            "quests": [
-                {
-                    "id": "q_b52820b75b",
-                    "title": "Glas rausbringen",
-                    "description": "Zum Container",
-                    "rewardXp": 177,
-                    "rewardCoins": 5,
-                    "difficulty": null,
-                    "catalogId": "16",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-04T17:13:52+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-04T17:13:50+00:00",
-                    "completedAt": "2026-04-04T17:14:15+00:00"
-                },
-                {
-                    "id": "q_f2ca3b6054",
-                    "title": "Kleidung einräumen",
-                    "description": "NAch dem Waschen eigene Kleidung in den Schrank einräumen",
-                    "rewardXp": 68,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "15",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-04T18:32:29+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-04T18:18:56+00:00",
-                    "completedAt": "2026-04-04T18:33:36+00:00"
-                },
-                {
-                    "id": "q_6bf0d07790",
-                    "title": "Wäsche sortieren",
-                    "description": "Nach Rücksprache (+Einweisung) mit Mama",
-                    "rewardXp": 68,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "10",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-04T19:09:15+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-04T18:55:16+00:00",
-                    "completedAt": "2026-04-04T19:11:41+00:00"
-                },
-                {
-                    "id": "q_40713dfc92",
-                    "title": "Wäsche abnehmen",
-                    "description": "vom Ständer nehmen",
-                    "rewardXp": 75,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "17",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-04T19:07:33+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-04T19:02:07+00:00",
-                    "completedAt": "2026-04-04T19:11:44+00:00"
-                },
-                {
-                    "id": "q_89182ca3df",
-                    "title": "Kleidung einräumen",
-                    "description": "eingene Kleidung in eigenen Schrank",
-                    "rewardXp": 75,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "18",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-04T19:11:04+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-04T19:11:02+00:00",
-                    "completedAt": "2026-04-04T19:11:47+00:00"
-                },
-                {
-                    "id": "q_aaf453e21d",
-                    "title": "Wäsche sortieren - zum Waschen",
-                    "description": "nach Rücksprache Mama",
-                    "rewardXp": 131,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "19",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-04T19:35:44+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-04T19:17:38+00:00",
-                    "completedAt": "2026-04-04T19:37:55+00:00"
-                },
-                {
-                    "id": "q_b0d5681a85",
-                    "title": "Brawl Stars - 1000 Pokis",
-                    "description": "Erreiche mit einem neuen Brawler 1000 Pokis",
-                    "rewardXp": 131,
-                    "rewardCoins": 1,
-                    "difficulty": null,
-                    "catalogId": "20",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-05T16:31:02+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-05T13:35:23+00:00",
-                    "completedAt": "2026-04-06T19:52:28+00:00"
-                },
-                {
-                    "id": "q_52101d2235",
-                    "title": "Huldigt dem Herrn",
-                    "description": "Verneige dich vor der glorreichen Erscheinung des Osterhasen und claim deine Eier.",
-                    "rewardXp": 203,
-                    "rewardCoins": 20,
-                    "difficulty": null,
-                    "catalogId": "21",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-05T13:40:44+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-05T13:40:40+00:00",
-                    "completedAt": "2026-04-05T13:59:31+00:00"
-                },
-                {
-                    "id": "q_e5e335c557",
-                    "title": "Hilfsbereiter Recke",
-                    "description": "Sei zuvorkommend und vorausschauend an Ostern. HElfe wo du kannst und es darfst. \nSei einfach der perfekte Enkel!\n\nBEACHTE:\nOMA und OPA müssen über die QUEST bescheid wissen!!!\n\n(Oma und Opa bewerten)",
-                    "rewardXp": 300,
-                    "rewardCoins": 10,
-                    "difficulty": null,
-                    "catalogId": "24",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-06T12:33:35+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-06T09:13:41+00:00",
-                    "completedAt": "2026-04-06T14:39:24+00:00"
-                },
-                {
-                    "id": "q_9598c660b4",
-                    "title": "Tisch aufräumen (Ostern)",
-                    "description": "Helfe beim aufräumen an Ostern",
-                    "rewardXp": 213,
-                    "rewardCoins": 2,
-                    "difficulty": null,
-                    "catalogId": "23",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-06T12:13:26+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-06T09:13:45+00:00",
-                    "completedAt": "2026-04-06T12:15:06+00:00"
-                },
-                {
-                    "id": "q_013c0ed2f6",
-                    "title": "Tisch decken (Ostern)",
-                    "description": "Decke den Tisch an Ostern oder helfe dabei",
-                    "rewardXp": 213,
-                    "rewardCoins": 2,
-                    "difficulty": null,
-                    "catalogId": "22",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-06T12:13:28+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-06T09:13:47+00:00",
-                    "completedAt": "2026-04-06T12:15:11+00:00"
-                },
-                {
-                    "id": "q_0ee1ece53a",
-                    "title": "Wäsche Waschen",
-                    "description": "Nach Rücksprache (+Einweisung) mit Mama",
-                    "rewardXp": 112,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "11",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-06T09:21:23+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-06T09:16:41+00:00",
-                    "completedAt": "2026-04-06T09:28:42+00:00"
-                },
-                {
-                    "id": "q_0d6a219d55",
-                    "title": "Nachtisch aufdecken und abräumen",
-                    "description": "Decke den Tisch und räume ihn danach wieder ab. Als Belohnung bekommst du Coins UND wo",
-                    "rewardXp": 213,
-                    "rewardCoins": 3,
-                    "difficulty": null,
-                    "catalogId": "25",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-06T12:33:43+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-06T12:33:40+00:00",
-                    "completedAt": "2026-04-06T14:37:56+00:00"
-                },
-                {
-                    "id": "q_6b576697e8",
-                    "title": "Gelber Sack rausstellen",
-                    "description": "06.04.2026\nGelber Sack Küche in vorhandenen Sack\nGelben SAck komplett dann rausstellen",
-                    "rewardXp": 68,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "8",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-06T19:51:49+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-06T19:51:46+00:00",
-                    "completedAt": "2026-04-06T19:52:30+00:00"
-                },
-                {
-                    "id": "q_827ba23a84",
-                    "title": "Lernen - Englisch",
-                    "description": "Bei Mama melden\n(voraussichtlich eine Seite Arbeitsblatt)",
-                    "rewardXp": 112,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "2",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-07T07:46:48+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-07T07:46:46+00:00",
-                    "completedAt": "2026-04-07T07:47:09+00:00"
-                },
-                {
-                    "id": "q_7968db969f",
-                    "title": "Nährt die Hungrigen",
-                    "description": "Besorgt zwei Sahneschnitze für die erlauchte Gesellschaft.\n(Zwei Sahneschnitze bei Kavalle für je 9€uronen)",
-                    "rewardXp": 151,
-                    "rewardCoins": 2,
-                    "difficulty": null,
-                    "catalogId": "26",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T09:31:23+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-07T16:59:51+00:00",
-                    "completedAt": "2026-04-09T17:38:48+00:00"
-                },
-                {
-                    "id": "q_2c9ddaebda",
-                    "title": "Einkaufen - Ergänzung Wocheneinkauf",
-                    "description": "Nach Rücksprache mit Mama\n(einfach fragen ob was besorgt werden muss)",
-                    "rewardXp": 177,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "9",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T09:31:30+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T09:31:28+00:00",
-                    "completedAt": "2026-04-09T17:38:36+00:00"
-                },
-                {
-                    "id": "q_93283d5ba5",
-                    "title": "Wäsche sortieren",
-                    "description": "Wäsche sortieren",
-                    "rewardXp": 232,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "30",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T10:52:17+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T10:52:16+00:00",
-                    "completedAt": "2026-04-09T17:38:38+00:00"
-                },
-                {
-                    "id": "q_96ffe1a859",
-                    "title": "Wäsche waschen",
-                    "description": "Wäsche waschen",
-                    "rewardXp": 151,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "29",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T10:52:26+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T10:52:20+00:00",
-                    "completedAt": "2026-04-09T17:38:40+00:00"
-                },
-                {
-                    "id": "q_0e671f99ad",
-                    "title": "Wäsche abhängen",
-                    "description": "Wäsche abhängen",
-                    "rewardXp": 94,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "28",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T10:52:30+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T10:52:22+00:00",
-                    "completedAt": "2026-04-09T17:38:41+00:00"
-                },
-                {
-                    "id": "q_686ebd8241",
-                    "title": "Wäsche einsortieren",
-                    "description": "Wäsche einsortieren",
-                    "rewardXp": 151,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "27",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T10:52:28+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T10:52:25+00:00",
-                    "completedAt": "2026-04-09T17:38:42+00:00"
-                },
-                {
-                    "id": "q_75f5411a9e",
-                    "title": "Lernen - Deutscharbeit",
-                    "description": "Auf Mama zukommen für spezifische Aufgabe\n(voraussichtlich eine Seite...)",
-                    "rewardXp": 112,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "1",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T17:17:44+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T11:06:58+00:00",
-                    "completedAt": "2026-04-09T17:38:46+00:00"
-                },
-                {
-                    "id": "q_5c25efd915",
-                    "title": "Lernen - Englisch",
-                    "description": "Melden bei Mama\n(voraussichtlich eine Seite...)",
-                    "rewardXp": 112,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "4",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T11:07:05+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T11:07:02+00:00",
-                    "completedAt": "2026-04-09T17:38:48+00:00"
-                },
-                {
-                    "id": "q_08d1377036",
-                    "title": "Kopie - Hausmüll rausstellen",
-                    "description": "09.04.2026\nMüllsack Küche Hausmüll in graue Tonne (Nr.7 und Nr.2)\nAbends graue Mülltonne rausstellen",
-                    "rewardXp": 68,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "31",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T17:20:05+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T17:18:59+00:00",
-                    "completedAt": "2026-04-09T17:38:51+00:00"
-                },
-                {
-                    "id": "q_76a80d9503",
-                    "title": "Hausmüll rausstellen",
-                    "description": "09.04.2026\nMüllsack Küche Hausmüll in graue Tonne (Nr.7 und Nr.2)\nAbends graue Mülltonne rausstellen",
-                    "rewardXp": 68,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "7",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-09T17:20:07+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-09T17:19:04+00:00",
-                    "completedAt": "2026-04-09T17:38:57+00:00"
-                },
-                {
-                    "id": "q_17f5c263c2",
-                    "title": "Lernen - Englisch",
-                    "description": "Melden bei Mama\n(voraussichtlich eine Seite...)",
-                    "rewardXp": 112,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "5",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-11T08:23:32+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-11T08:22:31+00:00",
-                    "completedAt": "2026-04-11T08:24:51+00:00"
-                },
-                {
-                    "id": "q_60cf735824",
-                    "title": "Spühlmaschine",
-                    "description": "Geschirr der Maschine entnehmen und dann in die Schränke räumen.",
-                    "rewardXp": 68,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "12",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-11T08:23:31+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-11T08:22:53+00:00",
-                    "completedAt": "2026-04-11T08:24:53+00:00"
-                },
-                {
-                    "id": "q_34ba083bae",
-                    "title": "Wäsche abhängen",
-                    "description": "vom Ständer Badezimmer",
-                    "rewardXp": 98,
-                    "rewardCoins": 1,
-                    "difficulty": null,
-                    "catalogId": "35",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-11T11:13:31+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-11T10:52:48+00:00",
-                    "completedAt": "2026-04-11T11:30:19+00:00"
-                },
-                {
-                    "id": "q_90e9d1afb4",
-                    "title": "Wäsche waschen",
-                    "description": "Wasche auf Pflegegrad stellen",
-                    "rewardXp": 98,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "33",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-11T10:56:53+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-11T10:52:52+00:00",
-                    "completedAt": "2026-04-11T11:30:31+00:00"
-                },
-                {
-                    "id": "q_37679529e2",
-                    "title": "Wäsche sortieren",
-                    "description": "Wäsche sortieren",
-                    "rewardXp": 242,
-                    "rewardCoins": 0,
-                    "difficulty": null,
-                    "catalogId": "32",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-11T10:56:48+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-11T10:52:55+00:00",
-                    "completedAt": "2026-04-11T11:30:34+00:00"
-                },
-                {
-                    "id": "q_d6c7144ad0",
-                    "title": "Snacks für Dortmund Spiel holen + Almigurt",
-                    "description": "Bei Rewe",
-                    "rewardXp": 158,
-                    "rewardCoins": 5,
-                    "difficulty": null,
-                    "catalogId": "36",
-                    "completionRequested": false,
-                    "completionRequestedAt": null,
-                    "completed": false,
-                    "createdAt": "2026-04-11T10:53:34+00:00",
-                    "completedAt": null
-                },
-                {
-                    "id": "q_765157580a",
-                    "title": "Wäsche EINsortieren",
-                    "description": "sortieren",
-                    "rewardXp": 158,
-                    "rewardCoins": 1,
-                    "difficulty": null,
-                    "catalogId": "37",
-                    "completionRequested": false,
-                    "completionRequestedAt": "2026-04-11T11:13:37+00:00",
-                    "completed": true,
-                    "createdAt": "2026-04-11T11:00:39+00:00",
-                    "completedAt": "2026-04-11T11:30:36+00:00"
-                },
-                {
-                    "id": "q_6b747455d2",
-                    "title": "Schlaftet süß",
-                    "description": "Betten - ALLE Betten",
-                    "rewardXp": 158,
-                    "rewardCoins": 1,
-                    "difficulty": null,
-                    "catalogId": "38",
-                    "completionRequested": true,
-                    "completionRequestedAt": "2026-04-11T11:13:29+00:00",
-                    "completed": false,
-                    "createdAt": "2026-04-11T11:02:06+00:00",
-                    "completedAt": null
-                }
-            ],
-            "createdAt": "2026-04-04T17:13:09+00:00",
-            "updatedAt": "2026-04-11T14:46:09+00:00",
-            "activeBoosts": [
-                {
-                    "id": "boost_lu_16_1cdd0182",
-                    "label": "Level-Up Boost (Level 16)",
-                    "multiplier": 1.05,
-                    "source": "level_up",
-                    "sourceLevel": 16,
-                    "remainingQuests": 5
-                }
-            ],
-            "systemMessages": [
-                {
-                    "text": "Quest \"Wäsche abhängen\" abgeschlossen! 103 EP erhalten (98 + 5 EP Boost). Coins: +1 (1 Quest-Coins).",
-                    "timestamp": "2026-04-11T11:30:19+00:00"
-                },
-                {
-                    "text": "Quest \"Wäsche waschen\" abgeschlossen! 103 EP erhalten (98 + 5 EP Boost).",
-                    "timestamp": "2026-04-11T11:30:31+00:00"
-                },
-                {
-                    "text": "Quest \"Wäsche sortieren\" abgeschlossen! 254 EP erhalten (242 + 12 EP Boost).",
-                    "timestamp": "2026-04-11T11:30:34+00:00"
-                },
-                {
-                    "text": "Quest \"Wäsche EINsortieren\" abgeschlossen! 166 EP erhalten (158 + 8 EP Boost). Coins: +6 (1 Quest-Coins, 5 Level-Up-Coins). Level-Up auf Level 16! Naechste Quest gibt +5 % EP.",
-                    "timestamp": "2026-04-11T11:30:36+00:00"
-                },
-                {
-                    "text": "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
-                    "timestamp": "2026-04-11T12:46:47+00:00"
-                }
-            ],
-            "unlockedRewardItemIds": [
-                "belohnung_unternehmung"
-            ],
-            "selectedTitleAchievementId": null
-        },
-        "kid_ezpv9518": {
-            "xp": 0,
-            "coins": 0,
-            "name": "Spieler",
-            "profileImageItemId": null,
-            "ownedShopItems": [],
-            "unlockedRewardItemIds": [],
-            "achievementRewardClaimedIds": [],
-            "quests": [],
-            "createdAt": "2026-04-06T09:12:11+00:00",
-            "updatedAt": "2026-04-06T09:47:29+00:00",
-            "systemMessages": [
-                {
-                    "text": "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
-                    "timestamp": "2026-04-11T12:46:47+00:00"
-                }
-            ]
-        },
-        "kid_8r4sd4ib": {
-            "xp": 0,
-            "coins": 0,
-            "name": "Spieler",
-            "profileImageItemId": null,
-            "ownedShopItems": [],
-            "unlockedRewardItemIds": [],
-            "achievementRewardClaimedIds": [],
-            "quests": [],
-            "createdAt": "2026-04-06T11:14:52+00:00",
-            "updatedAt": "2026-04-06T11:14:52+00:00",
-            "systemMessages": [
-                {
-                    "text": "Neue Belohnung verfuegbar: \"Wohl gekleidet\". Bedingung: 2 bestimmte Quest(s) erledigen.",
-                    "timestamp": "2026-04-11T12:46:47+00:00"
-                }
-            ]
-        }
-    }
 }

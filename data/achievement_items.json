@@ -1,19 +1,21 @@
 {
     "version": 1,
-    "updatedAt": "2026-04-11T13:37:10+00:00",
+    "updatedAt": "2026-04-11T18:20:00+00:00",
     "items": [
         {
             "id": "ach_beginner_1",
             "title": "Beginner",
             "target": 1,
             "image": "assets\/avatars\/beginner.png",
+            "titleReward": "Der Aufsteiger",
             "active": true
         },
         {
             "id": "ach_holz_10",
-            "title": "Holz",
+            "title": "Bronze",
             "target": 10,
             "image": "assets\/avatars\/holz.png",
+            "titleReward": "Bronzeanwaerter",
             "active": true
         },
         {
@@ -21,6 +23,7 @@
             "title": "Silber",
             "target": 50,
             "image": "assets\/avatars\/silber.png",
+            "titleReward": "Silberritter",
             "active": true
         },
         {
@@ -28,13 +31,15 @@
             "title": "Gold",
             "target": 200,
             "image": "assets\/avatars\/gold.png",
+            "titleReward": "Goldchampion",
             "active": true
         },
         {
             "id": "ach_elite_400",
-            "title": "Elite",
+            "title": "Platin",
             "target": 400,
             "image": "assets\/avatars\/elite.png",
+            "titleReward": "Platinheld",
             "active": true
         },
         {
@@ -42,6 +47,7 @@
             "title": "Smaragd",
             "target": 600,
             "image": "assets\/avatars\/smaragd.png",
+            "titleReward": "Smaragdwaechter",
             "active": true
         },
         {
@@ -49,6 +55,7 @@
             "title": "Rubin",
             "target": 800,
             "image": "assets\/avatars\/rubin.png",
+            "titleReward": "Rubinlegende",
             "active": true
         },
         {
@@ -56,6 +63,7 @@
             "title": "Diamant",
             "target": 1000,
             "image": "assets\/avatars\/diamant.png",
+            "titleReward": "Diamantmeister",
             "active": true
         },
         {
@@ -63,13 +71,15 @@
             "title": "Meister",
             "target": 1500,
             "image": "assets\/avatars\/meister.png",
+            "titleReward": "Grossmeister",
             "active": true
         },
         {
             "id": "ach_grossmeister_2000",
-            "title": "Grossmeister",
+            "title": "Legende",
             "target": 2000,
             "image": "assets\/avatars\/grossmeister.png",
+            "titleReward": "Unsterbliche Legende",
             "active": true
         },
         {

@@ -68,6 +68,21 @@ Dieses Protokoll dokumentiert fortlaufend alle funktionalen und visuellen Aender
 - Achievement-Bildpfad im Elternformular ist jetzt optional.
 - Frontend-Validierung entsprechend angepasst (Titel bleibt Pflichtfeld).
 
+### Trophaeenpfad: Meilenstein-Belohnungen und Spielertitel erweitert
+- Fuer alle System-Meilensteine im Achievement-Pfad wurden sinnvolle Rangnamen vereinheitlicht (u. a. Bronze, Silber, Gold, Platin, Smaragd, Rubin, Diamant, Legende).
+- Jeder Trophaeen-Meilenstein vergibt jetzt direkt einen passenden freischaltbaren Spielertitel (`titleReward`).
+- Die neuen Titel werden automatisch im Profil unter der Titelauswahl verfuegbar, sobald der jeweilige Meilenstein erreicht ist.
+
+### Belohnungen: Einloesepreise und Titelvergabe
+- Belohnungen koennen jetzt optional konkrete Einloesepreise vergeben:
+  - EP-Bonus
+  - Coin-Bonus
+  - Spielertitel
+- Elternformular fuer Belohnungen erweitert (Neuanlage und Bearbeitung) um diese Preisfelder.
+- Beim Einloesen einer Belohnung werden die Preise jetzt direkt auf den Spieler angewendet (EP/Coins/Titel).
+- Freigeschaltete Titel aus Belohnungen erscheinen zusammen mit Achievement-Titeln in der Profil-Titelauswahl.
+- Spieleransicht der Belohnungen zeigt die konfigurierten Einloesepreise in Details und Einloese-Dialog.
+
 ---
 
 ## 2026-04-05 14:52:55

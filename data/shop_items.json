@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updatedAt": "2026-04-11T12:46:47+00:00",
+    "updatedAt": "2026-04-11T16:50:41+00:00",
     "items": [
         {
             "id": "belohnung_d_ner_4_free",
@@ -155,6 +155,26 @@
             "unlockConditionRewardIds": [],
             "unlockStartCompletedQuests": 31,
             "unlockStartLevel": 16,
+            "active": true
+        },
+        {
+            "id": "belohnung_beginner",
+            "title": "Beginner",
+            "description": "Wenigstens hast du angefangen",
+            "type": "reward_item",
+            "costCoins": 0,
+            "image": "assets\/deinbild.png",
+            "boostPercent": null,
+            "boostQuests": null,
+            "unlockConditionType": "reach_level",
+            "unlockConditionValue": 1,
+            "unlockConditionQuestIds": [],
+            "unlockConditionRewardIds": [],
+            "unlockStartCompletedQuests": 31,
+            "unlockStartLevel": 16,
+            "claimRewardXp": 0,
+            "claimRewardCoins": 0,
+            "claimRewardTitle": "Blutiger Anfänger",
             "active": true
         }
     ]
